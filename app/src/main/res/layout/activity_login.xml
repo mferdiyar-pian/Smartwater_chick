@@ -40,6 +40,7 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:src="@drawable/ic_water_drop"
+                        android:tint="#FFFFFF"
                         android:contentDescription="Logo" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -50,8 +51,7 @@
                 android:text="SmartWaterChick"
                 android:textSize="26sp"
                 android:textStyle="bold"
-                android:textColor="@color/text_primary"
-                android:fontFamily="sans-serif-medium" />
+                android:textColor="@color/text_primary" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -95,17 +95,6 @@
                     android:textColor="@color/text_secondary"
                     android:layout_marginBottom="32dp" />
 
-                <!-- Email Label -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="EMAIL ADDRESS"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_secondary"
-                    android:letterSpacing="0.05"
-                    android:layout_marginBottom="8dp" />
-
                 <!-- Email Field -->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -121,6 +110,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_mail"
+                        android:tint="@color/text_secondary"
                         android:layout_marginEnd="12dp" />
 
                     <EditText
@@ -129,7 +119,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="@null"
-                        android:hint="name@example.com"
+                        android:hint="Email Address"
                         android:textColorHint="@color/text_hint"
                         android:textColor="@color/text_primary"
                         android:textSize="15sp"
@@ -137,17 +127,6 @@
                         android:imeOptions="actionNext"
                         android:singleLine="true" />
                 </LinearLayout>
-
-                <!-- Password Label -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="PASSWORD"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_secondary"
-                    android:letterSpacing="0.05"
-                    android:layout_marginBottom="8dp" />
 
                 <!-- Password Field -->
                 <LinearLayout
@@ -164,6 +143,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_lock"
+                        android:tint="@color/text_secondary"
                         android:layout_marginEnd="12dp" />
 
                     <EditText
@@ -172,7 +152,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="@null"
-                        android:hint="••••••••"
+                        android:hint="Password"
                         android:textColorHint="@color/text_hint"
                         android:textColor="@color/text_primary"
                         android:textSize="15sp"
@@ -185,6 +165,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_visibility"
+                        android:tint="@color/text_secondary"
                         android:clickable="true"
                         android:focusable="true" />
                 </LinearLayout>
@@ -215,8 +196,6 @@
                     android:textStyle="bold"
                     android:background="@drawable/bg_button_primary"
                     app:backgroundTint="@null"
-                    android:stateListAnimator="@null"
-                    android:elevation="4dp"
                     android:layout_marginBottom="32dp" />
 
                 <!-- Divider OR LOGIN WITH -->
@@ -249,61 +228,49 @@
 
                 <!-- Social Login Buttons -->
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="8dp">
+                    android:gravity="center">
 
                     <!-- Google Button -->
                     <androidx.cardview.widget.CardView
                         android:id="@+id/btnGoogle"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
                         app:cardCornerRadius="16dp"
-                        app:cardElevation="0dp"
-                        app:cardBackgroundColor="#F8F9FD"
+                        app:cardElevation="2dp"
+                        app:cardBackgroundColor="#FFFFFF"
                         android:layout_marginEnd="20dp"
                         android:clickable="true"
                         android:focusable="true">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center">
-
-                            <ImageView
-                                android:layout_width="28dp"
-                                android:layout_height="28dp"
-                                android:src="@drawable/ic_google"
-                                android:contentDescription="Google Login" />
-                        </LinearLayout>
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:src="@drawable/ic_google"
+                            android:layout_gravity="center"
+                            android:contentDescription="Google Login" />
                     </androidx.cardview.widget.CardView>
 
                     <!-- Fingerprint Button -->
                     <androidx.cardview.widget.CardView
                         android:id="@+id/btnFingerprint"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
                         app:cardCornerRadius="16dp"
-                        app:cardElevation="0dp"
-                        app:cardBackgroundColor="#F8F9FD"
+                        app:cardElevation="2dp"
+                        app:cardBackgroundColor="#FFFFFF"
                         android:clickable="true"
                         android:focusable="true">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center">
-
-                            <ImageView
-                                android:layout_width="28dp"
-                                android:layout_height="28dp"
-                                android:src="@android:drawable/ic_lock_idle_lock"
-                                android:tint="@color/text_secondary"
-                                android:contentDescription="Fingerprint Login" />
-                        </LinearLayout>
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:src="@drawable/ic_face"
+                            android:tint="@color/text_secondary"
+                            android:layout_gravity="center"
+                            android:contentDescription="Biometric Login" />
                     </androidx.cardview.widget.CardView>
                 </LinearLayout>
 
