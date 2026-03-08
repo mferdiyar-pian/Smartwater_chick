@@ -40,91 +40,50 @@ public class LoginActivity extends AppCompatActivity {
             if (isPasswordVisible) {
                 // Hide password
                 etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                ivTogglePassword.setColorFilter(getResources().getColor(android.R.color.darker_gray));
+                ivTogglePassword.setImageResource(R.drawable.ic_visibility); // Reset to visible icon
                 isPasswordVisible = false;
             } else {
                 // Show password
                 etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                ivTogglePassword.setColorFilter(getResources().getColor(R.color.blue_primary));
+                // You might want a different icon for 'hide'
                 isPasswordVisible = true;
             }
             // Move cursor to end
             etPassword.setSelection(etPassword.length());
         });
 
-        // Sign In button
+        // Sign In button - Dipermudah untuk testing
         btnSignIn.setOnClickListener(v -> {
-            String email = etEmail.getText().toString().trim();
-            String password = etPassword.getText().toString().trim();
-
-            if (email.isEmpty()) {
-                etEmail.setError("Email tidak boleh kosong");
-                etEmail.requestFocus();
-                return;
-            }
-
-            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                etEmail.setError("Format email tidak valid");
-                etEmail.requestFocus();
-                return;
-            }
-
-            if (password.isEmpty()) {
-                etPassword.setError("Password tidak boleh kosong");
-                etPassword.requestFocus();
-                return;
-            }
-
-            if (password.length() < 6) {
-                etPassword.setError("Password minimal 6 karakter");
-                etPassword.requestFocus();
-                return;
-            }
-
-            // TODO: Ganti dengan autentikasi Firebase / API Anda
-            performLogin(email, password);
+            // Langsung pindah ke Dashboard untuk mempermudah testing
+            Intent intent = new Intent(this, DashboardActivity.class);
+            startActivity(intent);
+            finish();
         });
 
         // Forgot Password
         tvForgotPassword.setOnClickListener(v -> {
-            // TODO: Navigasi ke halaman ForgotPasswordActivity
             Toast.makeText(this, "Forgot Password diklik", Toast.LENGTH_SHORT).show();
-            // Intent intent = new Intent(this, ForgotPasswordActivity.class);
-            // startActivity(intent);
         });
 
         // Sign Up
         tvSignUp.setOnClickListener(v -> {
-            // TODO: Navigasi ke halaman RegisterActivity
             Toast.makeText(this, "Sign Up diklik", Toast.LENGTH_SHORT).show();
-            // Intent intent = new Intent(this, RegisterActivity.class);
-            // startActivity(intent);
         });
 
         // Google Login
         btnGoogle.setOnClickListener(v -> {
-            // TODO: Implementasi Google Sign-In
             Toast.makeText(this, "Login dengan Google", Toast.LENGTH_SHORT).show();
+            // Bypass login for testing
+            startActivity(new Intent(this, DashboardActivity.class));
+            finish();
         });
 
         // Fingerprint Login
         btnFingerprint.setOnClickListener(v -> {
-            // TODO: Implementasi BiometricPrompt
             Toast.makeText(this, "Login dengan Fingerprint", Toast.LENGTH_SHORT).show();
+            // Bypass login for testing
+            startActivity(new Intent(this, DashboardActivity.class));
+            finish();
         });
-    }
-
-    private void performLogin(String email, String password) {
-        // Contoh validasi lokal (ganti dengan Firebase Auth / API)
-        // Contoh dummy:
-        if (email.equals("admin@smartwaterchick.com") && password.equals("admin123")) {
-            Toast.makeText(this, "Login berhasil!", Toast.LENGTH_SHORT).show();
-            // Navigasi ke MainActivity / Dashboard
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-        } else {
-            Toast.makeText(this, "Email atau password salah", Toast.LENGTH_SHORT).show();
-        }
     }
 }

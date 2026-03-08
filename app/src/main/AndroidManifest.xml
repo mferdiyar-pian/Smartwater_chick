@@ -24,7 +24,7 @@
 
         <!-- MainActivity / Dashboard setelah login -->
         <activity
-            android:name=".MainActivity"
+            android:name=".DashboardActivity"
             android:exported="false" />
 
     </application>
