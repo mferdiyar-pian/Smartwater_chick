@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="screen_padding">12dp</dimen>
+    <dimen name="content_top_padding">10dp</dimen>
+    <dimen name="content_bottom_padding">12dp</dimen>
+
+    <dimen name="content_max_width">420dp</dimen>
+
+    <dimen name="card_radius">10dp</dimen>
+    <dimen name="card_padding">12dp</dimen>
+    <dimen name="card_spacing">12dp</dimen>
+
+    <dimen name="topbar_height">56dp</dimen>
+    <dimen name="small_card_height">104dp</dimen>
+    <dimen name="chart_card_height">110dp</dimen>
+
+    <dimen name="title_text">13sp</dimen>
+    <dimen name="body_text">10sp</dimen>
+    <dimen name="value_text">18sp</dimen>
+    <dimen name="big_value_text">20sp</dimen>
+    <dimen name="button_text">10sp</dimen>
+</resources>

@@ -12,23 +12,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartWaterChick">
 
-        <!-- Splash Screen → halaman pertama -->
+        <!-- Activity pertama -->
         <activity
-            android:name=".SplashActivity"
+            android:name=".LoginActivity"
             android:exported="true"
-            android:theme="@style/Theme.SmartWaterChick.NoActionBar">
+            android:theme="@style/Theme.SmartWaterChick">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
-        <!-- Login Activity -->
-        <activity
-            android:name=".LoginActivity"
-            android:exported="false" />
-
-        <!-- Dashboard setelah login -->
         <activity
             android:name=".DashboardActivity"
             android:exported="false" />

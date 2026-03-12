@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Brand Colors -->
-    <color name="blue_primary">#0D47A1</color>
+    <color name="blue_primary">#1E5BB8</color>
     <color name="blue_dark">#0A3981</color>
     <color name="blue_light">#E3F2FD</color>
     <color name="blue_header">#1E5BB8</color>

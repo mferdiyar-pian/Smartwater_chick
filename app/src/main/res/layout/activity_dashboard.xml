@@ -407,29 +407,53 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
-                        <Button
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnGantiAir"
                             android:layout_width="0dp"
-                            android:layout_height="42dp"
+                            android:layout_height="64dp"
                             android:layout_weight="1"
-                            android:text="⟳  Ganti air sekarang"
-                            android:textSize="13sp"
-                            android:textColor="#FFFFFF"
+                            android:layout_marginEnd="12dp"
                             android:background="@drawable/bg_button_primary"
-                            android:stateListAnimator="@null"
-                            android:layout_marginEnd="10dp" />
+                            android:text="Ganti air sekarang"
+                            android:textAllCaps="false"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp"
+                            app:backgroundTint="@null"
+                            app:cornerRadius="14dp"
+                            app:icon="@drawable/ic_water_drop"
+                            app:iconGravity="textStart"
+                            app:iconPadding="10dp"
+                            app:iconTint="#FFFFFF"
+                            app:rippleColor="@android:color/transparent" />
 
-                        <Button
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnAbaikan"
-                            android:layout_width="wrap_content"
-                            android:layout_height="42dp"
-                            android:text="Abaikan"
-                            android:textSize="13sp"
-                            android:textColor="#8A8FA8"
+                            android:layout_width="150dp"
+                            android:layout_height="64dp"
                             android:background="@drawable/bg_button_outline"
-                            android:stateListAnimator="@null" />
+                            android:text="Abaikan"
+                            android:textAllCaps="false"
+                            android:textColor="#C62828"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp"
+                            app:backgroundTint="@null"
+                            app:cornerRadius="14dp"
+                            app:rippleColor="@android:color/transparent"
+                            app:strokeColor="#F3A6AF"
+                            app:strokeWidth="1dp" />
+
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
