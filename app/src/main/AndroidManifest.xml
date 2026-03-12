@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartWaterChick">
 
-        <!-- Activity pertama -->
+        <!-- Activity pertama Login -->
         <activity
             android:name=".LoginActivity"
             android:exported="true"
@@ -25,8 +25,14 @@
 
         </activity>
 
+        <!-- Halaman Dashboard -->
         <activity
             android:name=".DashboardActivity"
+            android:exported="false" />
+
+        <!-- Halaman Analisis -->
+        <activity
+            android:name=".AnalisisActivity"
             android:exported="false" />
 
     </application>

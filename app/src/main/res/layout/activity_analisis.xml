@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F6F9FF">
+
+    <!-- TOP APP BAR -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#1E5CCB"
+        app:elevation="0dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="16dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivBack"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_arrow_back"
+                    android:tint="#FFFFFF"
+                    android:padding="8dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Analisis"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_centerInParent="true" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true">
+
+                    <ImageView
+                        android:id="@+id/ivNotification"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/ic_notification"
+                        android:tint="#FFFFFF"
+                        android:layout_marginEnd="16dp"
+                        android:clickable="true"
+                        android:focusable="true" />
+
+                    <ImageView
+                        android:id="@+id/ivSettings"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/ic_settings"
+                        android:tint="#FFFFFF"
+                        android:clickable="true"
+                        android:focusable="true" />
+                </LinearLayout>
+            </RelativeLayout>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- CONTENT -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="78dp"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- CARD 1: Status pH Terkini -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:background="@drawable/bg_card_blue_border">
+
+                    <!-- Header -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp">
+
+                        <ImageView
+                            android:id="@+id/ivPhIcon"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/ic_water_drop"
+                            android:tint="#46B96A"
+                            android:background="@drawable/bg_icon_green"
+                            android:padding="8dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toEndOf="@id/ivPhIcon"
+                            android:layout_marginStart="12dp"
+                            android:layout_centerVertical="true"
+                            android:text="Status pH Terkini"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="#202938" />
+
+                        <TextView
+                            android:id="@+id/tvPhValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:text="7.2 pH"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            android:textColor="#46B96A" />
+                    </RelativeLayout>
+
+                    <!-- Labels -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp">
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="ASAM" android:textSize="10sp" android:textStyle="bold" android:textColor="#202938" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="NETRAL" android:textSize="10sp" android:textStyle="bold" android:textColor="#202938" android:gravity="center" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="BASA" android:textSize="10sp" android:textStyle="bold" android:textColor="#202938" android:gravity="end" />
+                    </LinearLayout>
+
+                    <!-- Segmented Bar -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="12dp"
+                        android:background="@drawable/bg_ph_segmented"
+                        android:layout_marginBottom="4dp" />
+
+                    <!-- Indicator -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_marginBottom="16dp">
+                        <View android:layout_width="2dp" android:layout_height="14dp" android:background="#202938" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="7.2 pH" android:textSize="12sp" android:textColor="#202938" />
+                    </LinearLayout>
+
+                    <!-- Keterangan -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Keterangan pH"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="#202938"
+                            android:layout_alignParentStart="true" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="AMAN"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="#46B96A"
+                            android:background="@drawable/bg_badge_normal"
+                            android:paddingHorizontal="20dp"
+                            android:paddingVertical="6dp"
+                            android:layout_alignParentEnd="true" />
+                    </RelativeLayout>
+
+                    <Button
+                        android:id="@+id/btnCekUlang"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/bg_button_primary"
+                        android:backgroundTint="#1148A1"
+                        android:text="⟳ Cek pH"
+                        android:textAllCaps="false"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- TITLE -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Riwayat Analisis (24 jam)"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="#202938"
+                android:layout_marginBottom="12dp" />
+
+            <!-- CARD 2: Tren pH -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_card_blue_border"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="10dp"
+                                android:layout_height="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:background="@drawable/bg_dot_green" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Tren pH"
+                                android:textColor="#202938"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:text="Diperbarui 2 menit yang lalu"
+                            android:textColor="#9EA9BB"
+                            android:textSize="11sp" />
+                    </RelativeLayout>
+
+                    <com.example.smartwaterchick.AnalisisChartView
+                        android:id="@+id/chartPh"
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        android:layout_marginBottom="12dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="06:00"
+                            android:textColor="#9EA9BB"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="12:00"
+                            android:textColor="#9EA9BB"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="18:00"
+                            android:textColor="#9EA9BB"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:text="00:00"
+                            android:textColor="#9EA9BB"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Laporan Lengkap -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp">
+                <Button
+                    android:id="@+id/btnLaporanLengkap"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:background="@drawable/bg_card_blue_border"
+                    android:backgroundTint="@null"
+                    android:text="📄 Laporan Lengkap"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </androidx.cardview.widget.CardView>
+
+            <!-- CARD 4: Kapasitas Air -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:background="@drawable/bg_card_blue_border">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="16dp">
+                        <ImageView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/ic_water_drop"
+                            android:tint="#1E5CCB"
+                            android:background="@drawable/bg_icon_blue"
+                            android:padding="8dp"
+                            android:layout_marginEnd="12dp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Kapasitas Air"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="#202938" />
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Total Kapasitas Air"
+                            android:textSize="14sp"
+                            android:textColor="#9EA9BB" />
+                        <TextView
+                            android:id="@+id/tvKapasitasAir"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="650L / 1000L"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="#202938"
+                            android:layout_alignParentEnd="true" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="12dp"
+                        android:background="@drawable/bg_progress_track"
+                        android:orientation="horizontal"
+                        android:weightSum="100"
+                        android:layout_marginBottom="24dp">
+                        <View
+                            android:id="@+id/viewKapasitasProgress"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="65"
+                            android:background="@drawable/bg_progress_kapasitas" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <Button
+                            android:id="@+id/btnIsiAir"
+                            android:layout_width="0dp"
+                            android:layout_height="52dp"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="12dp"
+                            android:background="@drawable/bg_card_blue_border"
+                            android:backgroundTint="@null"
+                            android:text="🛁 Isi Air"
+                            android:textAllCaps="false"
+                            android:textColor="#FFFFFF"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+                        <Button
+                            android:id="@+id/btnBuangAir"
+                            android:layout_width="0dp"
+                            android:layout_height="52dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/bg_badge_red"
+                            android:backgroundTint="#FFF1F2"
+                            android:text="🗑 Buang Air"
+                            android:textAllCaps="false"
+                            android:textColor="#E05A6A"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- CARD 5: Tempat Minum Ayam -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:background="@drawable/bg_card_blue_border">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="16dp">
+                        <ImageView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/ic_water_drop"
+                            android:tint="#1E5CCB"
+                            android:background="@drawable/bg_icon_blue"
+                            android:padding="8dp"
+                            android:layout_marginEnd="12dp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tempat Minum Ayam"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="#202938" />
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btnIsiAirAyam"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:background="@drawable/bg_button_primary"
+                        android:backgroundTint="#1148A1"
+                        android:text="🛁 Isi Air"
+                        android:textAllCaps="false"
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- BOTTOM NAVIGATION -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="#FFFFFF"
+        app:menu="@menu/bottom_nav_menu"
+        app:labelVisibilityMode="labeled"
+        app:itemTextColor="@color/nav_item_color"
+        app:itemIconTint="@color/nav_item_color"
+        app:elevation="8dp" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,6 +1,7 @@
 package com.example.smartwaterchick;
 
 import android.os.Bundle;
+import android.content.Intent;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -52,7 +53,7 @@ public class DashboardActivity extends AppCompatActivity {
             if (id == R.id.nav_beranda) {
                 return true;
             } else if (id == R.id.nav_analytics) {
-                Toast.makeText(this, "Analytics", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, AnalisisActivity.class));
                 return true;
             } else if (id == R.id.nav_controls) {
                 Toast.makeText(this, "Controls", Toast.LENGTH_SHORT).show();
