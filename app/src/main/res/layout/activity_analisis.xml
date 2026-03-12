@@ -203,7 +203,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
                         android:background="@drawable/bg_button_primary"
-                        android:backgroundTint="#1148A1"
+                        app:backgroundTint="@null"
                         android:text="⟳ Cek pH"
                         android:textAllCaps="false"
                         android:textColor="#FFFFFF"
@@ -333,7 +333,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
                     android:background="@drawable/bg_card_blue_border"
-                    android:backgroundTint="@null"
+                    app:backgroundTint="@null"
                     android:text="📄 Laporan Lengkap"
                     android:textAllCaps="false"
                     android:textColor="#FFFFFF"
@@ -361,22 +361,21 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
-                        android:layout_marginBottom="16dp">
+                        android:layout_marginBottom="20dp">
                         <ImageView
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:src="@drawable/ic_water_drop"
-                            android:tint="#1E5CCB"
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:src="@drawable/ic_water_capacity"
                             android:background="@drawable/bg_icon_blue"
                             android:padding="8dp"
-                            android:layout_marginEnd="12dp" />
+                            android:layout_marginEnd="14dp" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Kapasitas Air"
-                            android:textSize="16sp"
+                            android:textSize="18sp"
                             android:textStyle="bold"
-                            android:textColor="#202938" />
+                            android:textColor="#0F172A" />
                     </LinearLayout>
 
                     <RelativeLayout
@@ -387,22 +386,22 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Total Kapasitas Air"
-                            android:textSize="14sp"
-                            android:textColor="#9EA9BB" />
+                            android:textSize="15sp"
+                            android:textColor="#64748B" />
                         <TextView
                             android:id="@+id/tvKapasitasAir"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="650L / 1000L"
-                            android:textSize="18sp"
+                            android:textSize="19sp"
                             android:textStyle="bold"
-                            android:textColor="#202938"
+                            android:textColor="#0F172A"
                             android:layout_alignParentEnd="true" />
                     </RelativeLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="12dp"
+                        android:layout_height="14dp"
                         android:background="@drawable/bg_progress_track"
                         android:orientation="horizontal"
                         android:weightSum="100"
@@ -419,31 +418,47 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
+
                         <Button
                             android:id="@+id/btnIsiAir"
                             android:layout_width="0dp"
-                            android:layout_height="52dp"
+                            android:layout_height="58dp"
                             android:layout_weight="1"
-                            android:layout_marginEnd="12dp"
-                            android:background="@drawable/bg_card_blue_border"
-                            android:backgroundTint="@null"
-                            android:text="🛁 Isi Air"
+                            android:layout_marginEnd="14dp"
+                            android:background="@drawable/bg_button_outline_blue"
+                            app:backgroundTint="@null"
+                            android:text="Isi Air"
                             android:textAllCaps="false"
-                            android:textColor="#FFFFFF"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
+                            android:textColor="#1B5BCE"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:drawableStart="@drawable/ic_swirl"
+                            android:drawableTint="#1B5BCE"
+                            android:drawablePadding="8dp"
+                            android:gravity="center"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp"
+                            android:stateListAnimator="@null" />
+
                         <Button
                             android:id="@+id/btnBuangAir"
                             android:layout_width="0dp"
-                            android:layout_height="52dp"
+                            android:layout_height="58dp"
                             android:layout_weight="1"
-                            android:background="@drawable/bg_badge_red"
-                            android:backgroundTint="#FFF1F2"
-                            android:text="🗑 Buang Air"
+                            android:background="@drawable/bg_button_soft_red"
+                            app:backgroundTint="@null"
+                            android:text="Buang Air"
                             android:textAllCaps="false"
-                            android:textColor="#E05A6A"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
+                            android:textColor="#B91C1C"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:drawableStart="@drawable/ic_swirl"
+                            android:drawableTint="#B91C1C"
+                            android:drawablePadding="8dp"
+                            android:gravity="center"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="20dp"
+                            android:stateListAnimator="@null" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -491,7 +506,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
                         android:background="@drawable/bg_button_primary"
-                        android:backgroundTint="#1148A1"
+                        app:backgroundTint="@null"
                         android:text="🛁 Isi Air"
                         android:textAllCaps="false"
                         android:textColor="#FFFFFF"
