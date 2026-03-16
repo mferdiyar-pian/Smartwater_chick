@@ -35,6 +35,11 @@
             android:name=".AnalisisActivity"
             android:exported="false" />
 
+        <!-- Halaman Kontrol Air -->
+        <activity
+            android:name=".KontrolActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

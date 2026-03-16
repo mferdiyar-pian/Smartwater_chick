@@ -373,7 +373,7 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:src="@drawable/ic_warning"
-                            android:tint="#E74C3C"
+                            android:tint="#BE123C"
                             android:layout_marginEnd="10dp"
                             android:layout_marginTop="2dp" />
 
@@ -389,7 +389,7 @@
                                 android:text="pH Air Tidak Normal"
                                 android:textSize="14sp"
                                 android:textStyle="bold"
-                                android:textColor="#C0392B"
+                                android:textColor="#BE123C"
                                 android:layout_marginBottom="4dp" />
 
                             <TextView
@@ -441,7 +441,7 @@
                             android:background="@drawable/bg_button_outline"
                             android:text="Abaikan"
                             android:textAllCaps="false"
-                            android:textColor="#C62828"
+                            android:textColor="#BE123C"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:insetTop="0dp"

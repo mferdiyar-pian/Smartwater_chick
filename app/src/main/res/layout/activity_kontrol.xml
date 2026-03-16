@@ -1,0 +1,790 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F0F4FF">
+
+    <!-- TOP APP BAR -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/blue_header"
+        app:elevation="0dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="16dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivBack"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_arrow_back"
+                    android:tint="#FFFFFF"
+                    android:padding="8dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kontrol Air"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_centerInParent="true" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true">
+
+                    <ImageView
+                        android:id="@+id/ivNotification"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_notification"
+                        android:tint="#FFFFFF"
+                        android:layout_marginEnd="16dp"
+                        android:clickable="true"
+                        android:focusable="true" />
+
+                    <ImageView
+                        android:id="@+id/ivSettings"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_settings"
+                        android:tint="#FFFFFF"
+                        android:clickable="true"
+                        android:focusable="true" />
+                </LinearLayout>
+            </RelativeLayout>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- SCROLLABLE CONTENT -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="72dp"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="14dp">
+
+            <!-- ═══════════════════════════════════ -->
+            <!-- CARD 1: Tangki Air                 -->
+            <!-- ═══════════════════════════════════ -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:background="#FFFFFF">
+
+                    <!-- Header: Tangki Air + pH -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="6dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Tangki Air"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:textColor="#1A1A2E" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Status Tangki Air"
+                                android:textSize="12sp"
+                                android:textColor="#8A8FA8" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tvPhTangki"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="7.2 pH"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="#2ECC71"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true" />
+                    </RelativeLayout>
+
+                    <!-- Badge Cukup -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/bg_badge_normal"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="12dp"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
+                        android:layout_marginBottom="16dp">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_water_drop"
+                            android:tint="#2ECC71"
+                            android:layout_marginEnd="6dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Cukup"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="#2ECC71" />
+                    </LinearLayout>
+
+                    <!-- Tank illustration -->
+                    <com.example.smartwaterchick.TankView
+                        android:id="@+id/tankView"
+                        android:layout_width="160dp"
+                        android:layout_height="160dp"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Total Kapasitas Air -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Total Kapasitas Air"
+                            android:textSize="13sp"
+                            android:textColor="#8A8FA8"
+                            android:layout_centerVertical="true" />
+
+                        <TextView
+                            android:id="@+id/tvKapasitasTangki"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="650L / 1000L"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="#1A1A2E"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true" />
+                    </RelativeLayout>
+
+                    <!-- Progress bar -->
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp"
+                            android:background="@drawable/bg_progress_track" />
+
+                        <View
+                            android:id="@+id/viewProgressTangki"
+                            android:layout_width="0dp"
+                            android:layout_height="10dp"
+                            android:background="@drawable/bg_progress_kapasitas" />
+                    </FrameLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Section label: Kontrol Air -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kontrol Air"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#1A1A2E"
+                android:layout_marginBottom="10dp"
+                android:layout_marginStart="2dp" />
+
+            <!-- ═══════════════════════════════════ -->
+            <!-- CARD 2: Status pH Terkini          -->
+            <!-- ═══════════════════════════════════ -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                android:layout_marginBottom="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:background="#FFFFFF">
+
+                    <!-- Header -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp">
+
+                        <ImageView
+                            android:id="@+id/ivPhIcon"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_water_drop"
+                            android:tint="#2ECC71"
+                            android:background="@drawable/bg_icon_green"
+                            android:padding="5dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toEndOf="@id/ivPhIcon"
+                            android:layout_marginStart="10dp"
+                            android:layout_centerVertical="true"
+                            android:text="Status pH Terkini"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textColor="#1A1A2E" />
+
+                        <TextView
+                            android:id="@+id/tvPhKontrol"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:text="7.2 pH"
+                            android:textSize="17sp"
+                            android:textStyle="bold"
+                            android:textColor="#1B5BCE" />
+                    </RelativeLayout>
+
+                    <!-- Scale labels -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="4dp">
+
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text="ASAM"
+                            android:textSize="10sp" android:textColor="#E74C3C" android:textStyle="bold" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text="NETRAL"
+                            android:textSize="10sp" android:textColor="#2ECC71" android:textStyle="bold" android:gravity="center" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text="BASA"
+                            android:textSize="10sp" android:textColor="#3498DB" android:textStyle="bold" android:gravity="end" />
+                    </LinearLayout>
+
+                    <!-- Gradient pH bar -->
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="12dp"
+                        android:layout_marginBottom="4dp">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="12dp"
+                            android:background="@drawable/bg_ph_gradient" />
+
+                        <View
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:background="@drawable/bg_ph_indicator"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="165dp" />
+                    </FrameLayout>
+
+                    <!-- pH indicator line + value -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_marginBottom="14dp">
+
+                        <View
+                            android:layout_width="2dp"
+                            android:layout_height="10dp"
+                            android:background="#1A1A2E" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="7.2 pH"
+                            android:textSize="11sp"
+                            android:textColor="#1A1A2E" />
+                    </LinearLayout>
+
+                    <!-- Keterangan pH + badge AMAN -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="14dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Keterangan pH"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="#1A1A2E"
+                            android:layout_centerVertical="true" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="AMAN"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="#2ECC71"
+                            android:background="@drawable/bg_badge_normal"
+                            android:paddingStart="12dp"
+                            android:paddingEnd="12dp"
+                            android:paddingTop="4dp"
+                            android:paddingBottom="4dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true" />
+                    </RelativeLayout>
+
+                    <!-- Cek pH Button -->
+                    <Button
+                        android:id="@+id/btnCekPh"
+                        android:layout_width="match_parent"
+                        android:layout_height="46dp"
+                        android:text="↻  Cek pH"
+                        android:textSize="14sp"
+                        android:textColor="#FFFFFF"
+                        android:background="@drawable/bg_button_primary"
+                        android:stateListAnimator="@null" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ═══════════════════════════════════ -->
+            <!-- CARD 3: Kontrol Tangki              -->
+            <!-- ═══════════════════════════════════ -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                android:layout_marginBottom="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:background="#FFFFFF">
+
+                    <!-- Header -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="12dp">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_water_drop"
+                            android:tint="#1B5BCE"
+                            android:background="@drawable/bg_icon_blue"
+                            android:padding="5dp"
+                            android:layout_marginEnd="10dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Kontrol Tangki"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textColor="#1A1A2E" />
+                    </LinearLayout>
+
+                    <!-- Total Kapasitas -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Total Kapasitas Air"
+                            android:textSize="12sp"
+                            android:textColor="#8A8FA8"
+                            android:layout_centerVertical="true" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="650L / 1000L"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textColor="#1A1A2E"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true" />
+                    </RelativeLayout>
+
+                    <!-- Progress bar -->
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        android:layout_marginBottom="14dp">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp"
+                            android:background="@drawable/bg_progress_track" />
+
+                        <View
+                            android:id="@+id/viewProgressKontrol"
+                            android:layout_width="0dp"
+                            android:layout_height="10dp"
+                            android:background="@drawable/bg_progress_kapasitas" />
+                    </FrameLayout>
+
+                    <!-- Isi Air + Buang Air -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btnIsiAir"
+                            android:layout_width="0dp"
+                            android:layout_height="46dp"
+                            android:layout_weight="1"
+                            android:text="Isi Air"
+                            android:textSize="14sp"
+                            android:textColor="#1B5BCE"
+                            android:background="@drawable/bg_button_outline_blue"
+                            android:backgroundTint="@null"
+                            app:backgroundTint="@null"
+                            android:stateListAnimator="@null"
+                            android:layout_marginEnd="10dp" />
+
+                        <Button
+                            android:id="@+id/btnBuangAir"
+                            android:layout_width="0dp"
+                            android:layout_height="46dp"
+                            android:layout_weight="1"
+                            android:text="Buang Air"
+                            android:textSize="14sp"
+                            android:textColor="#BE123C"
+                            android:background="@drawable/bg_button_outline_red"
+                            android:backgroundTint="@null"
+                            app:backgroundTint="@null"
+                            android:stateListAnimator="@null" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ═══════════════════════════════════ -->
+            <!-- CARD 4: Pengisian Minum Ayam        -->
+            <!-- ═══════════════════════════════════ -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                android:layout_marginBottom="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:background="#FFFFFF">
+
+                    <!-- Header -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="16dp">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_water_drop"
+                            android:tint="#1B5BCE"
+                            android:background="@drawable/bg_icon_blue"
+                            android:padding="5dp"
+                            android:layout_marginEnd="10dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Pengisian Minum Ayam"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textColor="#1A1A2E" />
+                    </LinearLayout>
+
+                    <!-- Toggle: Isi Minum Ayam Otomatis -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Isi Minum Ayam Otomatis"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:textColor="#1A1A2E" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Mengisi wadah air secara otomatis"
+                                android:textSize="11sp"
+                                android:textColor="#8A8FA8" />
+                        </LinearLayout>
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/switchOtomatis"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            app:thumbTint="#FFFFFF"
+                            app:trackTint="@color/switch_track_color" />
+                    </RelativeLayout>
+
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#F0F2F8"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- Atur Jadwal label -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Atur Jadwal"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#1A1A2E"
+                        android:layout_marginBottom="2dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Atur jadwal pengisian wadah air otomatis"
+                        android:textSize="11sp"
+                        android:textColor="#8A8FA8"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- Jadwal 1: 07.00 -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="0dp"
+                        android:layout_marginBottom="8dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="14dp"
+                            android:background="#F4F6FB">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_centerVertical="true">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="07.00"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold"
+                                    android:textColor="#1A1A2E" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Setiap hari"
+                                    android:textSize="11sp"
+                                    android:textColor="#8A8FA8" />
+                            </LinearLayout>
+
+                            <androidx.appcompat.widget.SwitchCompat
+                                android:id="@+id/switchJadwal1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                app:thumbTint="#FFFFFF"
+                                app:trackTint="@color/switch_track_color" />
+                        </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Jadwal 2: 15.00 -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="0dp"
+                        android:layout_marginBottom="8dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="14dp"
+                            android:background="#F4F6FB">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_centerVertical="true">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="15.00"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold"
+                                    android:textColor="#1A1A2E" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Setiap hari"
+                                    android:textSize="11sp"
+                                    android:textColor="#8A8FA8" />
+                            </LinearLayout>
+
+                            <androidx.appcompat.widget.SwitchCompat
+                                android:id="@+id/switchJadwal2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                app:thumbTint="#FFFFFF"
+                                app:trackTint="@color/switch_track_color" />
+                        </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Jadwal 3: 22.00 -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="0dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="14dp"
+                            android:background="#F4F6FB">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_centerVertical="true">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="22.00"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold"
+                                    android:textColor="#1A1A2E" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Setiap hari"
+                                    android:textSize="11sp"
+                                    android:textColor="#8A8FA8" />
+                            </LinearLayout>
+
+                            <androidx.appcompat.widget.SwitchCompat
+                                android:id="@+id/switchJadwal3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="false"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                app:thumbTint="#FFFFFF"
+                                app:trackTint="@color/switch_track_color" />
+                        </RelativeLayout>
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- BOTTOM NAVIGATION -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="#FFFFFF"
+        app:menu="@menu/bottom_nav_menu"
+        app:labelVisibilityMode="labeled"
+        app:itemTextColor="@color/nav_item_color"
+        app:itemIconTint="@color/nav_item_color"
+        app:elevation="8dp" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

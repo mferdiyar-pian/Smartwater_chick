@@ -56,7 +56,7 @@ public class DashboardActivity extends AppCompatActivity {
                 startActivity(new Intent(this, AnalisisActivity.class));
                 return true;
             } else if (id == R.id.nav_controls) {
-                Toast.makeText(this, "Controls", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, KontrolActivity.class));
                 return true;
             } else if (id == R.id.nav_devices) {
                 Toast.makeText(this, "Devices", Toast.LENGTH_SHORT).show();
