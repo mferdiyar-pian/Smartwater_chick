@@ -4,18 +4,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F9FF">
+    android:background="#F0F4FF">
 
     <!-- TOP APP BAR -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#1E5CCB"
+        android:background="@color/blue_header"
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="56dp"
             android:paddingStart="4dp"
             android:paddingEnd="16dp">
 
@@ -53,8 +53,8 @@
 
                     <ImageView
                         android:id="@+id/ivNotification"
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:src="@drawable/ic_notification"
                         android:tint="#FFFFFF"
                         android:layout_marginEnd="16dp"
@@ -63,8 +63,8 @@
 
                     <ImageView
                         android:id="@+id/ivSettings"
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:src="@drawable/ic_settings"
                         android:tint="#FFFFFF"
                         android:clickable="true"
@@ -74,11 +74,11 @@
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- CONTENT -->
+    <!-- SCROLLABLE CONTENT -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="78dp"
+        android:paddingBottom="72dp"
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -86,432 +86,303 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="14dp">
 
-            <!-- CARD 1: Status pH Terkini -->
+            <!-- ═══════════════════════════════════════════ -->
+            <!-- CARD 1: Kapasitas & Penggunaan (Bar Chart) -->
+            <!-- ═══════════════════════════════════════════ -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="0dp">
+                app:cardElevation="2dp"
+                android:layout_marginBottom="14dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp"
-                    android:background="@drawable/bg_card_blue_border">
+                    android:background="#FFFFFF">
 
-                    <!-- Header -->
-                    <RelativeLayout
-                        android:layout_width="match_parent"
+                    <!-- Title & Subtitle -->
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp">
+                        android:text="Kapasitas &amp; Penggunaan"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#1A1A2E"
+                        android:layout_marginBottom="2dp" />
 
-                        <ImageView
-                            android:id="@+id/ivPhIcon"
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:src="@drawable/ic_water_drop"
-                            android:tint="#46B96A"
-                            android:background="@drawable/bg_icon_green"
-                            android:padding="8dp"
-                            android:layout_alignParentStart="true"
-                            android:layout_centerVertical="true" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Volume air dalam tangki (Liter)"
+                        android:textSize="11sp"
+                        android:textColor="#8A8FA8"
+                        android:layout_marginBottom="12dp" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_toEndOf="@id/ivPhIcon"
-                            android:layout_marginStart="12dp"
-                            android:layout_centerVertical="true"
-                            android:text="Status pH Terkini"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:textColor="#202938" />
+                    <!-- Bar Chart -->
+                    <com.example.smartwaterchick.BarChartView
+                        android:id="@+id/barChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="220dp"
+                        android:layout_marginBottom="14dp" />
 
-                        <TextView
-                            android:id="@+id/tvPhValue"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:text="7.2 pH"
-                            android:textSize="22sp"
-                            android:textStyle="bold"
-                            android:textColor="#46B96A" />
-                    </RelativeLayout>
-
-                    <!-- Labels -->
+                    <!-- Legend -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginBottom="8dp">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="ASAM" android:textSize="10sp" android:textStyle="bold" android:textColor="#202938" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="NETRAL" android:textSize="10sp" android:textStyle="bold" android:textColor="#202938" android:gravity="center" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="BASA" android:textSize="10sp" android:textStyle="bold" android:textColor="#202938" android:gravity="end" />
-                    </LinearLayout>
+                        android:gravity="center_vertical">
 
-                    <!-- Segmented Bar -->
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="12dp"
-                        android:background="@drawable/bg_ph_segmented"
-                        android:layout_marginBottom="4dp" />
+                        <View
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:background="@drawable/bg_dot_blue"
+                            android:layout_marginEnd="6dp" />
 
-                    <!-- Indicator -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:layout_marginBottom="16dp">
-                        <View android:layout_width="2dp" android:layout_height="14dp" android:background="#202938" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="7.2 pH" android:textSize="12sp" android:textColor="#202938" />
-                    </LinearLayout>
-
-                    <!-- Keterangan -->
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp">
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Keterangan pH"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:textColor="#202938"
-                            android:layout_alignParentStart="true" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="AMAN"
+                            android:layout_weight="1"
+                            android:text="Total Digunakan"
                             android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:textColor="#46B96A"
-                            android:background="@drawable/bg_badge_normal"
-                            android:paddingHorizontal="20dp"
-                            android:paddingVertical="6dp"
-                            android:layout_alignParentEnd="true" />
-                    </RelativeLayout>
+                            android:textColor="#8A8FA8" />
 
-                    <Button
-                        android:id="@+id/btnCekUlang"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:background="@drawable/bg_button_primary"
-                        app:backgroundTint="@null"
-                        android:text="⟳ Cek pH"
-                        android:textAllCaps="false"
-                        android:textColor="#FFFFFF"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/tvTotalDigunakan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1,240 L"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="#1A1A2E"
+                            android:layout_marginEnd="20dp" />
+
+                        <View
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:background="@drawable/bg_dot_orange"
+                            android:layout_marginEnd="6dp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Sisa Kapasitas"
+                            android:textSize="12sp"
+                            android:textColor="#8A8FA8" />
+
+                        <TextView
+                            android:id="@+id/tvSisaKapasitas"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="65%"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="#1A1A2E" />
+                    </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- TITLE -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Riwayat Analisis (24 jam)"
-                android:textSize="17sp"
-                android:textStyle="bold"
-                android:textColor="#202938"
-                android:layout_marginBottom="12dp" />
-
-            <!-- CARD 2: Tren pH -->
+            <!-- ══════════════════════════════════════════ -->
+            <!-- CARD 2: Riwayat Analisis - Tren pH        -->
+            <!-- ══════════════════════════════════════════ -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="0dp">
+                app:cardElevation="2dp"
+                android:layout_marginBottom="14dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_card_blue_border"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="16dp"
+                    android:background="#FFFFFF">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Riwayat Analisis (24 jam)"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="#1A1A2E"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- Tren pH label row -->
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="20dp">
+                        android:layout_marginBottom="8dp">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
 
                             <View
                                 android:layout_width="10dp"
                                 android:layout_height="10dp"
-                                android:layout_marginEnd="10dp"
-                                android:background="@drawable/bg_dot_green" />
+                                android:background="@drawable/bg_dot_blue"
+                                android:layout_marginEnd="8dp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Tren pH"
-                                android:textColor="#202938"
-                                android:textSize="15sp"
-                                android:textStyle="bold" />
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:textColor="#1A1A2E" />
                         </LinearLayout>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
                             android:text="Diperbarui 2 menit yang lalu"
-                            android:textColor="#9EA9BB"
-                            android:textSize="11sp" />
+                            android:textSize="10sp"
+                            android:textColor="#8A8FA8"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true" />
                     </RelativeLayout>
 
+                    <!-- Line Chart -->
                     <com.example.smartwaterchick.AnalisisChartView
                         android:id="@+id/chartPh"
                         android:layout_width="match_parent"
-                        android:layout_height="180dp"
-                        android:layout_marginBottom="12dp" />
+                        android:layout_height="140dp"
+                        android:layout_marginBottom="6dp" />
 
+                    <!-- X-axis labels -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="06:00"
-                            android:textColor="#9EA9BB"
-                            android:textSize="11sp" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="12:00"
-                            android:textColor="#9EA9BB"
-                            android:textSize="11sp" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="18:00"
-                            android:textColor="#9EA9BB"
-                            android:textSize="11sp" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="end"
-                            android:text="00:00"
-                            android:textColor="#9EA9BB"
-                            android:textSize="11sp" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text="06:00"
+                            android:textSize="9sp" android:textColor="#8A8FA8" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text="12:00"
+                            android:textSize="9sp" android:textColor="#8A8FA8" android:gravity="center" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text="18:00"
+                            android:textSize="9sp" android:textColor="#8A8FA8" android:gravity="center" />
+                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:text="00:00"
+                            android:textSize="9sp" android:textColor="#8A8FA8" android:gravity="end" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Laporan Lengkap -->
+            <!-- ══════════════════════════════════════════ -->
+            <!-- CARD 3: Laporan Lengkap                   -->
+            <!-- ══════════════════════════════════════════ -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="0dp">
-                <Button
-                    android:id="@+id/btnLaporanLengkap"
-                    android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:background="@drawable/bg_card_blue_border"
-                    app:backgroundTint="@null"
-                    android:text="📄 Laporan Lengkap"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-            </androidx.cardview.widget.CardView>
-
-            <!-- CARD 4: Kapasitas Air -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp">
+                app:cardElevation="2dp"
+                android:layout_marginBottom="14dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:background="@drawable/bg_card_blue_border">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_marginBottom="20dp">
-                        <ImageView
-                            android:layout_width="44dp"
-                            android:layout_height="44dp"
-                            android:src="@drawable/ic_water_capacity"
-                            android:background="@drawable/bg_icon_blue"
-                            android:padding="8dp"
-                            android:layout_marginEnd="14dp" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Kapasitas Air"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="#0F172A" />
-                    </LinearLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Total Kapasitas Air"
-                            android:textSize="15sp"
-                            android:textColor="#64748B" />
-                        <TextView
-                            android:id="@+id/tvKapasitasAir"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="650L / 1000L"
-                            android:textSize="19sp"
-                            android:textStyle="bold"
-                            android:textColor="#0F172A"
-                            android:layout_alignParentEnd="true" />
-                    </RelativeLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="14dp"
-                        android:background="@drawable/bg_progress_track"
-                        android:orientation="horizontal"
-                        android:weightSum="100"
-                        android:layout_marginBottom="24dp">
-                        <View
-                            android:id="@+id/viewKapasitasProgress"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="65"
-                            android:background="@drawable/bg_progress_kapasitas" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <Button
-                            android:id="@+id/btnIsiAir"
-                            android:layout_width="0dp"
-                            android:layout_height="58dp"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="14dp"
-                            android:background="@drawable/bg_button_outline_blue"
-                            app:backgroundTint="@null"
-                            android:text="Isi Air"
-                            android:textAllCaps="false"
-                            android:textColor="#1B5BCE"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:drawableStart="@drawable/ic_swirl"
-                            android:drawableTint="#1B5BCE"
-                            android:drawablePadding="8dp"
-                            android:gravity="center"
-                            android:paddingStart="20dp"
-                            android:paddingEnd="20dp"
-                            android:stateListAnimator="@null" />
-
-                        <Button
-                            android:id="@+id/btnBuangAir"
-                            android:layout_width="0dp"
-                            android:layout_height="58dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/bg_button_soft_red"
-                            app:backgroundTint="@null"
-                            android:text="Buang Air"
-                            android:textAllCaps="false"
-                            android:textColor="#B91C1C"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:drawableStart="@drawable/ic_swirl"
-                            android:drawableTint="#B91C1C"
-                            android:drawablePadding="8dp"
-                            android:gravity="center"
-                            android:paddingStart="20dp"
-                            android:paddingEnd="20dp"
-                            android:stateListAnimator="@null" />
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- CARD 5: Tempat Minum Ayam -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:background="@drawable/bg_card_blue_border">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_marginBottom="16dp">
-                        <ImageView
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:src="@drawable/ic_water_drop"
-                            android:tint="#1E5CCB"
-                            android:background="@drawable/bg_icon_blue"
-                            android:padding="8dp"
-                            android:layout_marginEnd="12dp" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Tempat Minum Ayam"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:textColor="#202938" />
-                    </LinearLayout>
+                    android:padding="12dp"
+                    android:background="#FFFFFF">
 
                     <Button
-                        android:id="@+id/btnIsiAirAyam"
+                        android:id="@+id/btnLaporanLengkap"
                         android:layout_width="match_parent"
-                        android:layout_height="52dp"
-                        android:background="@drawable/bg_button_primary"
-                        app:backgroundTint="@null"
-                        android:text="🛁 Isi Air"
-                        android:textAllCaps="false"
+                        android:layout_height="48dp"
+                        android:text="📄  Laporan Lengkap"
+                        android:textSize="14sp"
                         android:textColor="#FFFFFF"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:background="@drawable/bg_button_outline_blue"
+                        android:stateListAnimator="@null" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ══════════════════════════════════════════ -->
+            <!-- CARD 4: INFORMASI TERKINI                 -->
+            <!-- ══════════════════════════════════════════ -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                android:layout_marginBottom="14dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:background="#FFFFFF">
+
+                    <!-- Section Header -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="INFORMASI TERKINI"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="#1A1A2E"
+                        android:letterSpacing="0.06"
+                        android:layout_marginBottom="14dp" />
+
+                    <!-- Insight Row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="top">
+
+                        <!-- Blue circle icon -->
+                        <FrameLayout
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:background="@drawable/bg_insight_icon"
+                            android:layout_marginEnd="14dp">
+
+                            <ImageView
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:src="@drawable/ic_water_drop"
+                                android:tint="#FFFFFF"
+                                android:layout_gravity="center" />
+                        </FrameLayout>
+
+                        <!-- Text content -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Efisiensi Meningkat"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                android:textColor="#1A1A2E"
+                                android:layout_marginBottom="6dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Konsumsi air turun 12% dibanding minggu lalu. Hal ini menunjukkan sistem otomatisasi katup bekerja dengan optimal sesuai jadwal pemberian minum."
+                                android:textSize="12sp"
+                                android:textColor="#8A8FA8"
+                                android:lineSpacingMultiplier="1.5" />
+                        </LinearLayout>
+                    </LinearLayout>
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
