@@ -76,10 +76,12 @@ public class KontrolActivity extends AppCompatActivity {
             } else if (id == R.id.nav_controls) {
                 return true;
             } else if (id == R.id.nav_devices) {
-                Toast.makeText(this, "Devices", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, PerangkatActivity.class));
+                finish();
                 return true;
             } else if (id == R.id.nav_settings) {
-                Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, PengaturanActivity.class));
+                finish();
                 return true;
             }
             return false;

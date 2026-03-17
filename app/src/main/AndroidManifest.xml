@@ -11,35 +11,35 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartWaterChick">
-
+        <activity
+            android:name=".PengaturanActivity"
+            android:exported="false" />
         <!-- Activity pertama Login -->
         <activity
             android:name=".LoginActivity"
             android:exported="true"
             android:theme="@style/Theme.SmartWaterChick">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-        </activity>
-
-        <!-- Halaman Dashboard -->
+        </activity> <!-- Halaman Dashboard -->
         <activity
             android:name=".DashboardActivity"
-            android:exported="false" />
-
-        <!-- Halaman Analisis -->
+            android:exported="false" /> <!-- Halaman Analisis -->
         <activity
             android:name=".AnalisisActivity"
-            android:exported="false" />
-
-        <!-- Halaman Kontrol Air -->
+            android:exported="false" /> <!-- Halaman Kontrol Air -->
         <activity
             android:name=".KontrolActivity"
+            android:exported="false" /> <!-- Halaman Perangkat -->
+        <activity
+            android:name=".PerangkatActivity"
             android:exported="false" />
-
+        <activity
+            android:name=".PengaturanActivity"
+            android:exported="false" /> <!-- Halaman Pengaturan -->
     </application>
 
 </manifest>
