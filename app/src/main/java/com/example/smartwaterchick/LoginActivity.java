@@ -11,77 +11,93 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.button.MaterialButton;
-
 public class LoginActivity extends AppCompatActivity {
 
     private EditText etEmail, etPassword;
     private ImageView ivTogglePassword;
     private boolean isPasswordVisible = false;
 
+    private DatabaseHelper db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Init views
+        // init database
+        db = new DatabaseHelper(this);
+
+        // init view
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         ivTogglePassword = findViewById(R.id.ivTogglePassword);
 
         TextView tvForgotPassword = findViewById(R.id.tvForgotPassword);
-        View btnSignIn = findViewById(R.id.btnSignIn);
         TextView tvSignUp = findViewById(R.id.tvSignUp);
+        View btnSignIn = findViewById(R.id.btnSignIn);
         View btnGoogle = findViewById(R.id.btnGoogle);
         View btnFingerprint = findViewById(R.id.btnFingerprint);
 
-        // Toggle password visibility
+        // toggle password
         ivTogglePassword.setOnClickListener(v -> {
             if (isPasswordVisible) {
-                // Hide password
                 etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                ivTogglePassword.setImageResource(R.drawable.ic_visibility); // Reset to visible icon
+                ivTogglePassword.setImageResource(R.drawable.ic_visibility);
                 isPasswordVisible = false;
             } else {
-                // Show password
                 etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                // You might want a different icon for 'hide'
                 isPasswordVisible = true;
             }
-            // Move cursor to end
             etPassword.setSelection(etPassword.length());
         });
 
-        // Sign In button - Dipermudah untuk testing
+        // LOGIN BUTTON (pakai database)
         btnSignIn.setOnClickListener(v -> {
-            // Langsung pindah ke Dashboard untuk mempermudah testing
-            Intent intent = new Intent(this, DashboardActivity.class);
-            startActivity(intent);
-            finish();
+
+            String email = etEmail.getText().toString().trim();
+            String password = etPassword.getText().toString().trim();
+
+            // validasi kosong
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Email/Password tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // cek database
+            boolean isValid = db.checkLogin(email, password);
+
+            if (isValid) {
+                Toast.makeText(this, "Login Berhasil", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                startActivity(intent);
+                finish();
+
+            } else {
+                Toast.makeText(this, "Login Gagal", Toast.LENGTH_SHORT).show();
+            }
         });
 
         // Forgot Password
-        tvForgotPassword.setOnClickListener(v -> {
-            Toast.makeText(this, "Forgot Password diklik", Toast.LENGTH_SHORT).show();
-        });
+        tvForgotPassword.setOnClickListener(v ->
+                Toast.makeText(this, "Fitur belum tersedia", Toast.LENGTH_SHORT).show()
+        );
 
         // Sign Up
-        tvSignUp.setOnClickListener(v -> {
-            Toast.makeText(this, "Sign Up diklik", Toast.LENGTH_SHORT).show();
-        });
+        tvSignUp.setOnClickListener(v ->
+                Toast.makeText(this, "Arahkan ke halaman register", Toast.LENGTH_SHORT).show()
+        );
 
-        // Google Login
+        // Google Login (sementara dummy)
         btnGoogle.setOnClickListener(v -> {
-            Toast.makeText(this, "Login dengan Google", Toast.LENGTH_SHORT).show();
-            // Bypass login for testing
+            Toast.makeText(this, "Login Google (dummy)", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, DashboardActivity.class));
             finish();
         });
 
-        // Fingerprint Login
+        // Fingerprint (sementara dummy)
         btnFingerprint.setOnClickListener(v -> {
-            Toast.makeText(this, "Login dengan Fingerprint", Toast.LENGTH_SHORT).show();
-            // Bypass login for testing
+            Toast.makeText(this, "Fingerprint (dummy)", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, DashboardActivity.class));
             finish();
         });

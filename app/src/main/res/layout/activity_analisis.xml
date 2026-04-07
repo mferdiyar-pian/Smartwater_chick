@@ -207,7 +207,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Riwayat Analisis (24 jam)"
+                        android:text="Riwayat Analisis (20 hari)"
                         android:textSize="15sp"
                         android:textStyle="bold"
                         android:textColor="#1A1A2E"
@@ -243,7 +243,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Diperbarui 2 menit yang lalu"
+                            android:text="Data simulasi"
                             android:textSize="10sp"
                             android:textColor="#8A8FA8"
                             android:layout_alignParentEnd="true"
@@ -263,18 +263,49 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:text="06:00"
-                            android:textSize="9sp" android:textColor="#8A8FA8" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:text="12:00"
-                            android:textSize="9sp" android:textColor="#8A8FA8" android:gravity="center" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:text="18:00"
-                            android:textSize="9sp" android:textColor="#8A8FA8" android:gravity="center" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:text="00:00"
-                            android:textSize="9sp" android:textColor="#8A8FA8" android:gravity="end" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="01"
+                            android:textSize="9sp"
+                            android:textColor="#8A8FA8" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="05"
+                            android:gravity="center"
+                            android:textSize="9sp"
+                            android:textColor="#8A8FA8" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="10"
+                            android:gravity="center"
+                            android:textSize="9sp"
+                            android:textColor="#8A8FA8" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="15"
+                            android:gravity="center"
+                            android:textSize="9sp"
+                            android:textColor="#8A8FA8" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="20"
+                            android:gravity="end"
+                            android:textSize="9sp"
+                            android:textColor="#8A8FA8" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
