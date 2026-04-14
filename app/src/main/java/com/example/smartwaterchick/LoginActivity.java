@@ -71,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 finish();
 
             } else {
@@ -92,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
         btnGoogle.setOnClickListener(v -> {
             Toast.makeText(this, "Login Google (dummy)", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, DashboardActivity.class));
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             finish();
         });
 
@@ -99,6 +101,7 @@ public class LoginActivity extends AppCompatActivity {
         btnFingerprint.setOnClickListener(v -> {
             Toast.makeText(this, "Fingerprint (dummy)", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, DashboardActivity.class));
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             finish();
         });
     }

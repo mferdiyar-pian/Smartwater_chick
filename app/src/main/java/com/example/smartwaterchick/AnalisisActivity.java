@@ -97,6 +97,7 @@ public class AnalisisActivity extends AppCompatActivity {
 
             if (id == R.id.nav_beranda) {
                 startActivity(new Intent(this, DashboardActivity.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 finish();
                 return true;
 
@@ -105,15 +106,18 @@ public class AnalisisActivity extends AppCompatActivity {
 
             } else if (id == R.id.nav_controls) {
                 startActivity(new Intent(this, KontrolActivity.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 return true;
 
             } else if (id == R.id.nav_devices) {
                 startActivity(new Intent(this, PerangkatActivity.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 finish();
                 return true;
 
             } else if (id == R.id.nav_settings) {
                 startActivity(new Intent(this, PengaturanActivity.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 finish();
                 return true;
             }

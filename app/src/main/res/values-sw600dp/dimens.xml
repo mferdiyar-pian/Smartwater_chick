@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tablet 7" dimensions -->
+    <dimen name="screen_padding">18dp</dimen>
+    <dimen name="content_top_padding">14dp</dimen>
+    <dimen name="content_bottom_padding">16dp</dimen>
+
+    <dimen name="content_max_width">560dp</dimen>
+
+    <dimen name="card_radius">16dp</dimen>
+    <dimen name="card_padding">18dp</dimen>
+    <dimen name="card_spacing">16dp</dimen>
+
+    <dimen name="topbar_height">64dp</dimen>
+    <dimen name="small_card_height">140dp</dimen>
+    <dimen name="chart_card_height">160dp</dimen>
+
+    <dimen name="title_text">16sp</dimen>
+    <dimen name="body_text">13sp</dimen>
+    <dimen name="value_text">22sp</dimen>
+    <dimen name="big_value_text">26sp</dimen>
+    <dimen name="button_text">14sp</dimen>
+</resources>

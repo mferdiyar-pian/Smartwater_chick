@@ -1,22 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="screen_padding">12dp</dimen>
-    <dimen name="content_top_padding">10dp</dimen>
-    <dimen name="content_bottom_padding">12dp</dimen>
+    <!-- Default (Phone) dimensions -->
+    <dimen name="screen_padding">14dp</dimen>
+    <dimen name="content_top_padding">12dp</dimen>
+    <dimen name="content_bottom_padding">14dp</dimen>
 
-    <dimen name="content_max_width">420dp</dimen>
+    <dimen name="content_max_width">600dp</dimen>
 
-    <dimen name="card_radius">10dp</dimen>
-    <dimen name="card_padding">12dp</dimen>
+    <dimen name="card_radius">16dp</dimen>
+    <dimen name="card_padding">16dp</dimen>
     <dimen name="card_spacing">12dp</dimen>
 
     <dimen name="topbar_height">56dp</dimen>
-    <dimen name="small_card_height">104dp</dimen>
-    <dimen name="chart_card_height">110dp</dimen>
+    <dimen name="small_card_height">120dp</dimen>
+    <dimen name="chart_card_height">140dp</dimen>
 
-    <dimen name="title_text">13sp</dimen>
-    <dimen name="body_text">10sp</dimen>
-    <dimen name="value_text">18sp</dimen>
-    <dimen name="big_value_text">20sp</dimen>
-    <dimen name="button_text">10sp</dimen>
+    <!-- Text sizes - scalable -->
+    <dimen name="title_text">15sp</dimen>
+    <dimen name="subtitle_text">13sp</dimen>
+    <dimen name="body_text">12sp</dimen>
+    <dimen name="value_text">20sp</dimen>
+    <dimen name="big_value_text">24sp</dimen>
+    <dimen name="button_text">14sp</dimen>
+    <dimen name="caption_text">10sp</dimen>
+
+    <!-- Component sizes -->
+    <dimen name="icon_small">24dp</dimen>
+    <dimen name="icon_medium">32dp</dimen>
+    <dimen name="icon_large">48dp</dimen>
+    <dimen name="button_height">48dp</dimen>
+    <dimen name="button_height_large">56dp</dimen>
 </resources>

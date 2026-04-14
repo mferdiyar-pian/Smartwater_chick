@@ -96,7 +96,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="14dp"
-                app:cardElevation="1.5dp"
+                app:cardElevation="0dp"
                 android:layout_marginBottom="10dp">
 
                 <LinearLayout
@@ -173,7 +173,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="14dp"
-                app:cardElevation="1.5dp"
+                app:cardElevation="0dp"
                 android:layout_marginBottom="10dp">
 
                 <LinearLayout
@@ -236,7 +236,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="14dp"
-                app:cardElevation="1.5dp"
+                app:cardElevation="0dp"
                 android:layout_marginBottom="10dp">
 
                 <LinearLayout
@@ -264,7 +264,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="14dp"
-                app:cardElevation="1.5dp"
+                app:cardElevation="0dp"
                 android:layout_marginBottom="10dp">
 
                 <LinearLayout
@@ -350,6 +350,6 @@
         app:labelVisibilityMode="labeled"
         app:itemTextColor="@color/nav_item_color"
         app:itemIconTint="@color/nav_item_color"
-        app:elevation="8dp" />
+        app:elevation="0dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

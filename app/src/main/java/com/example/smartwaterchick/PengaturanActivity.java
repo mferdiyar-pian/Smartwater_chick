@@ -56,6 +56,7 @@ public class PengaturanActivity extends AppCompatActivity {
                             Intent intent = new Intent(this, LoginActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
+                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         })
                         .setNegativeButton("Batal", null)
                         .show());
@@ -67,23 +68,25 @@ public class PengaturanActivity extends AppCompatActivity {
             int id = item.getItemId();
             if (id == R.id.nav_beranda) {
                 startActivity(new Intent(this, DashboardActivity.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 finish();
                 return true;
             } else if (id == R.id.nav_analytics) {
                 startActivity(new Intent(this, AnalisisActivity.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 finish();
                 return true;
             } else if (id == R.id.nav_controls) {
                 startActivity(new Intent(this, KontrolActivity.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 finish();
                 return true;
             } else if (id == R.id.nav_devices) {
                 startActivity(new Intent(this, PerangkatActivity.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 finish();
                 return true;
             } else if (id == R.id.nav_settings) {
-                startActivity(new Intent(this, PengaturanActivity.class));
-                finish();
                 return true;
             }
             return false;

@@ -51,22 +51,24 @@ public class PerangkatActivity extends AppCompatActivity {
             int id = item.getItemId();
             if (id == R.id.nav_beranda) {
                 startActivity(new Intent(this, DashboardActivity.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 finish();
                 return true;
             } else if (id == R.id.nav_analytics) {
                 startActivity(new Intent(this, AnalisisActivity.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 finish();
                 return true;
             } else if (id == R.id.nav_controls) {
                 startActivity(new Intent(this, KontrolActivity.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 finish();
                 return true;
             } else if (id == R.id.nav_devices) {
-                startActivity(new Intent(this, PerangkatActivity.class));
-                finish();
                 return true;
             } else if (id == R.id.nav_settings) {
                 startActivity(new Intent(this, PengaturanActivity.class));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 finish();
                 return true;
             }
