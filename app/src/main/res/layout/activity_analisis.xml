@@ -253,7 +253,9 @@
                         android:text="📄  Laporan Lengkap"
                         android:textSize="13sp"
                         android:textColor="#FFFFFF"
-                        android:background="@drawable/bg_button_outline_blue"
+                        android:background="@drawable/bg_button_primary"
+                        android:backgroundTint="@null"
+                        app:backgroundTint="@null"
                         android:stateListAnimator="@null" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

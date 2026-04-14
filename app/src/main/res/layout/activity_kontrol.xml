@@ -393,6 +393,8 @@
                         android:textSize="14sp"
                         android:textColor="#FFFFFF"
                         android:background="@drawable/bg_button_primary"
+                        android:backgroundTint="@null"
+                        app:backgroundTint="@null"
                         android:stateListAnimator="@null" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
