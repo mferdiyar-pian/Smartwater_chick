@@ -511,57 +511,7 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- CARD: Riwayat Kadar pH Chart -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="@dimen/card_radius"
-                app:cardElevation="0dp"
-                android:layout_marginBottom="@dimen/card_spacing">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="@dimen/card_padding"
-                    android:background="#FFFFFF">
-
-                    <!-- Header -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_marginBottom="12dp">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Riwayat Kadar pH"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            android:textColor="#1A1A2E" />
-
-                        <TextView
-                            android:id="@+id/tvLihatDetail"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Lihat detail"
-                            android:textSize="13sp"
-                            android:textColor="@color/blue_primary"
-                            android:clickable="true"
-                            android:focusable="true" />
-                    </LinearLayout>
-
-                    <!-- Chart View -->
-                    <com.example.smartwaterchick.PhChartView
-                        android:id="@+id/phChartView"
-                        android:layout_width="match_parent"
-                        android:layout_height="140dp" />
-
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
@@ -573,6 +523,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="#FFFFFF"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        app:itemPaddingTop="4dp"
+        app:itemPaddingBottom="4dp"
+        app:itemIconSize="20dp"
+        app:itemTextAppearanceActive="@style/BottomNavTextAppearance"
+        app:itemTextAppearanceInactive="@style/BottomNavTextAppearance"
         app:menu="@menu/bottom_nav_menu"
         app:labelVisibilityMode="labeled"
         app:itemTextColor="@color/nav_item_color"

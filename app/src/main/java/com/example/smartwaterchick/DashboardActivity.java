@@ -40,11 +40,6 @@ public class DashboardActivity extends AppCompatActivity {
                 findViewById(R.id.btnAbaikan).setVisibility(android.view.View.GONE)
         );
 
-        // Lihat detail
-        findViewById(R.id.tvLihatDetail).setOnClickListener(v ->
-                Toast.makeText(this, "Lihat riwayat lengkap", Toast.LENGTH_SHORT).show()
-        );
-
         // Bottom Navigation
         BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
         bottomNav.setSelectedItemId(R.id.nav_beranda);
