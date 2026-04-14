@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -38,7 +39,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
+        // ======================
         // TABLE USER
+        // ======================
         String createUser = "CREATE TABLE " + TABLE_USER + " (" +
                 COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_EMAIL + " TEXT UNIQUE, " +
@@ -51,7 +54,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         user.put(COLUMN_PASSWORD, "1234");
         db.insert(TABLE_USER, null, user);
 
+        // ======================
         // TABLE MONITORING
+        // ======================
         String createMonitoring = "CREATE TABLE " + TABLE_MONITORING + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_TANGGAL + " TEXT, " +
@@ -60,7 +65,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_PH + " REAL)";
         db.execSQL(createMonitoring);
 
+        // ======================
         // 20 DATA DUMMY
+        // ======================
         insertDummy(db, "2026-03-01", 27, 80, 7);
         insertDummy(db, "2026-03-02", 28, 82, 7);
         insertDummy(db, "2026-03-03", 29, 85, 6.8);
@@ -84,6 +91,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         insertDummy(db, "2026-03-20", 32, 91, 6.4);
     }
 
+    // ======================
+    // INSERT DATA
+    // ======================
     private void insertDummy(SQLiteDatabase db, String tanggal, double suhu, double kelembaban, double ph) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_TANGGAL, tanggal);
@@ -93,6 +103,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(TABLE_MONITORING, null, values);
     }
 
+    // ======================
+    // UPGRADE DATABASE
+    // ======================
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
@@ -117,12 +130,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // ======================
-    // DATA GRAFIK
+    // AMBIL SEMUA DATA
     // ======================
-    public ArrayList<Float> getSuhuData() {
-        return getData("suhu");
-    }
-
     public ArrayList<Float> getData(String column) {
         ArrayList<Float> data = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -140,5 +149,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         cursor.close();
         return data;
+    }
+
+    // ======================
+    // FILTER DATA (1 HARI / 7 HARI / 1 BULAN)
+    // ======================
+    public ArrayList<Float> getLimitedData(String column, int limit) {
+        ArrayList<Float> data = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(
+                "SELECT " + column + " FROM " + TABLE_MONITORING +
+                        " ORDER BY tanggal DESC LIMIT " + limit,
+                null
+        );
+
+        if (cursor.moveToFirst()) {
+            do {
+                data.add(cursor.getFloat(0));
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+
+        Collections.reverse(data); // supaya urut dari lama → baru
+        return data;
+    }
+
+    // ======================
+    // KHUSUS PH (OPTIONAL BIAR RAPI)
+    // ======================
+    public ArrayList<Float> getPhData(int limit) {
+        return getLimitedData("ph", limit);
     }
 }

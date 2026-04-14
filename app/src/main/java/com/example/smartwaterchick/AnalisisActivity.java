@@ -3,6 +3,10 @@ package com.example.smartwaterchick;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +19,8 @@ public class AnalisisActivity extends AppCompatActivity {
 
     private DatabaseHelper db;
     private AnalisisChartView chartView;
+    private BarChartView barChart;
+    private Spinner spinnerFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,18 +31,50 @@ public class AnalisisActivity extends AppCompatActivity {
 
         db = new DatabaseHelper(this);
         chartView = findViewById(R.id.chartPh);
+        barChart = findViewById(R.id.barChart);
+        spinnerFilter = findViewById(R.id.spinnerFilter);
 
-        // ambil data dari database
-        ArrayList<Float> suhuList = db.getSuhuData();
+        // ======================
+        // SETUP DROPDOWN
+        // ======================
+        String[] filter = {"1 Hari", "1 Minggu", "1 Bulan"};
 
-        float[] suhuArray = new float[suhuList.size()];
-        for (int i = 0; i < suhuList.size(); i++) {
-            suhuArray[i] = suhuList.get(i);
-        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                filter
+        );
 
-        chartView.setData(suhuArray, Color.parseColor("#1B5BCE"));
+        spinnerFilter.setAdapter(adapter);
 
-        // tombol back
+        // ======================
+        // DEFAULT LOAD (1 BULAN)
+        // ======================
+        spinnerFilter.setSelection(2);  // default ke "1 Bulan"
+        loadChartData(30);
+
+        // ======================
+        // EVENT FILTER
+        // ======================
+        spinnerFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    loadChartData(1);
+                } else if (position == 1) {
+                    loadChartData(7);
+                } else {
+                    loadChartData(30);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        // ======================
+        // BACK BUTTON
+        // ======================
         findViewById(R.id.ivBack).setOnClickListener(v -> finish());
 
         findViewById(R.id.ivNotification).setOnClickListener(v ->
@@ -48,6 +86,9 @@ public class AnalisisActivity extends AppCompatActivity {
         findViewById(R.id.btnLaporanLengkap).setOnClickListener(v ->
                 Toast.makeText(this, "Membuka laporan lengkap...", Toast.LENGTH_SHORT).show());
 
+        // ======================
+        // BOTTOM NAVIGATION
+        // ======================
         BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
         bottomNav.setSelectedItemId(R.id.nav_analytics);
 
@@ -79,5 +120,24 @@ public class AnalisisActivity extends AppCompatActivity {
 
             return false;
         });
+    }
+
+    // ======================
+    // METHOD LOAD DATA KE CHART
+    // ======================
+    private void loadChartData(int limit) {
+        ArrayList<Float> dataList = db.getLimitedData("ph", limit);
+
+        if (dataList == null || dataList.isEmpty()) {
+            chartView.setData(new float[]{6.8f}, Color.parseColor("#1565C0"));
+            return;
+        }
+
+        float[] dataArray = new float[dataList.size()];
+        for (int i = 0; i < dataList.size(); i++) {
+            dataArray[i] = dataList.get(i);
+        }
+
+        chartView.setData(dataArray, Color.parseColor("#1565C0"));
     }
 }

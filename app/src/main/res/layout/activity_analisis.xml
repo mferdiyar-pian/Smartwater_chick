@@ -86,7 +86,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="14dp">
+            android:padding="12dp"
+            android:paddingTop="14dp">
 
             <!-- ═══════════════════════════════════════════ -->
             <!-- CARD 1: Kapasitas & Penggunaan (Bar Chart) -->
@@ -94,41 +95,42 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                android:layout_marginBottom="14dp">
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1.5dp"
+                android:layout_marginBottom="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp"
+                    android:padding="14dp"
                     android:background="#FFFFFF">
 
-                    <!-- Title & Subtitle -->
+                    <!-- Title -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Kapasitas &amp; Penggunaan"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold"
                         android:textColor="#1A1A2E"
                         android:layout_marginBottom="2dp" />
 
+                    <!-- Subtitle -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Volume air dalam tangki (Liter)"
-                        android:textSize="11sp"
-                        android:textColor="#8A8FA8"
-                        android:layout_marginBottom="12dp" />
+                        android:textSize="10sp"
+                        android:textColor="#9AAABF"
+                        android:layout_marginBottom="10dp" />
 
-                    <!-- Bar Chart -->
+                    <!-- Bar Chart — tinggi proporsional -->
                     <com.example.smartwaterchick.BarChartView
                         android:id="@+id/barChart"
                         android:layout_width="match_parent"
-                        android:layout_height="220dp"
-                        android:layout_marginBottom="14dp" />
+                        android:layout_height="200dp"
+                        android:layout_marginBottom="10dp" />
 
                     <!-- Legend -->
                     <LinearLayout
@@ -138,175 +140,92 @@
                         android:gravity="center_vertical">
 
                         <View
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
+                            android:layout_width="9dp"
+                            android:layout_height="9dp"
                             android:background="@drawable/bg_dot_blue"
-                            android:layout_marginEnd="6dp" />
+                            android:layout_marginEnd="5dp" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Total Digunakan"
-                            android:textSize="12sp"
-                            android:textColor="#8A8FA8" />
+                            android:textSize="11sp"
+                            android:textColor="#9AAABF" />
 
                         <TextView
                             android:id="@+id/tvTotalDigunakan"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="1,240 L"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="#1A1A2E"
-                            android:layout_marginEnd="20dp" />
-
-                        <View
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
-                            android:background="@drawable/bg_dot_orange"
-                            android:layout_marginEnd="6dp" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Sisa Kapasitas"
-                            android:textSize="12sp"
-                            android:textColor="#8A8FA8" />
-
-                        <TextView
-                            android:id="@+id/tvSisaKapasitas"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="65%"
-                            android:textSize="14sp"
+                            android:textSize="13sp"
                             android:textStyle="bold"
                             android:textColor="#1A1A2E" />
+
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <!-- ══════════════════════════════════════════ -->
-            <!-- CARD 2: Riwayat Analisis - Tren pH        -->
+            <!-- CARD 2: Riwayat Analisis — Tren pH        -->
             <!-- ══════════════════════════════════════════ -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                android:layout_marginBottom="14dp">
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1.5dp"
+                android:layout_marginBottom="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp"
+                    android:padding="14dp"
                     android:background="#FFFFFF">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Riwayat Analisis (20 hari)"
-                        android:textSize="15sp"
-                        android:textStyle="bold"
-                        android:textColor="#1A1A2E"
-                        android:layout_marginBottom="12dp" />
-
-                    <!-- Tren pH label row -->
+                    <!-- Header row: judul + filter sejajar -->
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical">
-
-                            <View
-                                android:layout_width="10dp"
-                                android:layout_height="10dp"
-                                android:background="@drawable/bg_dot_blue"
-                                android:layout_marginEnd="8dp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Tren pH"
-                                android:textSize="13sp"
-                                android:textStyle="bold"
-                                android:textColor="#1A1A2E" />
-                        </LinearLayout>
+                        android:layout_marginBottom="10dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Data simulasi"
-                            android:textSize="10sp"
-                            android:textColor="#8A8FA8"
+                            android:text="Riwayat Analisis"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="#1A1A2E"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentStart="true" />
+
+                        <Spinner
+                            android:id="@+id/spinnerFilter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
                             android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true" />
+                            android:layout_centerVertical="true"
+                            android:background="@drawable/bg_spinner_blue"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp" />
+
                     </RelativeLayout>
 
-                    <!-- Line Chart -->
+                    <!-- Line Chart — tinggi lebih proporsional -->
                     <com.example.smartwaterchick.AnalisisChartView
                         android:id="@+id/chartPh"
                         android:layout_width="match_parent"
-                        android:layout_height="140dp"
-                        android:layout_marginBottom="6dp" />
+                        android:layout_height="160dp" />
 
-                    <!-- X-axis labels -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <!-- Keterangan pH -->
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:text="pH normal air minum: 6.5 – 7.5"
+                        android:textSize="9.5sp"
+                        android:textColor="#9AAABF"
+                        android:layout_marginTop="6dp" />
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="01"
-                            android:textSize="9sp"
-                            android:textColor="#8A8FA8" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="05"
-                            android:gravity="center"
-                            android:textSize="9sp"
-                            android:textColor="#8A8FA8" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="10"
-                            android:gravity="center"
-                            android:textSize="9sp"
-                            android:textColor="#8A8FA8" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="15"
-                            android:gravity="center"
-                            android:textSize="9sp"
-                            android:textColor="#8A8FA8" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="20"
-                            android:gravity="end"
-                            android:textSize="9sp"
-                            android:textColor="#8A8FA8" />
-                    </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -316,22 +235,22 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                android:layout_marginBottom="14dp">
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1.5dp"
+                android:layout_marginBottom="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="12dp"
+                    android:padding="10dp"
                     android:background="#FFFFFF">
 
                     <Button
                         android:id="@+id/btnLaporanLengkap"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="46dp"
                         android:text="📄  Laporan Lengkap"
-                        android:textSize="14sp"
+                        android:textSize="13sp"
                         android:textColor="#FFFFFF"
                         android:background="@drawable/bg_button_outline_blue"
                         android:stateListAnimator="@null" />
@@ -344,45 +263,45 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                android:layout_marginBottom="14dp">
+                app:cardCornerRadius="14dp"
+                app:cardElevation="1.5dp"
+                android:layout_marginBottom="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp"
+                    android:padding="14dp"
                     android:background="#FFFFFF">
 
-                    <!-- Section Header -->
+                    <!-- Section header -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="INFORMASI TERKINI"
-                        android:textSize="12sp"
+                        android:textSize="10sp"
                         android:textStyle="bold"
                         android:textColor="#1A1A2E"
-                        android:letterSpacing="0.06"
-                        android:layout_marginBottom="14dp" />
+                        android:letterSpacing="0.07"
+                        android:layout_marginBottom="12dp" />
 
-                    <!-- Insight Row -->
+                    <!-- Insight row -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="top">
 
-                        <!-- Blue circle icon -->
+                        <!-- Icon circle -->
                         <FrameLayout
-                            android:layout_width="44dp"
-                            android:layout_height="44dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
                             android:background="@drawable/bg_insight_icon"
-                            android:layout_marginEnd="14dp">
+                            android:layout_marginEnd="12dp">
 
                             <ImageView
-                                android:layout_width="22dp"
-                                android:layout_height="22dp"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
                                 android:src="@drawable/ic_water_drop"
                                 android:tint="#FFFFFF"
                                 android:layout_gravity="center" />
@@ -399,18 +318,18 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Efisiensi Meningkat"
-                                android:textSize="15sp"
+                                android:textSize="13sp"
                                 android:textStyle="bold"
                                 android:textColor="#1A1A2E"
-                                android:layout_marginBottom="6dp" />
+                                android:layout_marginBottom="5dp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Konsumsi air turun 12% dibanding minggu lalu. Hal ini menunjukkan sistem otomatisasi katup bekerja dengan optimal sesuai jadwal pemberian minum."
-                                android:textSize="12sp"
-                                android:textColor="#8A8FA8"
-                                android:lineSpacingMultiplier="1.5" />
+                                android:textSize="11sp"
+                                android:textColor="#9AAABF"
+                                android:lineSpacingMultiplier="1.55" />
                         </LinearLayout>
                     </LinearLayout>
 

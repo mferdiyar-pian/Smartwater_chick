@@ -200,7 +200,60 @@
                         android:text="7.2 pH"
                         android:textSize="11sp"
                         android:textColor="#8A8FA8"
-                        android:gravity="center" />
+                        android:gravity="center"
+                        android:layout_marginBottom="12dp" />
+
+                    <!-- Keterangan pH -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="12dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Keterangan pH"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="#1A1A2E" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="AMAN"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="#2ECC71"
+                            android:background="@drawable/bg_badge_normal"
+                            android:paddingStart="12dp"
+                            android:paddingEnd="12dp"
+                            android:paddingTop="4dp"
+                            android:paddingBottom="4dp" />
+                    </LinearLayout>
+
+                    <!-- Cek pH Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnCekPh"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/bg_button_primary"
+                        android:text="Cek pH"
+                        android:textAllCaps="false"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        app:backgroundTint="@null"
+                        app:cornerRadius="12dp"
+                        app:icon="@drawable/ic_ph_monitoring"
+                        app:iconGravity="textStart"
+                        app:iconPadding="8dp"
+                        app:iconTint="#FFFFFF"
+                        app:rippleColor="@android:color/transparent" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

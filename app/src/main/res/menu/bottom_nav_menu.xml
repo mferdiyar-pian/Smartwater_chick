@@ -9,22 +9,22 @@
     <item
         android:id="@+id/nav_analytics"
         android:icon="@drawable/ic_analytics"
-        android:title="Analytics" />
+        android:title="Analisis" />
 
     <item
         android:id="@+id/nav_controls"
         android:icon="@drawable/ic_controls"
-        android:title="Controls" />
+        android:title="Kontrol" />
 
     <item
         android:id="@+id/nav_devices"
         android:icon="@drawable/ic_devices"
-        android:title="Devices" />
+        android:title="Peringatan" />
 
     <item
         android:id="@+id/nav_settings"
         android:icon="@drawable/ic_settings"
-        android:title="Settings" />
+        android:title="Pengaturan" />
 
 </menu>
 
