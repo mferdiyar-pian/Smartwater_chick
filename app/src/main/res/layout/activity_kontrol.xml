@@ -10,6 +10,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
         android:background="@color/blue_header"
         app:elevation="0dp">
 
@@ -781,10 +782,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="#FFFFFF"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp"
-        app:itemPaddingTop="4dp"
-        app:itemPaddingBottom="4dp"
         app:itemIconSize="20dp"
         app:itemTextAppearanceActive="@style/BottomNavTextAppearance"
         app:itemTextAppearanceInactive="@style/BottomNavTextAppearance"

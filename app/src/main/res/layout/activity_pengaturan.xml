@@ -25,7 +25,10 @@
                 android:layout_height="220dp"
                 android:orientation="vertical"
                 android:background="@drawable/bg_header_blue_gradient"
-                android:padding="20dp">
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingTop="48dp"
+                android:paddingBottom="20dp">
 
                 <!-- Title row -->
                 <RelativeLayout
@@ -623,10 +626,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="#FFFFFF"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp"
-        app:itemPaddingTop="4dp"
-        app:itemPaddingBottom="4dp"
         app:itemIconSize="20dp"
         app:itemTextAppearanceActive="@style/BottomNavTextAppearance"
         app:itemTextAppearanceInactive="@style/BottomNavTextAppearance"
