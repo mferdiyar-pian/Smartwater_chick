@@ -502,11 +502,10 @@
                         android:background="#F0F2F8"
                         android:layout_marginBottom="14dp" />
 
-                    <!-- Sensor Kelembaban -->
+                    <!-- Sensor Ultrasonik (Volume Air) -->
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="14dp">
+                        android:layout_height="wrap_content">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -530,66 +529,26 @@
                                     android:layout_gravity="center" />
                             </FrameLayout>
 
-                            <TextView
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Sensor Kelembaban"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:textColor="#1A1A2E" />
-                        </LinearLayout>
+                                android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Aktif"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:textColor="#2ECC71"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true" />
-                    </RelativeLayout>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Sensor Ultrasonik"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:textColor="#1A1A2E" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#F0F2F8"
-                        android:layout_marginBottom="14dp" />
-
-                    <!-- Sensor Suhu -->
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:layout_alignParentStart="true"
-                            android:layout_centerVertical="true">
-
-                            <FrameLayout
-                                android:layout_width="36dp"
-                                android:layout_height="36dp"
-                                android:background="@drawable/bg_icon_orange"
-                                android:layout_marginEnd="12dp">
-
-                                <ImageView
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
-                                    android:src="@drawable/ic_controls"
-                                    android:tint="#F39C12"
-                                    android:layout_gravity="center" />
-                            </FrameLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Sensor Suhu"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:textColor="#1A1A2E" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Untuk volume air"
+                                    android:textSize="11sp"
+                                    android:textColor="#8A8FA8" />
+                            </LinearLayout>
                         </LinearLayout>
 
                         <TextView
