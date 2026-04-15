@@ -66,7 +66,7 @@ public class AnalisisActivity extends AppCompatActivity {
         );
         spinnerFilterBar.setAdapter(barAdapter);
         spinnerFilterBar.setSelection(2); // Default ke 1 Bulan (20 data)
-        barChart.setMonthlyData(); // Load data default
+        loadBarChartData("monthly", 20); // Load data default dari database
 
         // ======================
         // EVENT FILTER DIAGRAM BATANG
@@ -76,13 +76,13 @@ public class AnalisisActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0: // 1 Hari
-                        barChart.setDailyData();
+                        loadBarChartData("daily", 7);
                         break;
                     case 1: // 1 Minggu
-                        barChart.setWeeklyData();
+                        loadBarChartData("weekly", 4);
                         break;
                     case 2: // 1 Bulan
-                        barChart.setMonthlyData();
+                        loadBarChartData("monthly", 20);
                         break;
                 }
             }
@@ -165,7 +165,7 @@ public class AnalisisActivity extends AppCompatActivity {
     }
 
     // ======================
-    // METHOD LOAD DATA KE CHART
+    // METHOD LOAD DATA KE CHART (DIAGRAM GARIS pH)
     // ======================
     private void loadChartData(int limit) {
         ArrayList<Float> dataList = db.getLimitedData("ph", limit);
@@ -181,5 +181,14 @@ public class AnalisisActivity extends AppCompatActivity {
         }
 
         chartView.setData(dataArray, Color.parseColor("#1565C0"));
+    }
+
+    // ======================
+    // METHOD LOAD DATA KE DIAGRAM BATANG
+    // ======================
+    private void loadBarChartData(String tipe, int limit) {
+        ArrayList<Float> dataList = db.getVolumeData(tipe, limit);
+        ArrayList<String> labelList = db.getVolumeLabels(tipe, limit);
+        barChart.loadDataFromDatabase(dataList, labelList, tipe);
     }
 }
