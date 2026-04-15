@@ -1,30 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+
+
     <item
+
         android:id="@+id/nav_beranda"
+
         android:icon="@drawable/ic_home"
+
         android:title="Beranda" />
 
+
+
     <item
+
         android:id="@+id/nav_analytics"
+
         android:icon="@drawable/ic_analytics"
+
         android:title="Analisis" />
 
+
+
     <item
+
         android:id="@+id/nav_controls"
+
         android:icon="@drawable/ic_controls"
+
         android:title="Kontrol" />
 
-    <item
-        android:id="@+id/nav_devices"
-        android:icon="@drawable/ic_devices"
-        android:title="Perangkat" />
+
 
     <item
+
+        android:id="@+id/nav_devices"
+
+        android:icon="@drawable/ic_devices"
+
+        android:title="Peringatan" />
+
+
+
+    <item
+
         android:id="@+id/nav_settings"
+
         android:icon="@drawable/ic_settings"
+
         android:title="Pengaturan" />
 
+
+
 </menu>
+
+
 

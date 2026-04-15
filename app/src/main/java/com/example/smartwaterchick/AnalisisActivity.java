@@ -21,6 +21,7 @@ public class AnalisisActivity extends AppCompatActivity {
     private AnalisisChartView chartView;
     private BarChartView barChart;
     private Spinner spinnerFilter;
+    private Spinner spinnerFilterBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public class AnalisisActivity extends AppCompatActivity {
         chartView = findViewById(R.id.chartPh);
         barChart = findViewById(R.id.barChart);
         spinnerFilter = findViewById(R.id.spinnerFilter);
+        spinnerFilterBar = findViewById(R.id.spinnerFilterBar);
 
         // ======================
         // SETUP DROPDOWN
@@ -48,10 +50,46 @@ public class AnalisisActivity extends AppCompatActivity {
         spinnerFilter.setAdapter(adapter);
 
         // ======================
-        // DEFAULT LOAD (1 BULAN)
+        // DEFAULT LOAD DIAGRAM PH (1 BULAN)
         // ======================
         spinnerFilter.setSelection(2);  // default ke "1 Bulan"
         loadChartData(30);
+
+        // ======================
+        // SETUP DROPDOWN DIAGRAM BATANG
+        // ======================
+        String[] barFilterOptions = {"1 Hari", "1 Minggu", "1 Bulan"};
+        ArrayAdapter<String> barAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                barFilterOptions
+        );
+        spinnerFilterBar.setAdapter(barAdapter);
+        spinnerFilterBar.setSelection(2); // Default ke 1 Bulan (20 data)
+        barChart.setMonthlyData(); // Load data default
+
+        // ======================
+        // EVENT FILTER DIAGRAM BATANG
+        // ======================
+        spinnerFilterBar.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0: // 1 Hari
+                        barChart.setDailyData();
+                        break;
+                    case 1: // 1 Minggu
+                        barChart.setWeeklyData();
+                        break;
+                    case 2: // 1 Bulan
+                        barChart.setMonthlyData();
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
 
         // ======================
         // EVENT FILTER
