@@ -180,9 +180,126 @@
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:layout_gravity="end"
-                    android:layout_marginBottom="32dp"
+                    android:layout_marginBottom="20dp"
                     android:clickable="true"
                     android:focusable="true" />
+
+                <!-- CAPTCHA Section -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="#F8FAFF"
+                    android:layout_marginBottom="24dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Verifikasi Keamanan"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"
+                            android:layout_marginBottom="12dp" />
+
+                        <!-- Captcha Display Row -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="56dp"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="12dp">
+
+                            <!-- Captcha Image/Display -->
+                            <LinearLayout
+                                android:id="@+id/captchaDisplay"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="horizontal"
+                                android:gravity="center"
+                                android:background="@drawable/bg_input_field">
+
+                                <TextView
+                                    android:id="@+id/tvCaptchaQuestion"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="5 + 3 = ?"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/blue_primary"
+                                    android:fontFamily="monospace" />
+                            </LinearLayout>
+
+                            <!-- Refresh Button -->
+                            <ImageView
+                                android:id="@+id/ivRefreshCaptcha"
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/ic_refresh"
+                                android:tint="@color/blue_primary"
+                                android:padding="12dp"
+                                android:layout_marginStart="8dp"
+                                android:background="@drawable/bg_circle_blue"
+                                android:clickable="true"
+                                android:focusable="true" />
+                        </LinearLayout>
+
+                        <!-- Captcha Input -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:orientation="horizontal"
+                            android:background="@drawable/bg_input_field"
+                            android:gravity="center_vertical"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_shield"
+                                android:tint="@color/text_secondary"
+                                android:layout_marginEnd="12dp" />
+
+                            <EditText
+                                android:id="@+id/etCaptcha"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="@null"
+                                android:hint="Masukkan jawaban captcha"
+                                android:textColorHint="@color/text_hint"
+                                android:textColor="@color/text_primary"
+                                android:textSize="14sp"
+                                android:inputType="number"
+                                android:imeOptions="actionDone"
+                                android:singleLine="true" />
+
+                            <ImageView
+                                android:id="@+id/ivCaptchaStatus"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_check_circle"
+                                android:tint="#CCCCCC"
+                                android:visibility="invisible" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Masukkan hasil penjumlahan di atas"
+                            android:textSize="11sp"
+                            android:textColor="@color/text_secondary"
+                            android:layout_marginTop="8dp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
                 <!-- Sign In Button -->
                 <Button
@@ -196,7 +313,7 @@
                     android:textStyle="bold"
                     android:background="@drawable/bg_button_primary"
                     app:backgroundTint="@null"
-                    android:layout_marginBottom="32dp" />
+                    android:layout_marginBottom="24dp" />
 
                 <!-- Divider OR LOGIN WITH -->
                 <LinearLayout

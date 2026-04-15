@@ -11,13 +11,19 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Random;
+
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText etEmail, etPassword;
-    private ImageView ivTogglePassword;
+    private EditText etEmail, etPassword, etCaptcha;
+    private ImageView ivTogglePassword, ivRefreshCaptcha, ivCaptchaStatus;
+    private TextView tvCaptchaQuestion;
     private boolean isPasswordVisible = false;
+    private boolean isCaptchaValid = false;
 
     private DatabaseHelper db;
+    private Random random = new Random();
+    private int currentCaptchaAnswer = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +36,20 @@ public class LoginActivity extends AppCompatActivity {
         // init view
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
+        etCaptcha = findViewById(R.id.etCaptcha);
         ivTogglePassword = findViewById(R.id.ivTogglePassword);
+        ivRefreshCaptcha = findViewById(R.id.ivRefreshCaptcha);
+        ivCaptchaStatus = findViewById(R.id.ivCaptchaStatus);
+        tvCaptchaQuestion = findViewById(R.id.tvCaptchaQuestion);
 
         TextView tvForgotPassword = findViewById(R.id.tvForgotPassword);
         TextView tvSignUp = findViewById(R.id.tvSignUp);
         View btnSignIn = findViewById(R.id.btnSignIn);
         View btnGoogle = findViewById(R.id.btnGoogle);
         View btnFingerprint = findViewById(R.id.btnFingerprint);
+
+        // Generate initial captcha
+        generateNewCaptcha();
 
         // toggle password
         ivTogglePassword.setOnClickListener(v -> {
@@ -51,15 +64,44 @@ public class LoginActivity extends AppCompatActivity {
             etPassword.setSelection(etPassword.length());
         });
 
-        // LOGIN BUTTON (pakai database)
+        // Refresh Captcha button
+        ivRefreshCaptcha.setOnClickListener(v -> generateNewCaptcha());
+
+        // LOGIN BUTTON (pakai database + captcha)
         btnSignIn.setOnClickListener(v -> {
 
             String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
+            String captchaInput = etCaptcha.getText().toString().trim();
 
             // validasi kosong
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Email/Password tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // validasi captcha
+            if (captchaInput.isEmpty()) {
+                Toast.makeText(this, "Captcha tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            try {
+                int userAnswer = Integer.parseInt(captchaInput);
+                if (userAnswer != currentCaptchaAnswer) {
+                    Toast.makeText(this, "Captcha salah! Silakan coba lagi.", Toast.LENGTH_SHORT).show();
+                    ivCaptchaStatus.setImageResource(R.drawable.ic_close);
+                    ivCaptchaStatus.setColorFilter(getResources().getColor(android.R.color.holo_red_light));
+                    ivCaptchaStatus.setVisibility(View.VISIBLE);
+                    generateNewCaptcha();
+                    return;
+                }
+                // Captcha benar
+                ivCaptchaStatus.setImageResource(R.drawable.ic_check_circle);
+                ivCaptchaStatus.setColorFilter(getResources().getColor(android.R.color.holo_green_light));
+                ivCaptchaStatus.setVisibility(View.VISIBLE);
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "Captcha harus berupa angka", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -75,7 +117,8 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
 
             } else {
-                Toast.makeText(this, "Login Gagal", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Login Gagal - Email/Password salah", Toast.LENGTH_SHORT).show();
+                generateNewCaptcha();
             }
         });
 
@@ -104,5 +147,16 @@ public class LoginActivity extends AppCompatActivity {
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             finish();
         });
+    }
+
+    // Method untuk generate captcha baru
+    private void generateNewCaptcha() {
+        int num1 = random.nextInt(10) + 1; // 1-10
+        int num2 = random.nextInt(10) + 1; // 1-10
+        currentCaptchaAnswer = num1 + num2;
+
+        tvCaptchaQuestion.setText(num1 + " + " + num2 + " = ?");
+        etCaptcha.setText("");
+        ivCaptchaStatus.setVisibility(View.INVISIBLE);
     }
 }
