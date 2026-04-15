@@ -46,6 +46,9 @@
         <activity
             android:name=".PengaturanActivity"
             android:exported="false" />
+        <activity
+            android:name=".PengaturanNotifikasiActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

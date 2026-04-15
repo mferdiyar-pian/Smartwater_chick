@@ -22,13 +22,13 @@
             <LinearLayout
                 android:id="@+id/headerLayout"
                 android:layout_width="match_parent"
-                android:layout_height="220dp"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:background="@drawable/bg_header_blue_gradient"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:paddingTop="48dp"
-                android:paddingBottom="20dp">
+                android:paddingTop="20dp"
+                android:paddingBottom="48dp">
 
                 <!-- Title row -->
                 <RelativeLayout
@@ -55,7 +55,8 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:clickable="true"
-                        android:focusable="true">
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackgroundBorderless">
 
                         <ImageView
                             android:layout_width="18dp"
