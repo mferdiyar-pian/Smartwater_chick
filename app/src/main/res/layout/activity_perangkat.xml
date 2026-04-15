@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
-        android:background="#1B5BCE"
+        android:background="@color/blue_header"
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
@@ -71,6 +71,7 @@
                         android:clickable="true"
                         android:focusable="true" />
                 </LinearLayout>
+
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
@@ -90,147 +91,7 @@
             android:padding="14dp">
 
             <!-- ══════════════════════════════════════ -->
-            <!-- CARD 1: pH saat ini + Status Filter   -->
-            <!-- ══════════════════════════════════════ -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="12dp">
-
-                <!-- pH saat ini -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="0dp"
-                    android:layout_marginEnd="8dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="14dp"
-                        android:background="#FFFFFF">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:layout_marginBottom="6dp">
-
-                            <ImageView
-                                android:layout_width="18dp"
-                                android:layout_height="18dp"
-                                android:src="@drawable/ic_water_drop"
-                                android:tint="#8A8FA8"
-                                android:layout_marginEnd="6dp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="pH saat ini"
-                                android:textSize="12sp"
-                                android:textColor="#8A8FA8" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="bottom"
-                            android:layout_marginBottom="4dp">
-
-                            <TextView
-                                android:id="@+id/tvPhSaatIni"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="7.2"
-                                android:textSize="32sp"
-                                android:textStyle="bold"
-                                android:textColor="#1A1A2E" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="+0.2"
-                                android:textSize="13sp"
-                                android:textColor="#2ECC71"
-                                android:layout_marginStart="4dp"
-                                android:layout_marginBottom="6dp" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="TARGET : 6.5 - 7.5"
-                            android:textSize="10sp"
-                            android:textColor="#8A8FA8" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <!-- Status Filter -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="0dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="14dp"
-                        android:background="#FFFFFF">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:layout_marginBottom="6dp">
-
-                            <ImageView
-                                android:layout_width="18dp"
-                                android:layout_height="18dp"
-                                android:src="@drawable/ic_controls"
-                                android:tint="#8A8FA8"
-                                android:layout_marginEnd="6dp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Status Filter"
-                                android:textSize="12sp"
-                                android:textColor="#8A8FA8" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/tvStatusFilter"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Bersih"
-                            android:textSize="24sp"
-                            android:textStyle="bold"
-                            android:textColor="#1A1A2E"
-                            android:layout_marginBottom="4dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="KINERJA OPTIMAL"
-                            android:textSize="10sp"
-                            android:textStyle="bold"
-                            android:textColor="#2ECC71" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-            </LinearLayout>
-
-            <!-- ══════════════════════════════════════ -->
-            <!-- CARD 2: Pemantauan pH Langsung        -->
+            <!-- CARD 1: Status Koneksi Utama            -->
             <!-- ══════════════════════════════════════ -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -246,7 +107,199 @@
                     android:padding="16dp"
                     android:background="#FFFFFF">
 
-                    <!-- Header + Badge AKTIF -->
+                    <!-- Header dengan status -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <FrameLayout
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:background="@drawable/bg_icon_blue"
+                                android:layout_marginEnd="12dp">
+
+                                <ImageView
+                                    android:layout_width="28dp"
+                                    android:layout_height="28dp"
+                                    android:src="@drawable/ic_devices"
+                                    android:tint="#1B5BCE"
+                                    android:layout_gravity="center" />
+                            </FrameLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Smart Water Chick"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:textColor="#1A1A2E" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Unit Utama - ID: SWC-001"
+                                    android:textSize="12sp"
+                                    android:textColor="#8A8FA8" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Online"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="#2ECC71"
+                            android:background="@drawable/bg_badge_normal"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:paddingTop="4dp"
+                            android:paddingBottom="4dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true" />
+                    </RelativeLayout>
+
+                    <!-- Status indicators -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <!-- WiFi Status -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_check_circle"
+                                android:tint="#2ECC71"
+                                android:layout_marginBottom="4dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="WiFi"
+                                android:textSize="11sp"
+                                android:textColor="#8A8FA8" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Terhubung"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:textColor="#2ECC71" />
+                        </LinearLayout>
+
+                        <!-- Battery Status -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_water_drop"
+                                android:tint="#1B5BCE"
+                                android:layout_marginBottom="4dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Baterai Backup"
+                                android:textSize="11sp"
+                                android:textColor="#8A8FA8" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="85%"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:textColor="#1B5BCE" />
+                        </LinearLayout>
+
+                        <!-- Signal Status -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_analytics"
+                                android:tint="#2ECC71"
+                                android:layout_marginBottom="4dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Sinyal"
+                                android:textSize="11sp"
+                                android:textColor="#8A8FA8" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Kuat"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:textColor="#2ECC71" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ══════════════════════════════════════ -->
+            <!-- CARD 2: Informasi Perangkat             -->
+            <!-- ══════════════════════════════════════ -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                android:layout_marginBottom="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:background="#FFFFFF">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Informasi Perangkat"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="#1A1A2E"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Firmware Version -->
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -255,99 +308,122 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Pemantauan pH Langsung"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            android:textColor="#1A1A2E"
+                            android:text="Versi Firmware"
+                            android:textSize="13sp"
+                            android:textColor="#8A8FA8"
+                            android:layout_alignParentStart="true"
                             android:layout_centerVertical="true" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="AKTIF"
-                            android:textSize="10sp"
+                            android:text="v2.1.4"
+                            android:textSize="13sp"
                             android:textStyle="bold"
-                            android:textColor="#2ECC71"
-                            android:background="@drawable/bg_badge_normal"
-                            android:paddingStart="10dp"
-                            android:paddingEnd="10dp"
-                            android:paddingTop="3dp"
-                            android:paddingBottom="3dp"
+                            android:textColor="#1A1A2E"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true" />
                     </RelativeLayout>
 
-                    <!-- pH Scale Labels -->
-                    <LinearLayout
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#F0F2F8"
+                        android:layout_marginBottom="14dp" />
+
+                    <!-- Hardware Version -->
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="4dp">
-
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:text="ASAM"
-                            android:textSize="10sp" android:textColor="#E74C3C" android:textStyle="bold" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:text="NETRAL"
-                            android:textSize="10sp" android:textColor="#2ECC71" android:textStyle="bold" android:gravity="center" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:text="BASA"
-                            android:textSize="10sp" android:textColor="#3498DB" android:textStyle="bold" android:gravity="end" />
-                    </LinearLayout>
-
-                    <!-- Gradient pH bar -->
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="12dp"
-                        android:layout_marginBottom="4dp">
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="12dp"
-                            android:background="@drawable/bg_ph_gradient" />
-
-                        <View
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:background="@drawable/bg_ph_indicator"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginStart="165dp" />
-                    </FrameLayout>
-
-                    <!-- Indicator line + 7.2 pH -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:layout_marginBottom="10dp">
-
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="8dp"
-                            android:background="#1A1A2E" />
+                        android:layout_marginBottom="14dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="7.2 pH"
-                            android:textSize="11sp"
-                            android:textColor="#1A1A2E" />
-                    </LinearLayout>
+                            android:text="Versi Hardware"
+                            android:textSize="13sp"
+                            android:textColor="#8A8FA8"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true" />
 
-                    <!-- Description -->
-                    <TextView
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="HW-v1.2"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:textColor="#1A1A2E"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true" />
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#F0F2F8"
+                        android:layout_marginBottom="14dp" />
+
+                    <!-- Last Connected -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Tingkat pH saat ini berada dalam kisaran yang sehat untuk ayam broiler. Tidak diperlukan tindakan."
-                        android:textSize="12sp"
-                        android:textColor="#8A8FA8"
-                        android:lineSpacingMultiplier="1.4" />
+                        android:layout_marginBottom="14dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Terakhir Terhubung"
+                            android:textSize="13sp"
+                            android:textColor="#8A8FA8"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Baru saja"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:textColor="#1A1A2E"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true" />
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#F0F2F8"
+                        android:layout_marginBottom="14dp" />
+
+                    <!-- IP Address -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Alamat IP"
+                            android:textSize="13sp"
+                            android:textColor="#8A8FA8"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="192.168.1.105"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:textColor="#1A1A2E"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true" />
+                    </RelativeLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <!-- ══════════════════════════════════════ -->
-            <!-- CARD 3: Pengaturan Otomatis           -->
+            <!-- CARD 3: Status Sensor                   -->
             <!-- ══════════════════════════════════════ -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -363,78 +439,124 @@
                     android:padding="16dp"
                     android:background="#FFFFFF">
 
-                    <!-- Header -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_marginBottom="16dp">
+                        android:text="Status Sensor"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="#1A1A2E"
+                        android:layout_marginBottom="16dp" />
 
-                        <ImageView
-                            android:layout_width="28dp"
-                            android:layout_height="28dp"
-                            android:src="@drawable/ic_controls"
-                            android:tint="#1B5BCE"
-                            android:background="@drawable/bg_icon_blue"
-                            android:padding="4dp"
-                            android:layout_marginEnd="10dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Pengaturan Otomatis"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            android:textColor="#1A1A2E" />
-                    </LinearLayout>
-
-                    <!-- Toggle 1: Siklus Penyaringan -->
+                    <!-- Sensor pH -->
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp">
+                        android:layout_marginBottom="14dp">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true">
+
+                            <FrameLayout
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:background="@drawable/bg_icon_green"
+                                android:layout_marginEnd="12dp">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:src="@drawable/ic_water_drop"
+                                    android:tint="#2ECC71"
+                                    android:layout_gravity="center" />
+                            </FrameLayout>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Siklus Penyaringan Otomatis"
+                                android:text="Sensor pH"
                                 android:textSize="14sp"
                                 android:textStyle="bold"
                                 android:textColor="#1A1A2E" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Setiap 4 jam atau saat air keruh"
-                                android:textSize="11sp"
-                                android:textColor="#8A8FA8" />
                         </LinearLayout>
 
-                        <androidx.appcompat.widget.SwitchCompat
-                            android:id="@+id/switchSiklus"
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:checked="true"
+                            android:text="Aktif"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="#2ECC71"
                             android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            app:thumbTint="#FFFFFF"
-                            app:trackTint="@color/switch_track_color" />
+                            android:layout_centerVertical="true" />
                     </RelativeLayout>
 
-                    <!-- Divider -->
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="#F0F2F8"
-                        android:layout_marginBottom="16dp" />
+                        android:layout_marginBottom="14dp" />
 
-                    <!-- Toggle 2: Injeksi Penetral pH -->
+                    <!-- Sensor Kelembaban -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="14dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true">
+
+                            <FrameLayout
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:background="@drawable/bg_icon_blue"
+                                android:layout_marginEnd="12dp">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:src="@drawable/ic_water_drop"
+                                    android:tint="#1B5BCE"
+                                    android:layout_gravity="center" />
+                            </FrameLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Sensor Kelembaban"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:textColor="#1A1A2E" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Aktif"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="#2ECC71"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true" />
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#F0F2F8"
+                        android:layout_marginBottom="14dp" />
+
+                    <!-- Sensor Suhu -->
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -442,133 +564,49 @@
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true">
+
+                            <FrameLayout
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:background="@drawable/bg_icon_orange"
+                                android:layout_marginEnd="12dp">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:src="@drawable/ic_controls"
+                                    android:tint="#F39C12"
+                                    android:layout_gravity="center" />
+                            </FrameLayout>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Injeksi Penetral pH"
+                                android:text="Sensor Suhu"
                                 android:textSize="14sp"
                                 android:textStyle="bold"
                                 android:textColor="#1A1A2E" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Aktifkan penambahan asam/basa&#10;secara otomatis"
-                                android:textSize="11sp"
-                                android:textColor="#8A8FA8" />
                         </LinearLayout>
-
-                        <androidx.appcompat.widget.SwitchCompat
-                            android:id="@+id/switchInjeksi"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="false"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            app:thumbTint="#FFFFFF"
-                            app:trackTint="@color/switch_track_color" />
-                    </RelativeLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- Section Label: Performa 24 Jam Terakhir -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Performa 24 Jam Terakhir"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="#1A1A2E"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="2dp" />
-
-            <!-- ══════════════════════════════════════ -->
-            <!-- CARD 4: Riwayat Tingkat pH (Bar)      -->
-            <!-- ══════════════════════════════════════ -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
-                android:layout_marginBottom="12dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:background="#FFFFFF">
-
-                    <!-- Header -->
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Riwayat Tingkat pH"
-                            android:textSize="14sp"
+                            android:text="Aktif"
+                            android:textSize="12sp"
                             android:textStyle="bold"
-                            android:textColor="#1A1A2E" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
+                            android:textColor="#2ECC71"
                             android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="24 Jam"
-                                android:textSize="12sp"
-                                android:textColor="#1B5BCE"
-                                android:textStyle="bold" />
-
-                            <ImageView
-                                android:layout_width="14dp"
-                                android:layout_height="14dp"
-                                android:src="@drawable/ic_arrow_back"
-                                android:tint="#1B5BCE"
-                                android:rotation="270"
-                                android:layout_marginStart="2dp" />
-                        </LinearLayout>
+                            android:layout_centerVertical="true" />
                     </RelativeLayout>
-
-                    <!-- pH Bar Chart -->
-                    <com.example.smartwaterchick.PhBarChartView
-                        android:id="@+id/phBarChart"
-                        android:layout_width="match_parent"
-                        android:layout_height="120dp"
-                        android:layout_marginBottom="8dp" />
-
-                    <!-- X-axis labels -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:text="00.00"
-                            android:textSize="9sp" android:textColor="#8A8FA8" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:text="12.00"
-                            android:textSize="9sp" android:textColor="#8A8FA8" android:gravity="center" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:text="SEKARANG"
-                            android:textSize="9sp" android:textColor="#8A8FA8" android:gravity="end" />
-                    </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <!-- ══════════════════════════════════════ -->
-            <!-- CARD 5: Konsumsi Air (Line Chart)     -->
+            <!-- CARD 4: Log Perangkat                   -->
             <!-- ══════════════════════════════════════ -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -584,92 +622,6 @@
                     android:padding="16dp"
                     android:background="#FFFFFF">
 
-                    <!-- Header -->
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Konsumsi Air (Liter)"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="#1A1A2E" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true">
-
-                            <ImageView
-                                android:layout_width="14dp"
-                                android:layout_height="14dp"
-                                android:src="@drawable/ic_analytics"
-                                android:tint="#2ECC71"
-                                android:layout_marginEnd="4dp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="12.4% dibanding&#10;kemarin"
-                                android:textSize="10sp"
-                                android:textColor="#2ECC71"
-                                android:gravity="end" />
-                        </LinearLayout>
-                    </RelativeLayout>
-
-                    <!-- Line Chart -->
-                    <com.example.smartwaterchick.AnalisisChartView
-                        android:id="@+id/chartKonsumsi"
-                        android:layout_width="match_parent"
-                        android:layout_height="120dp"
-                        android:layout_marginBottom="8dp" />
-
-                    <!-- X-axis labels -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:text="00:00"
-                            android:textSize="9sp" android:textColor="#8A8FA8" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:text="08:00"
-                            android:textSize="9sp" android:textColor="#8A8FA8" android:gravity="center" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:text="16:00"
-                            android:textSize="9sp" android:textColor="#8A8FA8" android:gravity="center" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:text="23:59"
-                            android:textSize="9sp" android:textColor="#8A8FA8" android:gravity="end" />
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- ══════════════════════════════════════ -->
-            <!-- CARD 6: Log Sistem                    -->
-            <!-- ══════════════════════════════════════ -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
-                android:layout_marginBottom="12dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:background="#FFFFFF">
-
-                    <!-- Header -->
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -678,7 +630,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Log Sistem"
+                            android:text="Log Perangkat"
                             android:textSize="15sp"
                             android:textStyle="bold"
                             android:textColor="#1A1A2E" />
@@ -696,7 +648,7 @@
                             android:focusable="true" />
                     </RelativeLayout>
 
-                    <!-- Log Item 1: Pembersihan Filter Selesai (success) -->
+                    <!-- Log Item 1 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -721,7 +673,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Pembersihan Filter Selesai"
+                                android:text="Perangkat Terhubung"
                                 android:textSize="13sp"
                                 android:textStyle="bold"
                                 android:textColor="#1A1A2E" />
@@ -729,20 +681,19 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Siklus otomatis • 2 jam lalu"
+                                android:text="Koneksi berhasil • 10 menit lalu"
                                 android:textSize="11sp"
                                 android:textColor="#8A8FA8" />
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!-- Divider -->
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="#F0F2F8"
                         android:layout_marginBottom="14dp" />
 
-                    <!-- Log Item 2: Tingkat pH Mencapai Ambang Batas (warning) -->
+                    <!-- Log Item 2 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -752,8 +703,8 @@
                         <ImageView
                             android:layout_width="22dp"
                             android:layout_height="22dp"
-                            android:src="@drawable/ic_warning"
-                            android:tint="#F39C12"
+                            android:src="@drawable/ic_notification"
+                            android:tint="#1B5BCE"
                             android:layout_marginEnd="12dp"
                             android:layout_marginTop="2dp" />
 
@@ -766,7 +717,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Tingkat pH Mencapai Ambang Batas (7.5)"
+                                android:text="Update Firmware Tersedia"
                                 android:textSize="13sp"
                                 android:textStyle="bold"
                                 android:textColor="#1A1A2E" />
@@ -774,11 +725,51 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Notifikasi Peringatan • 5 jam lalu"
+                                android:text="Versi v2.1.5 tersedia • 2 jam lalu"
                                 android:textSize="11sp"
                                 android:textColor="#8A8FA8" />
                         </LinearLayout>
                     </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ══════════════════════════════════════ -->
+            <!-- CARD 5: Tombol Aksi                     -->
+            <!-- ══════════════════════════════════════ -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                android:layout_marginBottom="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp"
+                    android:background="#FFFFFF">
+
+                    <Button
+                        android:id="@+id/bnRestartDevice"
+                        android:layout_width="match_parent"
+                        android:layout_height="46dp"
+                        android:text="🔄  Restart Perangkat"
+                        android:textSize="13sp"
+                        android:textColor="#FFFFFF"
+                        android:background="@drawable/bg_button_primary"
+                        app:backgroundTint="@null"
+                        android:layout_marginBottom="10dp" />
+
+                    <Button
+                        android:id="@+id/btnUpdateFirmware"
+                        android:layout_width="match_parent"
+                        android:layout_height="46dp"
+                        android:text="⬆️  Update Firmware"
+                        android:textSize="13sp"
+                        android:textColor="#1B5BCE"
+                        android:background="@drawable/bg_button_outline_blue"
+                        app:backgroundTint="@null" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

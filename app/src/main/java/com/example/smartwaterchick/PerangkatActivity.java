@@ -2,9 +2,9 @@ package com.example.smartwaterchick;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class PerangkatActivity extends AppCompatActivity {
@@ -19,30 +19,31 @@ public class PerangkatActivity extends AppCompatActivity {
         // Back
         findViewById(R.id.ivBack).setOnClickListener(v -> finish());
 
-        // Notifikasi & Settings
+        // Notifikasi button
         findViewById(R.id.ivNotification).setOnClickListener(v ->
                 Toast.makeText(this, "Notifikasi", Toast.LENGTH_SHORT).show());
+
+        // Settings button
         findViewById(R.id.ivSettings).setOnClickListener(v ->
                 Toast.makeText(this, "Pengaturan", Toast.LENGTH_SHORT).show());
 
-        // Switch Siklus Penyaringan
-        SwitchCompat switchSiklus = findViewById(R.id.switchSiklus);
-        switchSiklus.setOnCheckedChangeListener((btn, c) ->
-                Toast.makeText(this, "Siklus penyaringan " + (c ? "aktif" : "nonaktif"), Toast.LENGTH_SHORT).show());
-
-        // Switch Injeksi pH
-        SwitchCompat switchInjeksi = findViewById(R.id.switchInjeksi);
-        switchInjeksi.setOnCheckedChangeListener((btn, c) ->
-                Toast.makeText(this, "Injeksi penetral " + (c ? "aktif" : "nonaktif"), Toast.LENGTH_SHORT).show());
-
         // Lihat Semua log
         findViewById(R.id.tvLihatSemua).setOnClickListener(v ->
-                Toast.makeText(this, "Membuka log sistem...", Toast.LENGTH_SHORT).show());
+                Toast.makeText(this, "Membuka semua log...", Toast.LENGTH_SHORT).show());
 
-        // Setup konsumsi chart dengan data naik
-        AnalisisChartView chartKonsumsi = findViewById(R.id.chartKonsumsi);
-        float[] konsumsiData = {10f, 12f, 11f, 15f, 18f, 22f, 28f, 35f, 40f, 38f, 32f, 45f};
-        chartKonsumsi.setData(konsumsiData, android.graphics.Color.parseColor("#1B5BCE"));
+        // Restart Device button
+        Button btnRestart = findViewById(R.id.bnRestartDevice);
+        btnRestart.setOnClickListener(v -> {
+            Toast.makeText(this, "Memulai ulang perangkat...", Toast.LENGTH_LONG).show();
+            // Di sini bisa ditambahkan logika restart perangkat
+        });
+
+        // Update Firmware button
+        Button btnUpdate = findViewById(R.id.btnUpdateFirmware);
+        btnUpdate.setOnClickListener(v -> {
+            Toast.makeText(this, "Memeriksa update firmware...", Toast.LENGTH_SHORT).show();
+            // Di sini bisa ditambahkan logika update firmware
+        });
 
         // Bottom Navigation - tab Devices aktif
         BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
