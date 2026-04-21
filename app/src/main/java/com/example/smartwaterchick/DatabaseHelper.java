@@ -12,7 +12,7 @@ import java.util.Collections;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "smartwater.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 6;
 
     // ======================
     // TABLE USER (LOGIN)
@@ -110,56 +110,52 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(createVolume);
 
         // ======================
-        // 20 DATA DUMMY VOLUME (UNTUK DIAGRAM BATANG)
+        // DATA DUMMY VOLUME (UNTUK DIAGRAM BATANG)
         // ======================
-        insertVolumeDummy(db, "2026-03-01", 85f, "daily");
-        insertVolumeDummy(db, "2026-03-02", 92f, "daily");
-        insertVolumeDummy(db, "2026-03-03", 78f, "daily");
-        insertVolumeDummy(db, "2026-03-04", 105f, "daily");
-        insertVolumeDummy(db, "2026-03-05", 120f, "daily");
-        insertVolumeDummy(db, "2026-03-06", 95f, "daily");
-        insertVolumeDummy(db, "2026-03-07", 140f, "daily");
-        insertVolumeDummy(db, "2026-03-08", 88f, "daily");
-        insertVolumeDummy(db, "2026-03-09", 112f, "daily");
-        insertVolumeDummy(db, "2026-03-10", 135f, "daily");
-        insertVolumeDummy(db, "2026-03-11", 76f, "daily");
-        insertVolumeDummy(db, "2026-03-12", 98f, "daily");
-        insertVolumeDummy(db, "2026-03-13", 125f, "daily");
-        insertVolumeDummy(db, "2026-03-14", 82f, "daily");
-        insertVolumeDummy(db, "2026-03-15", 110f, "daily");
-        insertVolumeDummy(db, "2026-03-16", 145f, "daily");
-        insertVolumeDummy(db, "2026-03-17", 90f, "daily");
-        insertVolumeDummy(db, "2026-03-18", 118f, "daily");
-        insertVolumeDummy(db, "2026-03-19", 132f, "daily");
-        insertVolumeDummy(db, "2026-03-20", 160f, "daily");
 
-        // Data mingguan (4 minggu)
-        insertVolumeDummy(db, "Minggu 1", 580f, "weekly");
-        insertVolumeDummy(db, "Minggu 2", 620f, "weekly");
-        insertVolumeDummy(db, "Minggu 3", 590f, "weekly");
-        insertVolumeDummy(db, "Minggu 4", 650f, "weekly");
+        // 1 Hari = hanya hari ini (1 data)
+        insertVolumeDummy(db, "Hari ini", 120f, "daily");
 
-        // Data bulanan (20 hari)
-        insertVolumeDummy(db, "1", 85f, "monthly");
-        insertVolumeDummy(db, "2", 92f, "monthly");
-        insertVolumeDummy(db, "3", 78f, "monthly");
-        insertVolumeDummy(db, "4", 105f, "monthly");
-        insertVolumeDummy(db, "5", 120f, "monthly");
-        insertVolumeDummy(db, "6", 95f, "monthly");
-        insertVolumeDummy(db, "7", 140f, "monthly");
-        insertVolumeDummy(db, "8", 88f, "monthly");
-        insertVolumeDummy(db, "9", 112f, "monthly");
+        // 1 Minggu = 7 hari terakhir (label angka 1-7)
+        insertVolumeDummy(db, "1", 85f, "weekly");
+        insertVolumeDummy(db, "2", 92f, "weekly");
+        insertVolumeDummy(db, "3", 78f, "weekly");
+        insertVolumeDummy(db, "4", 105f, "weekly");
+        insertVolumeDummy(db, "5", 120f, "weekly");
+        insertVolumeDummy(db, "6", 95f, "weekly");
+        insertVolumeDummy(db, "7", 140f, "weekly");
+
+        // 1 Bulan = 30 hari (label angka 1-30)
+        insertVolumeDummy(db, "1",  85f,  "monthly");
+        insertVolumeDummy(db, "2",  92f,  "monthly");
+        insertVolumeDummy(db, "3",  78f,  "monthly");
+        insertVolumeDummy(db, "4",  105f, "monthly");
+        insertVolumeDummy(db, "5",  120f, "monthly");
+        insertVolumeDummy(db, "6",  95f,  "monthly");
+        insertVolumeDummy(db, "7",  140f, "monthly");
+        insertVolumeDummy(db, "8",  88f,  "monthly");
+        insertVolumeDummy(db, "9",  112f, "monthly");
         insertVolumeDummy(db, "10", 135f, "monthly");
-        insertVolumeDummy(db, "11", 76f, "monthly");
-        insertVolumeDummy(db, "12", 98f, "monthly");
+        insertVolumeDummy(db, "11", 76f,  "monthly");
+        insertVolumeDummy(db, "12", 98f,  "monthly");
         insertVolumeDummy(db, "13", 125f, "monthly");
-        insertVolumeDummy(db, "14", 82f, "monthly");
+        insertVolumeDummy(db, "14", 82f,  "monthly");
         insertVolumeDummy(db, "15", 110f, "monthly");
         insertVolumeDummy(db, "16", 145f, "monthly");
-        insertVolumeDummy(db, "17", 90f, "monthly");
+        insertVolumeDummy(db, "17", 90f,  "monthly");
         insertVolumeDummy(db, "18", 118f, "monthly");
         insertVolumeDummy(db, "19", 132f, "monthly");
         insertVolumeDummy(db, "20", 160f, "monthly");
+        insertVolumeDummy(db, "21", 88f,  "monthly");
+        insertVolumeDummy(db, "22", 97f,  "monthly");
+        insertVolumeDummy(db, "23", 115f, "monthly");
+        insertVolumeDummy(db, "24", 80f,  "monthly");
+        insertVolumeDummy(db, "25", 130f, "monthly");
+        insertVolumeDummy(db, "26", 100f, "monthly");
+        insertVolumeDummy(db, "27", 142f, "monthly");
+        insertVolumeDummy(db, "28", 95f,  "monthly");
+        insertVolumeDummy(db, "29", 108f, "monthly");
+        insertVolumeDummy(db, "30", 125f, "monthly");
     }
 
     // ======================

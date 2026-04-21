@@ -8,45 +8,49 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class BarChartView extends View {
 
-    private Paint barPaint, textPaint, gridPaint, axisPaint, tooltipBgPaint, tooltipTextPaint;
+    private Paint barPaint, barSelectedPaint, textPaint, gridPaint, axisPaint;
+    private Paint tooltipBgPaint, tooltipTextPaint, tooltipBorderPaint, tooltipShadowPaint;
 
     private float[] data = {
         85f, 92f, 78f, 105f, 120f, 95f, 140f, 88f, 112f, 135f,
         76f, 98f, 125f, 82f, 110f, 145f, 90f, 118f, 132f, 160f
     };
     private String[] labels = {
-        "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
-        "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"
+        "1","2","3","4","5","6","7","8","9","10",
+        "11","12","13","14","15","16","17","18","19","20"
     };
     private float maxValue = 200f;
     private float[] yGridValues = {0f, 40f, 80f, 120f, 160f, 200f};
+    private String currentTipe = "monthly";
 
     private RectF[] barRects;
     private int selectedBarIndex = -1;
-    private Context context;
 
     public BarChartView(Context context) {
         super(context);
-        this.context = context;
         init();
     }
 
     public BarChartView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.context = context;
         init();
     }
 
     private void init() {
+        setClickable(true);
+
         barPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         barPaint.setColor(Color.parseColor("#1B5BCE"));
         barPaint.setStyle(Paint.Style.FILL);
+
+        barSelectedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        barSelectedPaint.setColor(Color.parseColor("#FF6B35"));
+        barSelectedPaint.setStyle(Paint.Style.FILL);
 
         textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setColor(Color.parseColor("#8A8FA8"));
@@ -60,14 +64,25 @@ public class BarChartView extends View {
         axisPaint.setColor(Color.parseColor("#E0E4EF"));
         axisPaint.setStrokeWidth(1.5f);
 
+        // Tooltip — style sama seperti AnalisisChartView
         tooltipBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        tooltipBgPaint.setColor(Color.parseColor("#1A1A2E"));
+        tooltipBgPaint.setColor(Color.parseColor("#EAF3FF"));
         tooltipBgPaint.setStyle(Paint.Style.FILL);
 
         tooltipTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        tooltipTextPaint.setColor(Color.WHITE);
-        tooltipTextPaint.setTextSize(32f);
+        tooltipTextPaint.setColor(Color.parseColor("#0D47A1"));
+        tooltipTextPaint.setTextSize(28f);
+        tooltipTextPaint.setFakeBoldText(true);
         tooltipTextPaint.setTextAlign(Paint.Align.CENTER);
+
+        tooltipBorderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        tooltipBorderPaint.setStyle(Paint.Style.STROKE);
+        tooltipBorderPaint.setStrokeWidth(1.0f);
+        tooltipBorderPaint.setColor(Color.parseColor("#B5D4F4"));
+
+        tooltipShadowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        tooltipShadowPaint.setColor(Color.parseColor("#18000000"));
+        tooltipShadowPaint.setStyle(Paint.Style.FILL);
 
         barRects = new RectF[data.length];
         for (int i = 0; i < data.length; i++) {
@@ -82,14 +97,15 @@ public class BarChartView extends View {
         int w = getWidth();
         int h = getHeight();
 
-        float padLeft = 80f;
+        float padLeft  = 80f;
         float padRight = 16f;
-        float padTop = 20f;
-        float padBottom = 70f;
+        float padTop   = 20f;
+        float padBottom = 50f;
 
         float chartW = w - padLeft - padRight;
         float chartH = h - padTop - padBottom;
 
+        // Grid lines Y
         textPaint.setTextSize(22f);
         for (float val : yGridValues) {
             float ratio = val / maxValue;
@@ -100,71 +116,92 @@ public class BarChartView extends View {
         }
 
         int n = data.length;
-        float slotW = chartW / n;
-        float barW = slotW * 0.55f;
+        // Batasi lebar slot maks seperti 7-slot agar 1 bar tidak melebar penuh
+        int minSlots = Math.max(n, 7);
+        float slotW = chartW / minSlots;
+        float barW  = slotW * 0.55f;
         float radius = 8f;
 
+        // Offset untuk center batang jika jumlah batang < minSlots
+        float totalBarsWidth = n * slotW;
+        float startOffset = padLeft + (chartW - totalBarsWidth) / 2f;
+
+        // Label step — jangan terlalu penuh
         int labelStep = 1;
-        if (n > 15) {
-            labelStep = 3;
-        } else if (n > 7) {
-            labelStep = 2;
-        }
+        if (n > 20) labelStep = 5;
+        else if (n > 14) labelStep = 3;
+        else if (n > 7)  labelStep = 2;
 
         for (int i = 0; i < n; i++) {
-            float centerX = padLeft + i * slotW + slotW / 2f;
-            float barH = (data[i] / maxValue) * chartH;
-            float left = centerX - barW / 2f;
-            float right = centerX + barW / 2f;
-            float top = padTop + chartH - barH;
-            float bottom = padTop + chartH;
+            float centerX = startOffset + i * slotW + slotW / 2f;
+            float barH    = (data[i] / maxValue) * chartH;
+            float left    = centerX - barW / 2f;
+            float right   = centerX + barW / 2f;
+            float top     = padTop + chartH - barH;
+            float bottom  = padTop + chartH;
 
             barRects[i].set(left, top, right, bottom);
 
-            if (i == selectedBarIndex) {
-                barPaint.setColor(Color.parseColor("#FF6B35"));
-            } else {
-                barPaint.setColor(Color.parseColor("#1B5BCE"));
-            }
+            canvas.drawRoundRect(barRects[i], radius, radius,
+                    i == selectedBarIndex ? barSelectedPaint : barPaint);
 
-            canvas.drawRoundRect(barRects[i], radius, radius, barPaint);
-
+            // Label X di bawah
             textPaint.setTextAlign(Paint.Align.CENTER);
             textPaint.setTextSize(20f);
-            if (i % labelStep == 0 || i == n - 1) {
-                canvas.drawText(labels[i], centerX, h - 20f, textPaint);
+            boolean isFirst = (i == 0);
+            boolean isLast  = (i == n - 1);
+            if (isFirst || isLast || i % labelStep == 0) {
+                canvas.drawText(labels[i], centerX, h - 8f, textPaint);
             }
         }
 
+        // Tooltip di atas batang yang dipilih
         if (selectedBarIndex >= 0 && selectedBarIndex < n) {
-            drawTooltip(canvas, selectedBarIndex, barRects[selectedBarIndex]);
+            drawTooltip(canvas, selectedBarIndex);
         }
     }
 
-    private void drawTooltip(Canvas canvas, int index, RectF barRect) {
-        String tooltipText = String.format("%.0f L", data[index]);
-        float tooltipWidth = 120f;
-        float tooltipHeight = 60f;
-        float tooltipRadius = 12f;
-
-        float tooltipLeft = barRect.centerX() - tooltipWidth / 2f;
-        float tooltipTop = barRect.top - tooltipHeight - 20f;
-
-        if (tooltipTop < 10f) tooltipTop = barRect.bottom + 20f;
-        if (tooltipLeft < 10f) tooltipLeft = 10f;
-        if (tooltipLeft + tooltipWidth > getWidth() - 10f) {
-            tooltipLeft = getWidth() - tooltipWidth - 10f;
+    private void drawTooltip(Canvas canvas, int index) {
+        String labelStr = labels[index];
+        String text;
+        if (currentTipe.equals("daily")) {
+            text = "Hari ini: " + String.format("%.0f L", data[index]);
+        } else if (currentTipe.equals("weekly")) {
+            text = "Hari " + labelStr + ": " + String.format("%.0f L", data[index]);
+        } else {
+            text = "Tgl " + labelStr + ": " + String.format("%.0f L", data[index]);
         }
 
-        float tooltipRight = tooltipLeft + tooltipWidth;
-        float tooltipBottom = tooltipTop + tooltipHeight;
+        float paddingX  = 18f;
+        float textWidth = tooltipTextPaint.measureText(text);
+        float boxW      = textWidth + paddingX * 2;
+        float boxH      = 42f;
 
-        RectF tooltipRect = new RectF(tooltipLeft, tooltipTop, tooltipRight, tooltipBottom);
-        canvas.drawRoundRect(tooltipRect, tooltipRadius, tooltipRadius, tooltipBgPaint);
+        RectF bar = barRects[index];
+        float cx  = bar.centerX();
+        float left   = cx - boxW / 2f;
+        float top    = bar.top - boxH - 12f;
+        float right  = left + boxW;
+        float bottom = top + boxH;
 
-        float textX = tooltipRect.centerX();
-        float textY = tooltipRect.centerY() + 12f;
-        canvas.drawText(tooltipText, textX, textY, tooltipTextPaint);
+        // Clamp agar tidak keluar layar
+        if (left < 10f)              { left = 10f;               right = left + boxW; }
+        if (right > getWidth() - 10f){ right = getWidth() - 10f; left  = right - boxW; }
+        if (top < 10f)               { top = bar.bottom + 12f;   bottom = top + boxH; }
+
+        // Shadow
+        RectF shadow = new RectF(left + 2, top + 2, right + 2, bottom + 2);
+        canvas.drawRoundRect(shadow, 14f, 14f, tooltipShadowPaint);
+
+        // Background
+        RectF rect = new RectF(left, top, right, bottom);
+        canvas.drawRoundRect(rect, 14f, 14f, tooltipBgPaint);
+
+        // Border
+        canvas.drawRoundRect(rect, 14f, 14f, tooltipBorderPaint);
+
+        // Text
+        canvas.drawText(text, rect.centerX(), rect.centerY() + 10f, tooltipTextPaint);
     }
 
     @Override
@@ -174,86 +211,90 @@ public class BarChartView extends View {
             float y = event.getY();
 
             for (int i = 0; i < barRects.length; i++) {
-                if (barRects[i].contains(x, y)) {
-                    selectedBarIndex = i;
+                // Perluas area sentuh sedikit ke atas agar lebih mudah diklik
+                RectF hitArea = new RectF(barRects[i]);
+                hitArea.top -= 20f;
+                if (hitArea.contains(x, y)) {
+                    selectedBarIndex = (selectedBarIndex == i) ? -1 : i;
                     invalidate();
-                    if (context != null) {
-                        Toast.makeText(context,
-                            String.format("Data %s: %.0f Liter", labels[i], data[i]),
-                            Toast.LENGTH_SHORT).show();
-                    }
+                    performClick();
                     return true;
                 }
             }
-
             selectedBarIndex = -1;
             invalidate();
         }
         return super.onTouchEvent(event);
     }
 
+    @Override
+    public boolean performClick() {
+        return super.performClick();
+    }
+
     public void setData(float[] data, String[] labels, float maxValue) {
-        this.data = data;
-        this.labels = labels;
-        this.maxValue = maxValue;
-        this.barRects = new RectF[data.length];
-        for (int i = 0; i < data.length; i++) {
-            barRects[i] = new RectF();
-        }
+        this.data      = data;
+        this.labels    = labels;
+        this.maxValue  = maxValue;
+        this.barRects  = new RectF[data.length];
+        for (int i = 0; i < data.length; i++) barRects[i] = new RectF();
         selectedBarIndex = -1;
         invalidate();
     }
 
     public void loadDataFromDatabase(ArrayList<Float> dataList, ArrayList<String> labelList, String tipe) {
+        this.currentTipe = tipe;
         if (dataList == null || dataList.isEmpty() || labelList == null || labelList.isEmpty()) {
             setDefaultData(tipe);
             return;
         }
 
-        float[] newData = new float[dataList.size()];
+        float[] newData   = new float[dataList.size()];
         String[] newLabels = new String[labelList.size()];
-
         for (int i = 0; i < dataList.size(); i++) {
-            newData[i] = dataList.get(i);
+            newData[i]   = dataList.get(i);
             newLabels[i] = labelList.get(i);
         }
 
         if (tipe.equals("weekly")) {
-            float[] weeklyGrid = {0f, 200f, 400f, 600f, 800f};
-            this.yGridValues = weeklyGrid;
-            setData(newData, newLabels, 800f);
-        } else {
-            float[] dailyGrid = {0f, 40f, 80f, 120f, 160f, 200f};
-            this.yGridValues = dailyGrid;
+            yGridValues = new float[]{0f, 40f, 80f, 120f, 160f, 200f};
+            setData(newData, newLabels, 200f);
+        } else if (tipe.equals("monthly")) {
+            yGridValues = new float[]{0f, 40f, 80f, 120f, 160f, 200f};
+            setData(newData, newLabels, 200f);
+        } else { // daily
+            yGridValues = new float[]{0f, 40f, 80f, 120f, 160f, 200f};
             setData(newData, newLabels, 200f);
         }
     }
 
     private void setDefaultData(String tipe) {
         if (tipe.equals("daily")) {
-            float[] dailyData = {85f, 92f, 78f, 105f, 120f, 95f, 140f};
-            String[] dailyLabels = {"Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"};
-            float[] dailyGrid = {0f, 40f, 80f, 120f, 160f, 200f};
-            this.yGridValues = dailyGrid;
-            setData(dailyData, dailyLabels, 200f);
+            // 1 Hari = hanya hari ini (1 batang)
+            float[] d  = {120f};
+            String[] l = {"Hari ini"};
+            yGridValues = new float[]{0f, 40f, 80f, 120f, 160f, 200f};
+            setData(d, l, 200f);
         } else if (tipe.equals("weekly")) {
-            float[] weeklyData = {580f, 620f, 590f, 650f};
-            String[] weeklyLabels = {"Minggu 1", "Minggu 2", "Minggu 3", "Minggu 4"};
-            float[] weeklyGrid = {0f, 200f, 400f, 600f, 800f};
-            this.yGridValues = weeklyGrid;
-            setData(weeklyData, weeklyLabels, 800f);
+            // 1 Minggu = 7 hari terakhir
+            float[] d  = {85f, 92f, 78f, 105f, 120f, 95f, 140f};
+            String[] l = {"1","2","3","4","5","6","7"};
+            yGridValues = new float[]{0f, 40f, 80f, 120f, 160f, 200f};
+            setData(d, l, 200f);
         } else {
-            float[] monthlyData = {
+            // 1 Bulan = 30 hari
+            float[] d  = {
                 85f, 92f, 78f, 105f, 120f, 95f, 140f, 88f, 112f, 135f,
-                76f, 98f, 125f, 82f, 110f, 145f, 90f, 118f, 132f, 160f
+                76f, 98f, 125f, 82f, 110f, 145f, 90f, 118f, 132f, 160f,
+                88f, 97f, 115f, 80f, 130f, 100f, 142f, 95f, 108f, 125f
             };
-            String[] monthlyLabels = {
-                "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
-                "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"
+            String[] l = {
+                "1","2","3","4","5","6","7","8","9","10",
+                "11","12","13","14","15","16","17","18","19","20",
+                "21","22","23","24","25","26","27","28","29","30"
             };
-            float[] monthlyGrid = {0f, 40f, 80f, 120f, 160f, 200f};
-            this.yGridValues = monthlyGrid;
-            setData(monthlyData, monthlyLabels, 200f);
+            yGridValues = new float[]{0f, 40f, 80f, 120f, 160f, 200f};
+            setData(d, l, 200f);
         }
     }
 }

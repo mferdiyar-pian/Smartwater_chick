@@ -65,8 +65,8 @@ public class AnalisisActivity extends AppCompatActivity {
                 barFilterOptions
         );
         spinnerFilterBar.setAdapter(barAdapter);
-        spinnerFilterBar.setSelection(2); // Default ke 1 Bulan (20 data)
-        loadBarChartData("monthly", 20); // Load data default dari database
+        spinnerFilterBar.setSelection(2); // Default ke 1 Bulan (30 data)
+        loadBarChartData("monthly", 30);
 
         // ======================
         // EVENT FILTER DIAGRAM BATANG
@@ -75,14 +75,14 @@ public class AnalisisActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
-                    case 0: // 1 Hari
-                        loadBarChartData("daily", 7);
+                    case 0: // 1 Hari = hanya hari ini
+                        loadBarChartData("daily", 1);
                         break;
-                    case 1: // 1 Minggu
-                        loadBarChartData("weekly", 4);
+                    case 1: // 1 Minggu = 7 hari terakhir
+                        loadBarChartData("weekly", 7);
                         break;
-                    case 2: // 1 Bulan
-                        loadBarChartData("monthly", 20);
+                    case 2: // 1 Bulan = 30 hari
+                        loadBarChartData("monthly", 30);
                         break;
                 }
             }
