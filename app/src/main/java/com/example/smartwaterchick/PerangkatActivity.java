@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
+import android.widget.PopupMenu;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -20,12 +21,18 @@ public class PerangkatActivity extends AppCompatActivity {
         findViewById(R.id.ivBack).setOnClickListener(v -> finish());
 
         // Notifikasi button
-        findViewById(R.id.ivNotification).setOnClickListener(v ->
-                Toast.makeText(this, "Notifikasi", Toast.LENGTH_SHORT).show());
+        findViewById(R.id.ivNotification).setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(PerangkatActivity.this, v);
+            popup.getMenu().add("Peringatan: pH Air di Tangki 1 Rendah (5.5)");
+            popup.getMenu().add("Info: Kapasitas Air berkurang.");
+            popup.show();
+        });
 
         // Settings button
-        findViewById(R.id.ivSettings).setOnClickListener(v ->
-                Toast.makeText(this, "Pengaturan", Toast.LENGTH_SHORT).show());
+        findViewById(R.id.ivSettings).setOnClickListener(v -> {
+            startActivity(new Intent(PerangkatActivity.this, PengaturanActivity.class));
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        });
 
         // Lihat Semua log
         findViewById(R.id.tvLihatSemua).setOnClickListener(v ->

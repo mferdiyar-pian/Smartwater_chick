@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.widget.PopupMenu;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -115,11 +116,17 @@ public class AnalisisActivity extends AppCompatActivity {
         // ======================
         findViewById(R.id.ivBack).setOnClickListener(v -> finish());
 
-        findViewById(R.id.ivNotification).setOnClickListener(v ->
-                Toast.makeText(this, "Notifikasi", Toast.LENGTH_SHORT).show());
+        findViewById(R.id.ivNotification).setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(AnalisisActivity.this, v);
+            popup.getMenu().add("Peringatan: pH Air di Tangki 1 Rendah (5.5)");
+            popup.getMenu().add("Info: Kapasitas Air berkurang.");
+            popup.show();
+        });
 
-        findViewById(R.id.ivSettings).setOnClickListener(v ->
-                Toast.makeText(this, "Pengaturan", Toast.LENGTH_SHORT).show());
+        findViewById(R.id.ivSettings).setOnClickListener(v -> {
+            startActivity(new Intent(AnalisisActivity.this, PengaturanActivity.class));
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        });
 
         findViewById(R.id.btnLaporanLengkap).setOnClickListener(v ->
                 Toast.makeText(this, "Membuka laporan lengkap...", Toast.LENGTH_SHORT).show());
