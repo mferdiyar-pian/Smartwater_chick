@@ -46,7 +46,6 @@ public class LoginActivity extends AppCompatActivity {
         TextView tvSignUp = findViewById(R.id.tvSignUp);
         View btnSignIn = findViewById(R.id.btnSignIn);
         View btnGoogle = findViewById(R.id.btnGoogle);
-        View btnFingerprint = findViewById(R.id.btnFingerprint);
 
         // Generate initial captcha
         generateNewCaptcha();
@@ -132,20 +131,11 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(this, "Arahkan ke halaman register", Toast.LENGTH_SHORT).show()
         );
 
-        // Google Login (sementara dummy)
+        // Google Login (belum tersambung Firebase)
         btnGoogle.setOnClickListener(v -> {
-            Toast.makeText(this, "Login Google (dummy)", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, DashboardActivity.class));
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-            finish();
-        });
-
-        // Fingerprint (sementara dummy)
-        btnFingerprint.setOnClickListener(v -> {
-            Toast.makeText(this, "Fingerprint (dummy)", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, DashboardActivity.class));
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-            finish();
+            Toast.makeText(this,
+                "Login dengan Google belum tersedia. Fitur ini akan aktif setelah integrasi Firebase.",
+                Toast.LENGTH_LONG).show();
         });
     }
 
