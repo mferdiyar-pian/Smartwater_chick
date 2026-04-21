@@ -114,7 +114,13 @@ public class AnalisisActivity extends AppCompatActivity {
         // ======================
         // BACK BUTTON
         // ======================
-        findViewById(R.id.ivBack).setOnClickListener(v -> finish());
+        findViewById(R.id.ivBack).setOnClickListener(v -> {
+            Intent intent = new Intent(AnalisisActivity.this, DashboardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            finish();
+        });
 
         findViewById(R.id.ivNotification).setOnClickListener(v -> {
             PopupMenu popup = new PopupMenu(AnalisisActivity.this, v);

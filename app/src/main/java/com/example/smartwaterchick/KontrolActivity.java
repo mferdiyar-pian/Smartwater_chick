@@ -20,7 +20,13 @@ public class KontrolActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) getSupportActionBar().hide();
 
         // Back button
-        findViewById(R.id.ivBack).setOnClickListener(v -> finish());
+        findViewById(R.id.ivBack).setOnClickListener(v -> {
+            Intent intent = new Intent(KontrolActivity.this, DashboardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            finish();
+        });
 
         // Notifikasi & Settings
         findViewById(R.id.ivNotification).setOnClickListener(v -> {
