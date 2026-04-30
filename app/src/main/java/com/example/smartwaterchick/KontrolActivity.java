@@ -6,11 +6,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import android.widget.PopupMenu;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class KontrolActivity extends AppCompatActivity {
+
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +26,9 @@ public class KontrolActivity extends AppCompatActivity {
         setContentView(R.layout.activity_kontrol);
 
         if (getSupportActionBar() != null) getSupportActionBar().hide();
+
+        // Initialize Firebase
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         // Back button
         findViewById(R.id.ivBack).setOnClickListener(v -> {
@@ -40,26 +51,62 @@ public class KontrolActivity extends AppCompatActivity {
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         });
 
-        // Progress bar tangki 65%
-        setProgressBar(R.id.viewProgressTangki, 0.65f);
-        setProgressBar(R.id.viewProgressKontrol, 0.65f);
+        // Monitoring Jarak/Tinggi Air dari Firebase
+        mDatabase.child("monitoring/jarak").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    float jarak = snapshot.getValue(Float.class);
+                    // Misal tinggi tangki 100cm, 0cm = penuh, 100cm = kosong
+                    // Kita balik jadi persentase
+                    float persen = (100 - jarak) / 100f;
+                    if (persen < 0) persen = 0;
+                    if (persen > 1) persen = 1;
+                    setProgressBar(R.id.viewProgressTangki, persen);
+                    setProgressBar(R.id.viewProgressKontrol, persen);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
 
         // Cek pH
         findViewById(R.id.btnCekPh).setOnClickListener(v ->
                 Toast.makeText(this, "Mengecek pH...", Toast.LENGTH_SHORT).show());
 
-        // Isi Air
-        findViewById(R.id.btnIsiAir).setOnClickListener(v ->
-                Toast.makeText(this, "Mengisi air tangki...", Toast.LENGTH_SHORT).show());
+        // Isi Air (Kirim perintah ke Firebase)
+        findViewById(R.id.btnIsiAir).setOnClickListener(v -> {
+            mDatabase.child("kontrol/isi_air").setValue(true);
+            Toast.makeText(this, "Mengisi air tangki...", Toast.LENGTH_SHORT).show();
+            // Matikan lagi setelah 1 detik (simulasi toggle) atau biarkan sistem hardware mematikan
+        });
 
         // Buang Air
-        findViewById(R.id.btnBuangAir).setOnClickListener(v ->
-                Toast.makeText(this, "Membuang air tangki...", Toast.LENGTH_SHORT).show());
+        findViewById(R.id.btnBuangAir).setOnClickListener(v -> {
+            mDatabase.child("kontrol/buang_air").setValue(true);
+            Toast.makeText(this, "Membuang air tangki...", Toast.LENGTH_SHORT).show();
+        });
 
         // Switch Otomatis
         SwitchCompat switchOtomatis = findViewById(R.id.switchOtomatis);
-        switchOtomatis.setOnCheckedChangeListener((btn, checked) ->
-                Toast.makeText(this, checked ? "Otomatis aktif" : "Otomatis nonaktif", Toast.LENGTH_SHORT).show());
+        // Baca status awal dari Firebase
+        mDatabase.child("kontrol/otomatis").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    boolean isOtomatis = snapshot.getValue(Boolean.class);
+                    switchOtomatis.setChecked(isOtomatis);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+
+        switchOtomatis.setOnCheckedChangeListener((btn, checked) -> {
+            mDatabase.child("kontrol/otomatis").setValue(checked);
+            Toast.makeText(this, checked ? "Otomatis aktif" : "Otomatis nonaktif", Toast.LENGTH_SHORT).show();
+        });
 
         // Switch Jadwal
         SwitchCompat sw1 = findViewById(R.id.switchJadwal1);
@@ -114,4 +161,4 @@ public class KontrolActivity extends AppCompatActivity {
             progressView.setLayoutParams(params);
         });
     }
-}
+}
