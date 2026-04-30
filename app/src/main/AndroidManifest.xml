@@ -15,7 +15,7 @@
         <activity
             android:name=".SplashActivity"
             android:exported="true"
-            android:theme="@style/Theme.SmartWaterChick.NoActionBar">
+            android:theme="@style/Theme.SmartWaterChick.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

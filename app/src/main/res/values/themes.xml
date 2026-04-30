@@ -18,6 +18,10 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="Theme.SmartWaterChick.Splash" parent="Theme.SmartWaterChick.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
     <!-- Custom text appearance for Bottom Navigation to reduce text cramping -->
     <style name="BottomNavTextAppearance" parent="TextAppearance.MaterialComponents.Caption">
         <item name="android:textSize">10sp</item>

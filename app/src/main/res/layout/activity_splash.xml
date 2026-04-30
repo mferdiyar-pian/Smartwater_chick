@@ -35,12 +35,44 @@
         app:layout_constraintBottom_toTopOf="@id/bottomFeatures"
         app:layout_constraintVertical_bias="0.4">
 
-        <!-- App Logo -->
-        <ImageView
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:src="@drawable/logo_water"
-            android:layout_marginBottom="32dp" />
+        <!-- App Logo Container -->
+        <FrameLayout
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginBottom="32dp">
+
+            <!-- Outer thin ring -->
+            <View
+                android:layout_width="190dp"
+                android:layout_height="190dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_splash_ring_outer" />
+
+            <!-- Inner solid white circle (acting as thick ring + center) -->
+            <View
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_splash_circle_solid" />
+
+            <!-- Center Blue Logo with Shadow -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                app:cardBackgroundColor="@color/blue_primary"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="10dp"
+                app:cardMaxElevation="12dp">
+
+                <ImageView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/logo_water"
+                    android:scaleType="fitCenter" />
+            </androidx.cardview.widget.CardView>
+        </FrameLayout>
 
         <!-- Title -->
         <TextView
