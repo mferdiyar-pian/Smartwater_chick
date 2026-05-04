@@ -2,7 +2,7 @@ package com.example.smartwaterchick;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
+
 import android.widget.Toast;
 import android.widget.PopupMenu;
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,19 +44,6 @@ public class PerangkatActivity extends AppCompatActivity {
         findViewById(R.id.tvLihatSemua).setOnClickListener(v ->
                 Toast.makeText(this, "Membuka semua log...", Toast.LENGTH_SHORT).show());
 
-        // Restart Device button
-        Button btnRestart = findViewById(R.id.bnRestartDevice);
-        btnRestart.setOnClickListener(v -> {
-            Toast.makeText(this, "Memulai ulang perangkat...", Toast.LENGTH_LONG).show();
-            // Di sini bisa ditambahkan logika restart perangkat
-        });
-
-        // Update Firmware button
-        Button btnUpdate = findViewById(R.id.btnUpdateFirmware);
-        btnUpdate.setOnClickListener(v -> {
-            Toast.makeText(this, "Memeriksa update firmware...", Toast.LENGTH_SHORT).show();
-            // Di sini bisa ditambahkan logika update firmware
-        });
 
         // Bottom Navigation - tab Devices aktif
         BottomNavigationView bottomNav = findViewById(R.id.bottomNav);

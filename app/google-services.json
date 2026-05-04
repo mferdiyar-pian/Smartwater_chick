@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "444240270217",
-    "project_id": "smartwater-chick",
-    "storage_bucket": "smartwater-chick.firebasestorage.app"
+    "project_number": "827071907429",
+    "project_id": "smartwater-chick-77b9d",
+    "storage_bucket": "smartwater-chick-77b9d.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:444240270217:android:fe577d447340463fc54758",
+        "mobilesdk_app_id": "1:827071907429:android:d6b75e8a071b8da931288c",
         "android_client_info": {
           "package_name": "com.example.smartwaterchick"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCQ53_8gQuDtfQz80hWbmGYpLXak4E-N4U"
+          "current_key": "AIzaSyBX_GuuTxQi5uHxPJ7i-pnaki95eAFWTMs"
         }
       ],
       "services": {

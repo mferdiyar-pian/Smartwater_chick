@@ -427,7 +427,7 @@
             </androidx.cardview.widget.CardView>
 
             <!-- ══════════════════════════════════════ -->
-            <!-- CARD 3: Status Sensor                   -->
+            <!-- CARD 3: Monitoring Komponen             -->
             <!-- ══════════════════════════════════════ -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -446,7 +446,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Status Sensor"
+                        android:text="Monitoring Komponen"
                         android:textSize="15sp"
                         android:textStyle="bold"
                         android:textColor="#1A1A2E"
@@ -462,9 +462,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:layout_alignParentStart="true"
-                            android:layout_centerVertical="true">
+                            android:gravity="center_vertical">
 
                             <FrameLayout
                                 android:layout_width="36dp"
@@ -492,7 +490,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Aktif"
+                            android:text="Terhubung"
                             android:textSize="12sp"
                             android:textStyle="bold"
                             android:textColor="#2ECC71"
@@ -506,18 +504,17 @@
                         android:background="#F0F2F8"
                         android:layout_marginBottom="14dp" />
 
-                    <!-- Sensor Ultrasonik (Volume Air) -->
+                    <!-- Sensor Ultrasonik -->
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="14dp">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:layout_alignParentStart="true"
-                            android:layout_centerVertical="true">
+                            android:gravity="center_vertical">
 
                             <FrameLayout
                                 android:layout_width="36dp"
@@ -533,35 +530,73 @@
                                     android:layout_gravity="center" />
                             </FrameLayout>
 
-                            <LinearLayout
+                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Sensor Ultrasonik"
-                                    android:textSize="14sp"
-                                    android:textStyle="bold"
-                                    android:textColor="#1A1A2E" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Untuk volume air"
-                                    android:textSize="11sp"
-                                    android:textColor="#8A8FA8" />
-                            </LinearLayout>
+                                android:text="Sensor Ultrasonik"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:textColor="#1A1A2E" />
                         </LinearLayout>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Aktif"
+                            android:text="Terhubung"
                             android:textSize="12sp"
                             android:textStyle="bold"
                             android:textColor="#2ECC71"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true" />
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#F0F2F8"
+                        android:layout_marginBottom="14dp" />
+
+                    <!-- Pompa Air -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <FrameLayout
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:background="@drawable/bg_icon_blue"
+                                android:layout_marginEnd="12dp">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:src="@drawable/ic_water_drop"
+                                    android:tint="#1B5BCE"
+                                    android:layout_gravity="center" />
+                            </FrameLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Pompa Air (Relay)"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:textColor="#1A1A2E" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Standby"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="#8A8FA8"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true" />
                     </RelativeLayout>
@@ -680,7 +715,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Update Firmware Tersedia"
+                                android:text="Koneksi Stabil"
                                 android:textSize="13sp"
                                 android:textStyle="bold"
                                 android:textColor="#1A1A2E" />
@@ -688,51 +723,11 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Versi v2.1.5 tersedia • 2 jam lalu"
+                                android:text="Kualitas sinyal optimal • 1 jam lalu"
                                 android:textSize="11sp"
                                 android:textColor="#8A8FA8" />
                         </LinearLayout>
                     </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- ══════════════════════════════════════ -->
-            <!-- CARD 5: Tombol Aksi                     -->
-            <!-- ══════════════════════════════════════ -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
-                android:layout_marginBottom="12dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="12dp"
-                    android:background="#FFFFFF">
-
-                    <Button
-                        android:id="@+id/bnRestartDevice"
-                        android:layout_width="match_parent"
-                        android:layout_height="46dp"
-                        android:text="🔄  Restart Perangkat"
-                        android:textSize="13sp"
-                        android:textColor="#FFFFFF"
-                        android:background="@drawable/bg_button_primary"
-                        app:backgroundTint="@null"
-                        android:layout_marginBottom="10dp" />
-
-                    <Button
-                        android:id="@+id/btnUpdateFirmware"
-                        android:layout_width="match_parent"
-                        android:layout_height="46dp"
-                        android:text="⬆️  Update Firmware"
-                        android:textSize="13sp"
-                        android:textColor="#1B5BCE"
-                        android:background="@drawable/bg_button_outline_blue"
-                        app:backgroundTint="@null" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
