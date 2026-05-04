@@ -26,4 +26,10 @@
     <style name="BottomNavTextAppearance" parent="TextAppearance.MaterialComponents.Caption">
         <item name="android:textSize">10sp</item>
     </style>
+
+    <!-- Style untuk menghilangkan garis bawah default pada EditText -->
+    <style name="NoUnderlineEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:backgroundTint">@android:color/transparent</item>
+    </style>
 </resources>

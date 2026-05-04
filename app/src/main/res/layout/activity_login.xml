@@ -112,8 +112,10 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="@null"
+                        style="@style/NoUnderlineEditText"
+                        android:background="@android:color/transparent"
                         android:hint="Email Address"
+                        android:gravity="center_vertical"
                         android:textCursorDrawable="@drawable/cursor_black"
                         android:textColorHint="@color/text_hint"
                         android:textColor="@color/text_primary"
@@ -146,8 +148,10 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="@null"
+                        style="@style/NoUnderlineEditText"
+                        android:background="@android:color/transparent"
                         android:hint="Password"
+                        android:gravity="center_vertical"
                         android:textCursorDrawable="@drawable/cursor_black"
                         android:textColorHint="@color/text_hint"
                         android:textColor="@color/text_primary"
@@ -180,121 +184,103 @@
                     android:clickable="true"
                     android:focusable="true" />
 
-                <!-- CAPTCHA Section -->
+                <!-- CAPTCHA Section - Checkbox Style -->
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/cardCaptcha"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="16dp"
-                    app:cardElevation="0dp"
-                    app:cardBackgroundColor="#F8FAFF"
-                    android:layout_marginBottom="24dp">
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="#FFFFFF"
+                    android:layout_marginBottom="24dp"
+                    android:clickable="true"
+                    android:focusable="true">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
+                        android:orientation="horizontal"
+                        android:padding="16dp"
+                        android:gravity="center_vertical"
+                        android:minHeight="64dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Verifikasi Keamanan"
-                            android:textSize="13sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_primary"
-                            android:layout_marginBottom="12dp" />
-
-                        <!-- Captcha Display Row -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="56dp"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:layout_marginBottom="12dp">
-
-                            <!-- Captcha Image/Display -->
-                            <LinearLayout
-                                android:id="@+id/captchaDisplay"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:orientation="horizontal"
-                                android:gravity="center"
-                                android:background="@drawable/bg_input_field">
-
-                                <TextView
-                                    android:id="@+id/tvCaptchaQuestion"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="5 + 3 = ?"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold"
-                                    android:textColor="@color/blue_primary"
-                                    android:fontFamily="monospace" />
-                            </LinearLayout>
-
-                            <!-- Refresh Button -->
-                            <ImageView
-                                android:id="@+id/ivRefreshCaptcha"
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:src="@drawable/ic_refresh"
-                                android:tint="@color/blue_primary"
-                                android:padding="12dp"
-                                android:layout_marginStart="8dp"
-                                android:background="@drawable/bg_circle_blue"
-                                android:clickable="true"
-                                android:focusable="true" />
-                        </LinearLayout>
-
-                        <!-- Captcha Input -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:orientation="horizontal"
-                            android:background="@drawable/bg_input_field"
-                            android:gravity="center_vertical"
-                            android:paddingStart="16dp"
-                            android:paddingEnd="16dp">
+                        <!-- Checkbox area -->
+                        <FrameLayout
+                            android:id="@+id/flCaptchaBox"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:background="@drawable/bg_captcha_checkbox"
+                            android:layout_marginEnd="16dp">
 
                             <ImageView
+                                android:id="@+id/ivCaptchaCheck"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@drawable/ic_shield"
-                                android:tint="@color/text_secondary"
-                                android:layout_marginEnd="12dp" />
-
-                            <EditText
-                                android:id="@+id/etCaptcha"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:background="@null"
-                                android:hint="Masukkan jawaban captcha"
-                                android:textCursorDrawable="@drawable/cursor_black"
-                                android:textColorHint="@color/text_hint"
-                                android:textColor="@color/text_primary"
-                                android:textSize="14sp"
-                                android:inputType="number"
-                                android:imeOptions="actionDone"
-                                android:singleLine="true" />
-
-                            <ImageView
-                                android:id="@+id/ivCaptchaStatus"
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
+                                android:layout_gravity="center"
                                 android:src="@drawable/ic_check_circle"
-                                android:tint="#CCCCCC"
-                                android:visibility="invisible" />
+                                android:tint="#4285F4"
+                                android:visibility="gone" />
+
+                            <ProgressBar
+                                android:id="@+id/pbCaptcha"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:indeterminateTint="#4285F4"
+                                android:visibility="gone" />
+
+                        </FrameLayout>
+
+                        <!-- Label -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvCaptchaLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Saya bukan robot"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary" />
+
+                            <TextView
+                                android:id="@+id/tvCaptchaStatus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Ketuk untuk verifikasi"
+                                android:textSize="12sp"
+                                android:textColor="@color/text_secondary"
+                                android:layout_marginTop="2dp" />
+
                         </LinearLayout>
 
-                        <TextView
+                        <!-- reCAPTCHA branding -->
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Masukkan hasil penjumlahan di atas"
-                            android:textSize="11sp"
-                            android:textColor="@color/text_secondary"
-                            android:layout_marginTop="8dp" />
+                            android:orientation="vertical"
+                            android:gravity="center_horizontal">
+
+                            <ImageView
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:src="@drawable/ic_shield"
+                                android:tint="#4285F4" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Aman"
+                                android:textSize="9sp"
+                                android:textColor="@color/text_secondary"
+                                android:layout_marginTop="2dp" />
+
+                        </LinearLayout>
+
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
