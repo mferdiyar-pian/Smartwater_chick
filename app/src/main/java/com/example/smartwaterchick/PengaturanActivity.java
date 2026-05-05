@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class PengaturanActivity extends AppCompatActivity {
 
@@ -83,8 +84,11 @@ public class PengaturanActivity extends AppCompatActivity {
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         });
 
-        findViewById(R.id.menuManajemen).setOnClickListener(v ->
-                Toast.makeText(this, "Manajemen Perangkat", Toast.LENGTH_SHORT).show());
+        // Setup WiFi ESP32 via BLE
+        findViewById(R.id.menuManajemen).setOnClickListener(v -> {
+            startActivity(new Intent(this, BleWifiSetupActivity.class));
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        });
 
         findViewById(R.id.menuKeamanan).setOnClickListener(v ->
                 Toast.makeText(this, "Keamanan", Toast.LENGTH_SHORT).show());
@@ -111,6 +115,8 @@ public class PengaturanActivity extends AppCompatActivity {
                         .setTitle("Keluar Sesi")
                         .setMessage("Apakah Anda yakin ingin keluar?")
                         .setPositiveButton("Keluar", (dialog, which) -> {
+                            // Sign out dari Firebase — sesi dihapus
+                            FirebaseAuth.getInstance().signOut();
                             Intent intent = new Intent(this, LoginActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);

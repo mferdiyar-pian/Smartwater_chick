@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class SplashActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
@@ -24,14 +27,12 @@ public class SplashActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         tvLoadingPercent = findViewById(R.id.tvLoadingPercent);
 
-        // Start loading animation
         startLoadingAnimation();
     }
 
     private void startLoadingAnimation() {
-        // Animate progress from 0 to 100 over 2.5 seconds
-        final int totalDuration = 2500; // 2.5 seconds
-        final int interval = 25; // update every 25ms
+        final int totalDuration = 2500;
+        final int interval = 25;
         final int steps = totalDuration / interval;
         final int increment = 100 / steps;
 
@@ -41,14 +42,14 @@ public class SplashActivity extends AppCompatActivity {
                 if (progress < 100) {
                     progress += increment;
                     if (progress > 100) progress = 100;
-                    
+
                     progressBar.setProgress(progress);
                     tvLoadingPercent.setText(progress + "%");
-                    
+
                     handler.postDelayed(this, interval);
                 } else {
-                    // Loading complete, go to LoginActivity
-                    navigateToLogin();
+                    // Selesai loading — cek status login Firebase
+                    checkLoginAndNavigate();
                 }
             }
         };
@@ -56,17 +57,26 @@ public class SplashActivity extends AppCompatActivity {
         handler.post(progressRunnable);
     }
 
-    private void navigateToLogin() {
-        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-        startActivity(intent);
+    private void checkLoginAndNavigate() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (currentUser != null) {
+            // Pengguna sudah login sebelumnya → langsung ke Dashboard
+            Intent intent = new Intent(SplashActivity.this, DashboardActivity.class);
+            startActivity(intent);
+        } else {
+            // Belum login → arahkan ke halaman Login
+            Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
+
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-        finish(); // Close splash activity
+        finish();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // Remove any pending callbacks to prevent memory leaks
         handler.removeCallbacksAndMessages(null);
     }
 }

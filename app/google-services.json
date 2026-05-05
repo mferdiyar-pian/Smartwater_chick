@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "827071907429",
+    "firebase_url": "https://smartwater-chick-77b9d-default-rtdb.firebaseio.com",
     "project_id": "smartwater-chick-77b9d",
     "storage_bucket": "smartwater-chick-77b9d.firebasestorage.app"
   },
@@ -12,7 +13,12 @@
           "package_name": "com.example.smartwaterchick"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "827071907429-ai2unbjkdlq9al0q43c7lgolp70ls57u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBX_GuuTxQi5uHxPJ7i-pnaki95eAFWTMs"
@@ -20,7 +26,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "827071907429-ai2unbjkdlq9al0q43c7lgolp70ls57u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

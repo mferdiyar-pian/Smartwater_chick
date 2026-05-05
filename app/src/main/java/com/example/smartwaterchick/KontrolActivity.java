@@ -6,19 +6,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import android.widget.PopupMenu;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class KontrolActivity extends AppCompatActivity {
 
-    private DatabaseReference mDatabase;
+    private DatabaseReference dbRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +23,8 @@ public class KontrolActivity extends AppCompatActivity {
 
         if (getSupportActionBar() != null) getSupportActionBar().hide();
 
-        // Initialize Firebase
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        // Inisialisasi Firebase Realtime Database
+        dbRef = FirebaseDatabase.getInstance().getReference("kontrol");
 
         // Back button
         findViewById(R.id.ivBack).setOnClickListener(v -> {
@@ -39,86 +35,75 @@ public class KontrolActivity extends AppCompatActivity {
             finish();
         });
 
-        // Notifikasi & Settings
+        // Notifikasi
         findViewById(R.id.ivNotification).setOnClickListener(v -> {
             PopupMenu popup = new PopupMenu(KontrolActivity.this, v);
             popup.getMenu().add("Peringatan: pH Air di Tangki 1 Rendah (5.5)");
             popup.getMenu().add("Info: Kapasitas Air berkurang.");
             popup.show();
         });
+
+        // Settings
         findViewById(R.id.ivSettings).setOnClickListener(v -> {
             startActivity(new Intent(KontrolActivity.this, PengaturanActivity.class));
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         });
 
-        // Monitoring Jarak/Tinggi Air dari Firebase
-        mDatabase.child("monitoring/jarak").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    float jarak = snapshot.getValue(Float.class);
-                    // Misal tinggi tangki 100cm, 0cm = penuh, 100cm = kosong
-                    // Kita balik jadi persentase
-                    float persen = (100 - jarak) / 100f;
-                    if (persen < 0) persen = 0;
-                    if (persen > 1) persen = 1;
-                    setProgressBar(R.id.viewProgressTangki, persen);
-                    setProgressBar(R.id.viewProgressKontrol, persen);
-                }
-            }
+        // Progress bar tangki 65%
+        setProgressBar(R.id.viewProgressTangki, 0.65f);
+        setProgressBar(R.id.viewProgressKontrol, 0.65f);
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
+        // Cek pH — baca nilai pH terbaru dari Firebase
+        findViewById(R.id.btnCekPh).setOnClickListener(v -> {
+            dbRef.getParent().child("monitoring").limitToLast(1)
+                    .get().addOnSuccessListener(snapshot -> {
+                        for (var entry : snapshot.getChildren()) {
+                            Object phVal = entry.child("ph").getValue();
+                            String ph = phVal != null ? String.valueOf(phVal) : "N/A";
+                            Toast.makeText(this, "pH terkini: " + ph, Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnFailureListener(e ->
+                            Toast.makeText(this, "Gagal membaca pH dari Firebase", Toast.LENGTH_SHORT).show());
         });
 
-        // Cek pH
-        findViewById(R.id.btnCekPh).setOnClickListener(v ->
-                Toast.makeText(this, "Mengecek pH...", Toast.LENGTH_SHORT).show());
-
-        // Isi Air (Kirim perintah ke Firebase)
+        // Isi Air — kirim perintah ke Firebase
         findViewById(R.id.btnIsiAir).setOnClickListener(v -> {
-            mDatabase.child("kontrol/isi_air").setValue(true);
-            Toast.makeText(this, "Mengisi air tangki...", Toast.LENGTH_SHORT).show();
-            // Matikan lagi setelah 1 detik (simulasi toggle) atau biarkan sistem hardware mematikan
+            dbRef.child("perintah").setValue("isi_air")
+                    .addOnSuccessListener(unused -> Toast.makeText(this, "Perintah isi air dikirim!", Toast.LENGTH_SHORT).show())
+                    .addOnFailureListener(e -> Toast.makeText(this, "Gagal mengirim perintah", Toast.LENGTH_SHORT).show());
         });
 
-        // Buang Air
+        // Buang Air — kirim perintah ke Firebase
         findViewById(R.id.btnBuangAir).setOnClickListener(v -> {
-            mDatabase.child("kontrol/buang_air").setValue(true);
-            Toast.makeText(this, "Membuang air tangki...", Toast.LENGTH_SHORT).show();
+            dbRef.child("perintah").setValue("buang_air")
+                    .addOnSuccessListener(unused -> Toast.makeText(this, "Perintah buang air dikirim!", Toast.LENGTH_SHORT).show())
+                    .addOnFailureListener(e -> Toast.makeText(this, "Gagal mengirim perintah", Toast.LENGTH_SHORT).show());
         });
 
-        // Switch Otomatis
+        // Switch Otomatis — simpan ke Firebase
         SwitchCompat switchOtomatis = findViewById(R.id.switchOtomatis);
-        // Baca status awal dari Firebase
-        mDatabase.child("kontrol/otomatis").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    boolean isOtomatis = snapshot.getValue(Boolean.class);
-                    switchOtomatis.setChecked(isOtomatis);
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
-        });
-
         switchOtomatis.setOnCheckedChangeListener((btn, checked) -> {
-            mDatabase.child("kontrol/otomatis").setValue(checked);
-            Toast.makeText(this, checked ? "Otomatis aktif" : "Otomatis nonaktif", Toast.LENGTH_SHORT).show();
+            dbRef.child("otomatis").setValue(checked);
+            Toast.makeText(this, checked ? "Mode otomatis aktif" : "Mode otomatis nonaktif", Toast.LENGTH_SHORT).show();
         });
 
-        // Switch Jadwal
+        // Switch Jadwal — simpan ke Firebase
         SwitchCompat sw1 = findViewById(R.id.switchJadwal1);
         SwitchCompat sw2 = findViewById(R.id.switchJadwal2);
         SwitchCompat sw3 = findViewById(R.id.switchJadwal3);
 
-        sw1.setOnCheckedChangeListener((btn, c) ->
-                Toast.makeText(this, "Jadwal 07.00 " + (c ? "aktif" : "nonaktif"), Toast.LENGTH_SHORT).show());
-        sw2.setOnCheckedChangeListener((btn, c) ->
-                Toast.makeText(this, "Jadwal 15.00 " + (c ? "aktif" : "nonaktif"), Toast.LENGTH_SHORT).show());
-        sw3.setOnCheckedChangeListener((btn, c) ->
-                Toast.makeText(this, "Jadwal 22.00 " + (c ? "aktif" : "nonaktif"), Toast.LENGTH_SHORT).show());
+        sw1.setOnCheckedChangeListener((btn, c) -> {
+            dbRef.child("jadwal_07").setValue(c);
+            Toast.makeText(this, "Jadwal 07.00 " + (c ? "aktif" : "nonaktif"), Toast.LENGTH_SHORT).show();
+        });
+        sw2.setOnCheckedChangeListener((btn, c) -> {
+            dbRef.child("jadwal_15").setValue(c);
+            Toast.makeText(this, "Jadwal 15.00 " + (c ? "aktif" : "nonaktif"), Toast.LENGTH_SHORT).show();
+        });
+        sw3.setOnCheckedChangeListener((btn, c) -> {
+            dbRef.child("jadwal_22").setValue(c);
+            Toast.makeText(this, "Jadwal 22.00 " + (c ? "aktif" : "nonaktif"), Toast.LENGTH_SHORT).show();
+        });
 
         // Bottom Navigation
         BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
@@ -161,4 +146,4 @@ public class KontrolActivity extends AppCompatActivity {
             progressView.setLayoutParams(params);
         });
     }
-}
+}

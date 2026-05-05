@@ -1,70 +1,98 @@
 package com.example.smartwaterchick;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.InputType;
 import android.view.View;
-import android.view.animation.OvershootInterpolator;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+
 public class LoginActivity extends AppCompatActivity {
 
-    private android.widget.EditText etEmail, etPassword;
+    private EditText etEmail, etPassword;
     private ImageView ivTogglePassword;
     private boolean isPasswordVisible = false;
 
-    // CAPTCHA checkbox
+    // Komponen UI Captcha
     private CardView cardCaptcha;
     private FrameLayout flCaptchaBox;
     private ImageView ivCaptchaCheck;
     private ProgressBar pbCaptcha;
-    private TextView tvCaptchaLabel, tvCaptchaStatus;
-
+    private TextView tvCaptchaStatus;
     private boolean isCaptchaVerified = false;
-    private boolean isCaptchaLoading  = false;
 
-    // Deteksi bot: hitung berapa kali diklik dalam waktu singkat
-    private int tapCount = 0;
-    private long firstTapTime = 0;
-    private static final int BOT_TAP_THRESHOLD = 4;    // lebih dari 4 klik
-    private static final long BOT_TAP_WINDOW_MS = 2000; // dalam 2 detik = curiga bot
+    private Button btnSignIn;
 
-    private DatabaseHelper db;
+    private FirebaseAuth mAuth;
+    private GoogleSignInClient mGoogleSignInClient;
+
+    // Launcher untuk hasil Google Sign-In
+    private final ActivityResultLauncher<Intent> googleSignInLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
+                try {
+                    GoogleSignInAccount account = task.getResult(ApiException.class);
+                    firebaseAuthWithGoogle(account.getIdToken());
+                } catch (ApiException e) {
+                    Toast.makeText(this, "Google Sign-In gagal: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    enableLoginButtons();
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        db = new DatabaseHelper(this);
+        // Inisialisasi Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
 
-        // Init view umum
-        etEmail           = findViewById(R.id.etEmail);
-        etPassword        = findViewById(R.id.etPassword);
-        ivTogglePassword  = findViewById(R.id.ivTogglePassword);
+        // Konfigurasi Google Sign-In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        // Init CAPTCHA checkbox
-        cardCaptcha      = findViewById(R.id.cardCaptcha);
-        flCaptchaBox     = findViewById(R.id.flCaptchaBox);
-        ivCaptchaCheck   = findViewById(R.id.ivCaptchaCheck);
-        pbCaptcha        = findViewById(R.id.pbCaptcha);
-        tvCaptchaLabel   = findViewById(R.id.tvCaptchaLabel);
-        tvCaptchaStatus  = findViewById(R.id.tvCaptchaStatus);
+        // Inisialisasi View Input
+        etEmail = findViewById(R.id.etEmail);
+        etPassword = findViewById(R.id.etPassword);
+        ivTogglePassword = findViewById(R.id.ivTogglePassword);
+        
+        // Inisialisasi View Captcha Checkbox
+        cardCaptcha = findViewById(R.id.cardCaptcha);
+        flCaptchaBox = findViewById(R.id.flCaptchaBox);
+        ivCaptchaCheck = findViewById(R.id.ivCaptchaCheck);
+        pbCaptcha = findViewById(R.id.pbCaptcha);
+        tvCaptchaStatus = findViewById(R.id.tvCaptchaStatus);
 
         TextView tvForgotPassword = findViewById(R.id.tvForgotPassword);
-        TextView tvSignUp         = findViewById(R.id.tvSignUp);
-        View     btnSignIn        = findViewById(R.id.btnSignIn);
-        View     btnGoogle        = findViewById(R.id.btnGoogle);
+        btnSignIn = findViewById(R.id.btnSignIn);
+        View btnGoogle = findViewById(R.id.btnGoogle);
 
         // Toggle password visibility
         ivTogglePassword.setOnClickListener(v -> {
@@ -79,158 +107,124 @@ public class LoginActivity extends AppCompatActivity {
             etPassword.setSelection(etPassword.length());
         });
 
-        // CAPTCHA checkbox – klik sekali untuk verifikasi
-        cardCaptcha.setOnClickListener(v -> handleCaptchaTap());
+        // Logika simulasi reCAPTCHA checkbox
+        cardCaptcha.setOnClickListener(v -> {
+            if (!isCaptchaVerified) {
+                verifyCaptcha();
+            }
+        });
+        flCaptchaBox.setOnClickListener(v -> {
+            if (!isCaptchaVerified) {
+                verifyCaptcha();
+            }
+        });
 
-        // LOGIN BUTTON
+        // Tombol Sign In (Email & Password via Firebase)
         btnSignIn.setOnClickListener(v -> {
-            String email    = etEmail.getText().toString().trim();
+            String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
 
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Email/Password tidak boleh kosong", Toast.LENGTH_SHORT).show();
                 return;
             }
-
+            
             if (!isCaptchaVerified) {
-                Toast.makeText(this, "Mohon selesaikan verifikasi keamanan terlebih dahulu", Toast.LENGTH_SHORT).show();
-                // Goyangkan card captcha agar user sadar
-                shakeCaptchaCard();
+                Toast.makeText(this, "Silakan verifikasi Captcha (Saya bukan robot)", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            boolean isValid = db.checkLogin(email, password);
-            if (isValid) {
-                Toast.makeText(this, "Login Berhasil", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                finish();
-            } else {
-                Toast.makeText(this, "Login Gagal - Email/Password salah", Toast.LENGTH_SHORT).show();
-                // Reset captcha supaya harus verifikasi ulang
-                resetCaptcha();
-            }
+            disableLoginButtons();
+            mAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, task -> {
+                        enableLoginButtons();
+                        if (task.isSuccessful()) {
+                            Toast.makeText(this, "Login Berhasil!", Toast.LENGTH_SHORT).show();
+                            goToDashboard();
+                        } else {
+                            String errorMsg = task.getException() != null ? task.getException().getMessage() : "Login gagal";
+                            Toast.makeText(this, "Login Gagal: " + errorMsg, Toast.LENGTH_LONG).show();
+                            resetCaptcha();
+                        }
+                    });
         });
 
-        // Forgot Password
-        tvForgotPassword.setOnClickListener(v ->
-                Toast.makeText(this, "Fitur belum tersedia", Toast.LENGTH_SHORT).show()
-        );
+        // Tombol Google Sign-In
+        btnGoogle.setOnClickListener(v -> {
+            disableLoginButtons();
+            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+            googleSignInLauncher.launch(signInIntent);
+        });
 
-        // Sign Up
-        tvSignUp.setOnClickListener(v ->
-                Toast.makeText(this, "Arahkan ke halaman register", Toast.LENGTH_SHORT).show()
-        );
-
-        // Google Login
-        btnGoogle.setOnClickListener(v ->
-                Toast.makeText(this,
-                        "Login dengan Google belum tersedia. Fitur ini akan aktif setelah integrasi Firebase.",
-                        Toast.LENGTH_LONG).show()
-        );
+        // Forgot Password via Firebase
+        tvForgotPassword.setOnClickListener(v -> {
+            String email = etEmail.getText().toString().trim();
+            if (email.isEmpty()) {
+                Toast.makeText(this, "Masukkan email Anda terlebih dahulu", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            mAuth.sendPasswordResetEmail(email)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(this, "Email reset password telah dikirim ke " + email, Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(this, "Gagal mengirim email reset", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        });
     }
 
-    // ─── CAPTCHA LOGIC ───────────────────────────────────────────────────────────
-
-    private void handleCaptchaTap() {
-        if (isCaptchaLoading || isCaptchaVerified) return;
-
-        long now = System.currentTimeMillis();
-
-        // Mulai hitung window jika ini klik pertama
-        if (tapCount == 0) {
-            firstTapTime = now;
-        }
-        tapCount++;
-
-        // Cek apakah dalam window 2 detik sudah terlalu banyak klik (bot)
-        if ((now - firstTapTime) < BOT_TAP_WINDOW_MS && tapCount > BOT_TAP_THRESHOLD) {
-            // Kemungkinan bot – reset dan beri peringatan
-            tapCount = 0;
-            tvCaptchaStatus.setText("Aktivitas mencurigakan. Coba lagi.");
-            tvCaptchaStatus.setTextColor(getResources().getColor(android.R.color.holo_red_light, null));
-            new Handler().postDelayed(() -> {
-                tvCaptchaStatus.setText("Ketuk untuk verifikasi");
-                tvCaptchaStatus.setTextColor(getResources().getColor(android.R.color.darker_gray, null));
-            }, 2000);
-            return;
-        }
-
-        // Jika window sudah lewat, reset counter
-        if ((now - firstTapTime) >= BOT_TAP_WINDOW_MS) {
-            tapCount = 1;
-            firstTapTime = now;
-        }
-
-        // Mulai proses verifikasi
-        startCaptchaVerification();
-    }
-
-    private void startCaptchaVerification() {
-        isCaptchaLoading = true;
-
-        // Tampilkan loading spinner
+    private void verifyCaptcha() {
+        // Tampilkan loading di dalam checkbox
         ivCaptchaCheck.setVisibility(View.GONE);
         pbCaptcha.setVisibility(View.VISIBLE);
         tvCaptchaStatus.setText("Memverifikasi...");
-        tvCaptchaStatus.setTextColor(getResources().getColor(android.R.color.darker_gray, null));
-
-        // Simulasi verifikasi 1.2 detik lalu tampilkan centang
-        new Handler().postDelayed(() -> {
+        
+        // Simulasi delay jaringan/verifikasi 1,5 detik
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
             pbCaptcha.setVisibility(View.GONE);
-            showCaptchaSuccess();
-        }, 1200);
+            ivCaptchaCheck.setVisibility(View.VISIBLE);
+            tvCaptchaStatus.setText("Terverifikasi");
+            isCaptchaVerified = true;
+        }, 1500);
     }
-
-    private void showCaptchaSuccess() {
-        isCaptchaVerified = true;
-        isCaptchaLoading  = false;
-
-        // Tampilkan centang dengan animasi pop
-        ivCaptchaCheck.setVisibility(View.VISIBLE);
-        ivCaptchaCheck.setScaleX(0f);
-        ivCaptchaCheck.setScaleY(0f);
-
-        AnimatorSet pop = new AnimatorSet();
-        pop.playTogether(
-                ObjectAnimator.ofFloat(ivCaptchaCheck, "scaleX", 0f, 1.2f, 1f),
-                ObjectAnimator.ofFloat(ivCaptchaCheck, "scaleY", 0f, 1.2f, 1f)
-        );
-        pop.setDuration(350);
-        pop.setInterpolator(new OvershootInterpolator());
-        pop.start();
-
-        // Update teks & border checkbox menjadi hijau
-        tvCaptchaLabel.setText("Verifikasi berhasil");
-        tvCaptchaStatus.setText("✓ Anda terdeteksi sebagai manusia");
-        tvCaptchaStatus.setTextColor(getResources().getColor(android.R.color.holo_green_dark, null));
-
-        // Beri outline hijau pada checkbox box
-        flCaptchaBox.setBackground(getDrawable(R.drawable.bg_captcha_checkbox_checked));
-        // Beri border hijau tipis pada card
-        cardCaptcha.setCardBackgroundColor(getResources().getColor(android.R.color.white, null));
-    }
-
+    
     private void resetCaptcha() {
         isCaptchaVerified = false;
-        isCaptchaLoading  = false;
-        tapCount = 0;
-
         ivCaptchaCheck.setVisibility(View.GONE);
         pbCaptcha.setVisibility(View.GONE);
-        flCaptchaBox.setBackground(getDrawable(R.drawable.bg_captcha_checkbox));
-        tvCaptchaLabel.setText("Saya bukan robot");
         tvCaptchaStatus.setText("Ketuk untuk verifikasi");
-        tvCaptchaStatus.setTextColor(getResources().getColor(android.R.color.darker_gray, null));
     }
 
-    private void shakeCaptchaCard() {
-        ObjectAnimator shake = ObjectAnimator.ofFloat(
-                cardCaptcha, "translationX",
-                0f, -16f, 16f, -12f, 12f, -8f, 8f, 0f
-        );
-        shake.setDuration(400);
-        shake.start();
+    private void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, task -> {
+                    enableLoginButtons();
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        Toast.makeText(this, "Selamat datang, " + (user != null ? user.getDisplayName() : ""), Toast.LENGTH_SHORT).show();
+                        goToDashboard();
+                    } else {
+                        Toast.makeText(this, "Autentikasi Google gagal", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void goToDashboard() {
+        Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        finish();
+    }
+
+    private void disableLoginButtons() {
+        btnSignIn.setEnabled(false);
+        btnSignIn.setText("Memproses...");
+    }
+
+    private void enableLoginButtons() {
+        btnSignIn.setEnabled(true);
+        btnSignIn.setText("Sign In");
     }
 }
