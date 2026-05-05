@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F0F4FF">
+
+    <!-- HEADER -->
+    <LinearLayout
+        android:id="@+id/headerBle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/blue_header"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="24dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/ic_arrow_back"
+                android:tint="#FFFFFF"
+                android:background="@drawable/bg_edit_button"
+                android:padding="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_centerVertical="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Setup WiFi ESP32"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kirim kredensial WiFi ke perangkat ESP32 melalui Bluetooth"
+            android:textColor="#DDEEFF"
+            android:textSize="13sp"
+            android:layout_marginTop="12dp" />
+    </LinearLayout>
+
+    <!-- SCROLLABLE CONTENT -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="110dp"
+        android:paddingBottom="24dp"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- STATUS CARD -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="16dp"
+                    android:background="#FFFFFF">
+
+                    <FrameLayout
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:background="@drawable/bg_menu_icon_blue_light"
+                        android:layout_marginEnd="14dp">
+                        <ImageView
+                            android:id="@+id/ivBleStatusIcon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_signal"
+                            android:tint="#1B5BCE"
+                            android:layout_gravity="center" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="STATUS BLUETOOTH"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            android:textColor="#8A8FA8"
+                            android:letterSpacing="0.06" />
+
+                        <TextView
+                            android:id="@+id/tvBleStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Belum Terhubung"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="#E74C3C"
+                            android:layout_marginTop="2dp" />
+                    </LinearLayout>
+
+                    <ProgressBar
+                        android:id="@+id/progressBle"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:visibility="gone"
+                        android:indeterminateTint="#1B5BCE" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- SCAN CARD -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:background="#FFFFFF">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="LANGKAH 1 — CARI PERANGKAT"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#8A8FA8"
+                        android:letterSpacing="0.06"
+                        android:layout_marginBottom="12dp" />
+
+                    <Button
+                        android:id="@+id/btnScan"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:text="🔍  Scan Perangkat BLE"
+                        android:textAllCaps="false"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:background="@drawable/bg_button_primary"
+                        app:backgroundTint="@null" />
+
+                    <!-- List perangkat BLE ditemukan -->
+                    <TextView
+                        android:id="@+id/tvDeviceList"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tekan Scan untuk mencari perangkat SmartWaterChick..."
+                        android:textSize="13sp"
+                        android:textColor="#8A8FA8"
+                        android:gravity="center"
+                        android:padding="16dp"
+                        android:layout_marginTop="8dp" />
+
+                    <!-- Perangkat ditemukan -->
+                    <LinearLayout
+                        android:id="@+id/layoutDeviceFound"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="#F0F8FF"
+                        android:padding="12dp"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_signal"
+                            android:tint="#1B5BCE"
+                            android:layout_marginEnd="10dp" />
+
+                        <TextView
+                            android:id="@+id/tvDeviceName"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="SmartWaterChick"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:textColor="#1A1A2E" />
+
+                        <Button
+                            android:id="@+id/btnConnect"
+                            android:layout_width="wrap_content"
+                            android:layout_height="36dp"
+                            android:text="Hubungkan"
+                            android:textAllCaps="false"
+                            android:textSize="12sp"
+                            android:textColor="#FFFFFF"
+                            android:background="@drawable/bg_button_primary"
+                            app:backgroundTint="@null" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- WIFI CREDENTIAL CARD -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardWifiInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:background="#FFFFFF">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="LANGKAH 2 — MASUKKAN DATA WIFI"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#8A8FA8"
+                        android:letterSpacing="0.06"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- SSID Input -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nama WiFi (SSID)"
+                        android:textSize="13sp"
+                        android:textColor="#1A1A2E"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="6dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:orientation="horizontal"
+                        android:background="@drawable/bg_input_field"
+                        android:gravity="center_vertical"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:layout_marginBottom="16dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_signal"
+                            android:tint="#8A8FA8"
+                            android:layout_marginEnd="10dp" />
+
+                        <EditText
+                            android:id="@+id/etSsid"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@android:color/transparent"
+                            android:hint="Nama jaringan WiFi"
+                            android:textColorHint="#C4C9D9"
+                            android:textColor="#1A1A2E"
+                            android:textSize="14sp"
+                            android:inputType="text"
+                            android:singleLine="true" />
+                    </LinearLayout>
+
+                    <!-- Password Input -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Password WiFi"
+                        android:textSize="13sp"
+                        android:textColor="#1A1A2E"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="6dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:orientation="horizontal"
+                        android:background="@drawable/bg_input_field"
+                        android:gravity="center_vertical"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:layout_marginBottom="20dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_lock"
+                            android:tint="#8A8FA8"
+                            android:layout_marginEnd="10dp" />
+
+                        <EditText
+                            android:id="@+id/etWifiPassword"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@android:color/transparent"
+                            android:hint="Password WiFi"
+                            android:textColorHint="#C4C9D9"
+                            android:textColor="#1A1A2E"
+                            android:textSize="14sp"
+                            android:inputType="textPassword"
+                            android:singleLine="true" />
+
+                        <ImageView
+                            android:id="@+id/ivToggleWifiPass"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:src="@drawable/ic_visibility"
+                            android:tint="#8A8FA8"
+                            android:clickable="true"
+                            android:focusable="true" />
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btnSendWifi"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:text="📡  Kirim ke ESP32"
+                        android:textAllCaps="false"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        android:background="@drawable/bg_button_primary"
+                        app:backgroundTint="@null" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- HASIL / LOG -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardLog"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:background="#FFFFFF">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="LOG KONEKSI"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#8A8FA8"
+                        android:letterSpacing="0.06"
+                        android:layout_marginBottom="10dp" />
+
+                    <TextView
+                        android:id="@+id/tvLog"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textSize="13sp"
+                        android:textColor="#1A1A2E"
+                        android:fontFamily="monospace"
+                        android:lineSpacingExtra="4dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- INFO CARD -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:background="#FFF8E1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ℹ️  Petunjuk Penggunaan"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:textColor="#F39C12"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="1. Pastikan ESP32 menyala dan dalam mode BLE (LED berkedip biru)\n2. Pastikan Bluetooth HP Anda aktif\n3. Tekan Scan → pilih SmartWaterChick → Hubungkan\n4. Masukkan nama &amp; password WiFi lalu tekan Kirim\n5. ESP32 akan mencoba terhubung ke WiFi dan Firebase"
+                        android:textSize="13sp"
+                        android:textColor="#7D6200"
+                        android:lineSpacingExtra="4dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
