@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- TOP HEADER - Moved inside ScrollView -->
+            <!-- TOP HEADER (As shown in reference image) -->
             <LinearLayout
                 android:id="@+id/headerLayout"
                 android:layout_width="match_parent"
@@ -27,15 +27,14 @@
                 android:background="@color/blue_header"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:paddingTop="20dp"
+                android:paddingTop="24dp"
                 android:paddingBottom="48dp">
 
-                <!-- Title row -->
+                <!-- Title row with Edit button -->
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="20dp">
+                    android:layout_marginBottom="24dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -46,7 +45,7 @@
                         android:textStyle="bold"
                         android:layout_centerVertical="true" />
 
-                    <!-- Edit icon -->
+                    <!-- Edit icon (Circular as in image) -->
                     <FrameLayout
                         android:id="@+id/btnEdit"
                         android:layout_width="38dp"
@@ -160,7 +159,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    app:cardCornerRadius="14dp"
+                    app:cardCornerRadius="16dp"
                     app:cardElevation="0dp"
                     android:layout_marginEnd="8dp">
 
@@ -168,18 +167,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="14dp"
+                        android:padding="16dp"
                         android:background="#FFFFFF">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="STATUS AIR"
-                            android:textSize="10sp"
+                            android:textSize="11sp"
                             android:textStyle="bold"
                             android:textColor="#8A8FA8"
                             android:letterSpacing="0.06"
-                            android:layout_marginBottom="4dp" />
+                            android:layout_marginBottom="6dp" />
 
                         <TextView
                             android:id="@+id/tvStatusAir"
@@ -197,25 +196,25 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    app:cardCornerRadius="14dp"
+                    app:cardCornerRadius="16dp"
                     app:cardElevation="0dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="14dp"
+                        android:padding="16dp"
                         android:background="#FFFFFF">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="STATUS SISTEM"
-                            android:textSize="10sp"
+                            android:textSize="11sp"
                             android:textStyle="bold"
                             android:textColor="#8A8FA8"
                             android:letterSpacing="0.06"
-                            android:layout_marginBottom="4dp" />
+                            android:layout_marginBottom="6dp" />
 
                         <TextView
                             android:id="@+id/tvStatusSistem"
@@ -238,7 +237,7 @@
                 android:textStyle="bold"
                 android:textColor="#8A8FA8"
                 android:layout_marginStart="16dp"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="12dp" />
 
             <!-- Menu Utama Card -->
             <androidx.cardview.widget.CardView
@@ -260,7 +259,7 @@
                     <LinearLayout
                         android:id="@+id/menuNotifikasi"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                        android:layout_height="64dp"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
                         android:paddingStart="16dp"
@@ -270,13 +269,13 @@
                         android:background="?attr/selectableItemBackground">
 
                         <FrameLayout
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
                             android:background="@drawable/bg_menu_icon_blue_light"
                             android:layout_marginEnd="14dp">
                             <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
                                 android:src="@drawable/ic_notification"
                                 android:tint="#1B5BCE"
                                 android:layout_gravity="center" />
@@ -299,13 +298,13 @@
                     </LinearLayout>
 
                     <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#F0F2F8" android:layout_marginStart="66dp" />
+                        android:background="#F0F2F8" android:layout_marginStart="68dp" />
 
                     <!-- Manajemen Perangkat -->
                     <LinearLayout
                         android:id="@+id/menuManajemen"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                        android:layout_height="64dp"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
                         android:paddingStart="16dp"
@@ -315,13 +314,13 @@
                         android:background="?attr/selectableItemBackground">
 
                         <FrameLayout
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
                             android:background="@drawable/bg_menu_icon_orange_light"
                             android:layout_marginEnd="14dp">
                             <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
                                 android:src="@drawable/ic_controls"
                                 android:tint="#F39C12"
                                 android:layout_gravity="center" />
@@ -344,13 +343,13 @@
                     </LinearLayout>
 
                     <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#F0F2F8" android:layout_marginStart="66dp" />
+                        android:background="#F0F2F8" android:layout_marginStart="68dp" />
 
                     <!-- Keamanan -->
                     <LinearLayout
                         android:id="@+id/menuKeamanan"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                        android:layout_height="64dp"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
                         android:paddingStart="16dp"
@@ -360,13 +359,13 @@
                         android:background="?attr/selectableItemBackground">
 
                         <FrameLayout
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
                             android:background="@drawable/bg_menu_icon_purple_light"
                             android:layout_marginEnd="14dp">
                             <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
                                 android:src="@drawable/ic_security"
                                 android:tint="#8B5CF6"
                                 android:layout_gravity="center" />
@@ -399,7 +398,7 @@
                 android:textStyle="bold"
                 android:textColor="#8A8FA8"
                 android:layout_marginStart="16dp"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="12dp" />
 
             <!-- Menu Umum Card -->
             <androidx.cardview.widget.CardView
@@ -421,7 +420,7 @@
                     <LinearLayout
                         android:id="@+id/menuBackup"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                        android:layout_height="64dp"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
                         android:paddingStart="16dp"
@@ -431,13 +430,13 @@
                         android:background="?attr/selectableItemBackground">
 
                         <FrameLayout
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
                             android:background="@drawable/bg_menu_icon_teal_light"
                             android:layout_marginEnd="14dp">
                             <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
                                 android:src="@drawable/ic_backup"
                                 android:tint="#0D9488"
                                 android:layout_gravity="center" />
@@ -460,13 +459,13 @@
                     </LinearLayout>
 
                     <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#F0F2F8" android:layout_marginStart="66dp" />
+                        android:background="#F0F2F8" android:layout_marginStart="68dp" />
 
                     <!-- Bahasa -->
                     <LinearLayout
                         android:id="@+id/menuBahasa"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                        android:layout_height="64dp"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
                         android:paddingStart="16dp"
@@ -476,13 +475,13 @@
                         android:background="?attr/selectableItemBackground">
 
                         <FrameLayout
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
                             android:background="@drawable/bg_menu_icon_green_light"
                             android:layout_marginEnd="14dp">
                             <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
                                 android:src="@drawable/ic_language"
                                 android:tint="#2ECC71"
                                 android:layout_gravity="center" />
@@ -513,13 +512,13 @@
                     </LinearLayout>
 
                     <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#F0F2F8" android:layout_marginStart="66dp" />
+                        android:background="#F0F2F8" android:layout_marginStart="68dp" />
 
                     <!-- Pusat Bantuan -->
                     <LinearLayout
                         android:id="@+id/menuBantuan"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                        android:layout_height="64dp"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
                         android:paddingStart="16dp"
@@ -529,13 +528,13 @@
                         android:background="?attr/selectableItemBackground">
 
                         <FrameLayout
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
                             android:background="@drawable/bg_menu_icon_red_light"
                             android:layout_marginEnd="14dp">
                             <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
                                 android:src="@drawable/ic_help"
                                 android:tint="#E74C3C"
                                 android:layout_gravity="center" />
@@ -559,40 +558,28 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Keluar Sesi Button -->
-            <androidx.cardview.widget.CardView
+            <!-- Keluar Sesi Button (Modernized) -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnKeluarSesi"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
+                android:layout_height="48dp"
                 android:layout_marginStart="14dp"
                 android:layout_marginEnd="14dp"
-                android:layout_marginBottom="20dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#FFFFFF"
-                    android:padding="4dp">
-
-                    <Button
-                        android:id="@+id/btnKeluarSesi"
-                        android:layout_width="match_parent"
-                        android:layout_height="52dp"
-                        android:text="  Keluar Sesi"
-                        android:textSize="15sp"
-                        android:textColor="#E74C3C"
-                        android:textStyle="bold"
-                        android:drawableStart="@drawable/ic_logout"
-                        android:drawableTint="#E74C3C"
-                        android:drawablePadding="8dp"
-                        android:background="@drawable/bg_button_outline_red"
-                        android:backgroundTint="@null"
-                        app:backgroundTint="@null"
-                        android:stateListAnimator="@null"
-                        android:gravity="center" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                android:layout_marginBottom="24dp"
+                android:text="Keluar Sesi"
+                android:textAllCaps="false"
+                android:textColor="#E74C3C"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:cornerRadius="12dp"
+                app:strokeWidth="1.5dp"
+                app:strokeColor="#E74C3C"
+                app:icon="@drawable/ic_logout"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                app:iconTint="#E74C3C"
+                android:backgroundTint="#FFFFFF"
+                android:stateListAnimator="@null" />
 
             <!-- Version info -->
             <LinearLayout

@@ -8,6 +8,7 @@
 
     <!-- TOP APP BAR -->
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
@@ -15,14 +16,15 @@
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:paddingStart="4dp"
-            android:paddingEnd="16dp">
+            android:layout_height="56dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingStart="4dp"
+                android:paddingEnd="16dp">
 
                 <ImageView
                     android:id="@+id/ivBack"
@@ -34,7 +36,8 @@
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:clickable="true"
-                    android:focusable="true" />
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackgroundBorderless" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -49,6 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:gravity="center_vertical"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true">
 
@@ -56,10 +60,9 @@
                         android:id="@+id/ivNotification"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:padding="4dp"
-                        android:src="@drawable/ic_notification"
-                        android:tint="#FFFFFF"
-                        android:layout_marginEnd="12dp"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_notification_badge"
+                        android:layout_marginEnd="10dp"
                         android:clickable="true"
                         android:focusable="true"
                         android:background="?attr/selectableItemBackgroundBorderless" />
@@ -68,7 +71,7 @@
                         android:id="@+id/ivSettings"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:padding="4dp"
+                        android:padding="6dp"
                         android:src="@drawable/ic_settings"
                         android:tint="#FFFFFF"
                         android:clickable="true"
@@ -263,105 +266,115 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp">
+                        android:layout_marginBottom="16dp">
 
                         <ImageView
                             android:id="@+id/ivPhIcon"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@drawable/ic_water_drop"
+                            android:layout_width="42dp"
+                            android:layout_height="42dp"
+                            android:src="@drawable/ic_ph_leaf"
                             android:tint="#2ECC71"
                             android:background="@drawable/bg_icon_green"
-                            android:padding="5dp"
+                            android:padding="8dp"
                             android:layout_alignParentStart="true"
                             android:layout_centerVertical="true" />
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:orientation="vertical"
                             android:layout_toEndOf="@id/ivPhIcon"
-                            android:layout_marginStart="10dp"
-                            android:layout_centerVertical="true"
-                            android:text="Status pH Terkini"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            android:textColor="#1A1A2E" />
+                            android:layout_marginStart="12dp"
+                            android:layout_centerVertical="true">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Status pH Terkini"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                android:textColor="#1A1A2E" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="pH normal air minum: 6.5 – 7.5"
+                                android:textSize="10sp"
+                                android:textColor="#8A8FA8" />
+                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/tvPhKontrol"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
                             android:text="7.2 pH"
-                            android:textSize="17sp"
+                            android:textSize="18sp"
                             android:textStyle="bold"
-                            android:textColor="#1B5BCE" />
+                            android:textColor="#1B5BCE"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true" />
                     </RelativeLayout>
 
-                    <!-- Scale labels -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="4dp">
-
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:text="ASAM"
-                            android:textSize="10sp" android:textColor="#E74C3C" android:textStyle="bold" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:text="NETRAL"
-                            android:textSize="10sp" android:textColor="#2ECC71" android:textStyle="bold" android:gravity="center" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:text="BASA"
-                            android:textSize="10sp" android:textColor="#3498DB" android:textStyle="bold" android:gravity="end" />
-                    </LinearLayout>
-
-                    <!-- Gradient pH bar -->
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="12dp"
-                        android:layout_marginBottom="4dp">
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="12dp"
-                            android:background="@drawable/bg_ph_gradient" />
-
-                        <View
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:background="@drawable/bg_ph_indicator"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginStart="165dp" />
-                    </FrameLayout>
-
-                    <!-- pH indicator line + value -->
+                    <!-- Scale Bar -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:gravity="center"
-                        android:layout_marginBottom="14dp">
+                        android:layout_marginBottom="16dp">
 
-                        <View
-                            android:layout_width="2dp"
-                            android:layout_height="10dp"
-                            android:background="#1A1A2E" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <!-- Scale labels -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="7.2 pH"
-                            android:textSize="11sp"
-                            android:textColor="#1A1A2E" />
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="6dp">
+
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                                android:layout_weight="1" android:text="ASAM"
+                                android:textSize="10sp" android:textColor="#FF9F43" android:textStyle="bold" />
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                                android:layout_weight="1" android:text="NETRAL"
+                                android:textSize="10sp" android:textColor="#28C76F" android:textStyle="bold" android:gravity="center" />
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                                android:layout_weight="1" android:text="BASA"
+                                android:textSize="10sp" android:textColor="#54A0FF" android:textStyle="bold" android:gravity="end" />
+                        </LinearLayout>
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="12dp"
+                                android:background="@drawable/bg_ph_segmented" />
+
+                            <!-- Indicator line -->
+                            <View
+                                android:id="@+id/ivPhIndicator"
+                                android:layout_width="2.5dp"
+                                android:layout_height="24dp"
+                                android:background="#1A1A2E"
+                                android:layout_gravity="center" />
+                        </FrameLayout>
                     </LinearLayout>
 
-                    <!-- Keterangan pH + badge AMAN -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="7.2 pH"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:textColor="#1A1A2E"
+                        android:gravity="center"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Badge AMAN -->
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="14dp">
+                        android:layout_marginBottom="16dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -388,17 +401,21 @@
                             android:layout_centerVertical="true" />
                     </RelativeLayout>
 
-                    <!-- Cek pH Button -->
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnCekPh"
                         android:layout_width="match_parent"
                         android:layout_height="46dp"
-                        android:text="↻  Cek pH"
-                        android:textSize="14sp"
+                        android:text="Cek pH"
+                        android:textAllCaps="false"
                         android:textColor="#FFFFFF"
-                        android:background="@drawable/bg_button_primary"
-                        android:backgroundTint="@null"
-                        app:backgroundTint="@null"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:cornerRadius="10dp"
+                        app:icon="@drawable/ic_refresh"
+                        app:iconGravity="textStart"
+                        app:iconPadding="8dp"
+                        app:iconTint="#FFFFFF"
+                        app:backgroundTint="#1B5BCE"
                         android:stateListAnimator="@null" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -429,12 +446,12 @@
                         android:layout_marginBottom="12dp">
 
                         <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@drawable/ic_water_drop"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/ic_water_capacity"
                             android:tint="#1B5BCE"
                             android:background="@drawable/bg_icon_blue"
-                            android:padding="5dp"
+                            android:padding="8dp"
                             android:layout_marginEnd="10dp" />
 
                         <TextView
@@ -489,37 +506,42 @@
                             android:background="@drawable/bg_progress_kapasitas" />
                     </FrameLayout>
 
-                    <!-- Isi Air + Buang Air -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <Button
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnIsiAir"
                             android:layout_width="0dp"
                             android:layout_height="46dp"
                             android:layout_weight="1"
                             android:text="Isi Air"
+                            android:textAllCaps="false"
                             android:textSize="14sp"
+                            android:textStyle="bold"
                             android:textColor="#1B5BCE"
-                            android:background="@drawable/bg_button_outline_blue"
-                            android:backgroundTint="@null"
-                            app:backgroundTint="@null"
+                            app:cornerRadius="10dp"
+                            app:strokeWidth="1dp"
+                            app:strokeColor="#1B5BCE"
+                            android:backgroundTint="#FFFFFF"
                             android:stateListAnimator="@null"
                             android:layout_marginEnd="10dp" />
 
-                        <Button
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnBuangAir"
                             android:layout_width="0dp"
                             android:layout_height="46dp"
                             android:layout_weight="1"
                             android:text="Buang Air"
+                            android:textAllCaps="false"
                             android:textSize="14sp"
+                            android:textStyle="bold"
                             android:textColor="#BE123C"
-                            android:background="@drawable/bg_button_outline_red"
-                            android:backgroundTint="@null"
-                            app:backgroundTint="@null"
+                            app:cornerRadius="10dp"
+                            app:strokeWidth="1dp"
+                            app:strokeColor="#BE123C"
+                            android:backgroundTint="#FFFFFF"
                             android:stateListAnimator="@null" />
                     </LinearLayout>
                 </LinearLayout>
@@ -551,12 +573,12 @@
                         android:layout_marginBottom="16dp">
 
                         <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@drawable/ic_water_drop"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/ic_tank"
                             android:tint="#1B5BCE"
                             android:background="@drawable/bg_icon_blue"
-                            android:padding="5dp"
+                            android:padding="8dp"
                             android:layout_marginEnd="10dp" />
 
                         <TextView

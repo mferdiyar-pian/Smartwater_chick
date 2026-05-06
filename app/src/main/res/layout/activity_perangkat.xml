@@ -8,6 +8,7 @@
 
     <!-- TOP APP BAR -->
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
@@ -15,14 +16,15 @@
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:paddingStart="4dp"
-            android:paddingEnd="16dp">
+            android:layout_height="56dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingStart="4dp"
+                android:paddingEnd="16dp">
 
                 <ImageView
                     android:id="@+id/ivBack"
@@ -34,7 +36,8 @@
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:clickable="true"
-                    android:focusable="true" />
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackgroundBorderless" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -49,6 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:gravity="center_vertical"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true">
 
@@ -56,10 +60,9 @@
                         android:id="@+id/ivNotification"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:padding="4dp"
-                        android:src="@drawable/ic_notification"
-                        android:tint="#FFFFFF"
-                        android:layout_marginEnd="12dp"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_notification_badge"
+                        android:layout_marginEnd="10dp"
                         android:clickable="true"
                         android:focusable="true"
                         android:background="?attr/selectableItemBackgroundBorderless" />
@@ -68,14 +71,13 @@
                         android:id="@+id/ivSettings"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:padding="4dp"
+                        android:padding="6dp"
                         android:src="@drawable/ic_settings"
                         android:tint="#FFFFFF"
                         android:clickable="true"
                         android:focusable="true"
                         android:background="?attr/selectableItemBackgroundBorderless" />
                 </LinearLayout>
-
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
@@ -464,19 +466,14 @@
                             android:orientation="horizontal"
                             android:gravity="center_vertical">
 
-                            <FrameLayout
+                            <ImageView
                                 android:layout_width="36dp"
                                 android:layout_height="36dp"
+                                android:src="@drawable/ic_ph_leaf"
+                                android:tint="#2ECC71"
                                 android:background="@drawable/bg_icon_green"
-                                android:layout_marginEnd="12dp">
-
-                                <ImageView
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
-                                    android:src="@drawable/ic_water_drop"
-                                    android:tint="#2ECC71"
-                                    android:layout_gravity="center" />
-                            </FrameLayout>
+                                android:padding="8dp"
+                                android:layout_marginEnd="12dp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -516,19 +513,14 @@
                             android:orientation="horizontal"
                             android:gravity="center_vertical">
 
-                            <FrameLayout
+                            <ImageView
                                 android:layout_width="36dp"
                                 android:layout_height="36dp"
+                                android:src="@drawable/ic_water_capacity"
+                                android:tint="#1B5BCE"
                                 android:background="@drawable/bg_icon_blue"
-                                android:layout_marginEnd="12dp">
-
-                                <ImageView
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
-                                    android:src="@drawable/ic_water_drop"
-                                    android:tint="#1B5BCE"
-                                    android:layout_gravity="center" />
-                            </FrameLayout>
+                                android:padding="8dp"
+                                android:layout_marginEnd="12dp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -567,19 +559,14 @@
                             android:orientation="horizontal"
                             android:gravity="center_vertical">
 
-                            <FrameLayout
+                            <ImageView
                                 android:layout_width="36dp"
                                 android:layout_height="36dp"
+                                android:src="@drawable/ic_tank"
+                                android:tint="#1B5BCE"
                                 android:background="@drawable/bg_icon_blue"
-                                android:layout_marginEnd="12dp">
-
-                                <ImageView
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
-                                    android:src="@drawable/ic_water_drop"
-                                    android:tint="#1B5BCE"
-                                    android:layout_gravity="center" />
-                            </FrameLayout>
+                                android:padding="8dp"
+                                android:layout_marginEnd="12dp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
