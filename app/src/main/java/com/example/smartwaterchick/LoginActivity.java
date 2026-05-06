@@ -33,8 +33,6 @@ import com.google.firebase.auth.GoogleAuthProvider;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText etEmail, etPassword;
-    private ImageView ivTogglePassword;
-    private boolean isPasswordVisible = false;
 
     // Komponen UI Captcha
     private CardView cardCaptcha;
@@ -81,7 +79,6 @@ public class LoginActivity extends AppCompatActivity {
         // Inisialisasi View Input
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
-        ivTogglePassword = findViewById(R.id.ivTogglePassword);
         
         // Inisialisasi View Captcha Checkbox
         cardCaptcha = findViewById(R.id.cardCaptcha);
@@ -94,18 +91,7 @@ public class LoginActivity extends AppCompatActivity {
         btnSignIn = findViewById(R.id.btnSignIn);
         View btnGoogle = findViewById(R.id.btnGoogle);
 
-        // Toggle password visibility
-        ivTogglePassword.setOnClickListener(v -> {
-            if (isPasswordVisible) {
-                etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                ivTogglePassword.setImageResource(R.drawable.ic_visibility);
-                isPasswordVisible = false;
-            } else {
-                etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                isPasswordVisible = true;
-            }
-            etPassword.setSelection(etPassword.length());
-        });
+
 
         // Logika simulasi reCAPTCHA checkbox
         cardCaptcha.setOnClickListener(v -> {

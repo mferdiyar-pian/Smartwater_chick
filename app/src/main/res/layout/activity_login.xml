@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_screen"
+    android:background="#F8FAFF"
     android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="28dp"
+        android:padding="24dp"
         android:gravity="center_horizontal">
 
         <!-- Logo + App Name -->
@@ -19,20 +19,20 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="48dp"
             android:layout_marginBottom="40dp">
 
             <androidx.cardview.widget.CardView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                app:cardBackgroundColor="@color/blue_primary"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="8dp"
-                android:layout_marginBottom="16dp">
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                app:cardBackgroundColor="#1B5BCE"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="0dp"
+                android:layout_marginBottom="20dp">
 
                 <ImageView
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
+                    android:layout_width="76dp"
+                    android:layout_height="76dp"
                     android:layout_gravity="center"
                     android:src="@drawable/logo_water"
                     android:scaleType="fitCenter"
@@ -43,24 +43,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="SmartWaterChick"
-                android:textSize="26sp"
+                android:textSize="28sp"
                 android:textStyle="bold"
-                android:textColor="@color/text_primary" />
+                android:textColor="#1A1A2E"
+                android:letterSpacing="-0.02" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Poultry Water Management"
+                android:text="Sistem Monitoring Air Mandiri"
                 android:textSize="14sp"
-                android:textColor="@color/text_secondary"
+                android:textColor="#8A8FA8"
                 android:layout_marginTop="4dp" />
         </LinearLayout>
 
-        <!-- Card Login -->
+        <!-- Login Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="40dp"
+            app:cardCornerRadius="24dp"
             app:cardElevation="0dp"
             android:layout_marginBottom="32dp">
 
@@ -68,328 +69,225 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="32dp"
-                android:background="@color/bg_card">
+                android:padding="28dp"
+                android:background="#FFFFFF">
 
-                <!-- Welcome Text -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Welcome Back!"
+                    android:text="Selamat Datang"
                     android:textSize="22sp"
                     android:textStyle="bold"
-                    android:textColor="@color/text_primary"
-                    android:layout_marginBottom="4dp" />
+                    android:textColor="#1A1A2E"
+                    android:layout_marginBottom="6dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Please sign in to continue"
+                    android:text="Silakan masuk untuk mengelola kandang Anda"
                     android:textSize="14sp"
-                    android:textColor="@color/text_secondary"
-                    android:layout_marginBottom="32dp" />
+                    android:textColor="#8A8FA8"
+                    android:layout_marginBottom="28dp" />
 
-                <!-- Email Field -->
-                <LinearLayout
+                <!-- Input Fields -->
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:orientation="horizontal"
-                    android:background="@drawable/bg_input_field"
-                    android:gravity="center_vertical"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:layout_marginBottom="20dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_mail"
-                        android:tint="@color/text_secondary"
-                        android:layout_marginEnd="12dp" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:hintEnabled="false"
+                    app:boxBackgroundMode="none">
 
                     <EditText
                         android:id="@+id/etEmail"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        style="@style/NoUnderlineEditText"
-                        android:background="@android:color/transparent"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
                         android:hint="Email Address"
-                        android:gravity="center_vertical"
-                        android:textCursorDrawable="@drawable/cursor_black"
-                        android:textColorHint="@color/text_hint"
-                        android:textColor="@color/text_primary"
-                        android:textSize="15sp"
                         android:inputType="textEmailAddress"
-                        android:imeOptions="actionNext"
-                        android:singleLine="true" />
-                </LinearLayout>
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:textSize="15sp"
+                        android:textColor="#1A1A2E"
+                        android:background="@drawable/bg_input_field"
+                        android:drawableStart="@drawable/ic_mail"
+                        android:drawablePadding="12dp"
+                        android:drawableTint="#8A8FA8" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Password Field -->
-                <LinearLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:orientation="horizontal"
-                    android:background="@drawable/bg_input_field"
-                    android:gravity="center_vertical"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:layout_marginBottom="12dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_lock"
-                        android:tint="@color/text_secondary"
-                        android:layout_marginEnd="12dp" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:hintEnabled="false"
+                    app:boxBackgroundMode="none"
+                    app:passwordToggleEnabled="true"
+                    app:passwordToggleTint="#8A8FA8">
 
                     <EditText
                         android:id="@+id/etPassword"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        style="@style/NoUnderlineEditText"
-                        android:background="@android:color/transparent"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
                         android:hint="Password"
-                        android:gravity="center_vertical"
-                        android:textCursorDrawable="@drawable/cursor_black"
-                        android:textColorHint="@color/text_hint"
-                        android:textColor="@color/text_primary"
-                        android:textSize="15sp"
                         android:inputType="textPassword"
-                        android:imeOptions="actionDone"
-                        android:singleLine="true" />
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:textSize="15sp"
+                        android:textColor="#1A1A2E"
+                        android:background="@drawable/bg_input_field"
+                        android:drawableStart="@drawable/ic_lock"
+                        android:drawablePadding="12dp"
+                        android:drawableTint="#8A8FA8" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                    <ImageView
-                        android:id="@+id/ivTogglePassword"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_visibility"
-                        android:tint="@color/text_secondary"
-                        android:clickable="true"
-                        android:focusable="true" />
-                </LinearLayout>
-
-                <!-- Forgot Password -->
                 <TextView
                     android:id="@+id/tvForgotPassword"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Forgot Password?"
-                    android:textColor="@color/blue_primary"
-                    android:textSize="14sp"
+                    android:text="Lupa Password?"
+                    android:textColor="#1B5BCE"
+                    android:textSize="13sp"
                     android:textStyle="bold"
                     android:layout_gravity="end"
-                    android:layout_marginBottom="20dp"
-                    android:clickable="true"
-                    android:focusable="true" />
+                    android:layout_marginBottom="28dp" />
 
-                <!-- CAPTCHA Section - Checkbox Style -->
+                <!-- CAPTCHA Card (Standardized) -->
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardCaptcha"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
-                    app:cardBackgroundColor="#FFFFFF"
-                    android:layout_marginBottom="24dp"
-                    android:clickable="true"
-                    android:focusable="true">
+                    app:cardCornerRadius="14dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="#F4F6FB"
+                    android:layout_marginBottom="28dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="64dp"
                         android:orientation="horizontal"
-                        android:padding="16dp"
-                        android:gravity="center_vertical"
-                        android:minHeight="64dp">
+                        android:padding="12dp"
+                        android:gravity="center_vertical">
 
-                        <!-- Checkbox area -->
                         <FrameLayout
                             android:id="@+id/flCaptchaBox"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:background="@drawable/bg_captcha_checkbox"
-                            android:layout_marginEnd="16dp">
-
+                            android:layout_marginEnd="12dp">
                             <ImageView
                                 android:id="@+id/ivCaptchaCheck"
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
                                 android:layout_gravity="center"
                                 android:src="@drawable/ic_check_circle"
-                                android:tint="#4285F4"
+                                android:tint="#1B5BCE"
                                 android:visibility="gone" />
-
                             <ProgressBar
                                 android:id="@+id/pbCaptcha"
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
                                 android:layout_gravity="center"
-                                android:indeterminateTint="#4285F4"
+                                android:indeterminateTint="#1B5BCE"
                                 android:visibility="gone" />
-
                         </FrameLayout>
 
-                        <!-- Label -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical">
-
                             <TextView
                                 android:id="@+id/tvCaptchaLabel"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Saya bukan robot"
-                                android:textSize="15sp"
+                                android:textSize="14sp"
                                 android:textStyle="bold"
-                                android:textColor="@color/text_primary" />
-
+                                android:textColor="#1A1A2E" />
                             <TextView
                                 android:id="@+id/tvCaptchaStatus"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Ketuk untuk verifikasi"
-                                android:textSize="12sp"
-                                android:textColor="@color/text_secondary"
-                                android:layout_marginTop="2dp" />
-
+                                android:textSize="11sp"
+                                android:textColor="#8A8FA8" />
                         </LinearLayout>
 
-                        <!-- reCAPTCHA branding -->
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:gravity="center_horizontal">
-
-                            <ImageView
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
-                                android:src="@drawable/ic_shield"
-                                android:tint="#4285F4" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Aman"
-                                android:textSize="9sp"
-                                android:textColor="@color/text_secondary"
-                                android:layout_marginTop="2dp" />
-
-                        </LinearLayout>
-
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:src="@drawable/ic_shield"
+                            android:tint="#1B5BCE"
+                            android:alpha="0.6" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
                 <!-- Sign In Button -->
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSignIn"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:text="Sign In"
+                    android:layout_height="54dp"
+                    android:text="Masuk Sekarang"
                     android:textAllCaps="false"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:background="@drawable/bg_button_primary"
-                    app:backgroundTint="@null"
+                    android:backgroundTint="#1B5BCE"
+                    app:cornerRadius="12dp"
+                    android:elevation="0dp"
                     android:layout_marginBottom="24dp" />
 
-                <!-- Divider OR LOGIN WITH -->
+                <!-- OR Divider -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:layout_marginBottom="24dp">
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_weight="1"
-                        android:background="@color/divider" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="  OR LOGIN WITH  "
-                        android:textSize="11sp"
-                        android:textColor="@color/text_secondary" />
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_weight="1"
-                        android:background="@color/divider" />
+                    <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" android:background="#F0F2F8" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="  Atau masuk dengan  " android:textSize="12sp" android:textColor="#8A8FA8" />
+                    <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1" android:background="#F0F2F8" />
                 </LinearLayout>
 
-                <!-- Google Login Button (full-width) -->
-                <androidx.cardview.widget.CardView
+                <!-- Google Button -->
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnGoogle"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="0dp"
-                    app:cardBackgroundColor="@color/bg_input"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:gravity="center"
-                        android:paddingStart="20dp"
-                        android:paddingEnd="20dp">
-
-                        <ImageView
-                            android:layout_width="22dp"
-                            android:layout_height="22dp"
-                            android:src="@drawable/ic_google"
-                            android:layout_marginEnd="10dp"
-                            android:contentDescription="Google" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Google"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_primary" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                    android:layout_height="54dp"
+                    android:text="Google"
+                    android:textAllCaps="false"
+                    android:textColor="#1A1A2E"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:backgroundTint="#F4F6FB"
+                    app:cornerRadius="12dp"
+                    app:icon="@drawable/ic_google"
+                    app:iconTint="@null"
+                    app:iconGravity="textStart"
+                    app:iconPadding="10dp"
+                    android:elevation="0dp" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Sign Up -->
+        <!-- Sign Up Row -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="24dp">
-
+            android:layout_marginBottom="32dp">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Don't have an account? "
+                android:text="Belum punya akun? "
                 android:textSize="14sp"
-                android:textColor="@color/text_secondary" />
-
+                android:textColor="#8A8FA8" />
             <TextView
                 android:id="@+id/tvSignUp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sign Up"
+                android:text="Daftar di sini"
                 android:textSize="14sp"
-                android:textColor="@color/blue_primary"
-                android:textStyle="bold"
-                android:clickable="true"
-                android:focusable="true" />
+                android:textColor="#1B5BCE"
+                android:textStyle="bold" />
         </LinearLayout>
 
     </LinearLayout>
