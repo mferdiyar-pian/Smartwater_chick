@@ -10,17 +10,17 @@
     <LinearLayout
         android:id="@+id/topBar"
         android:layout_width="match_parent"
-        android:layout_height="36dp"
+        android:layout_height="32dp"
         android:orientation="horizontal"
         android:background="#FFFFFF"
         android:gravity="end|center_vertical"
-        android:paddingEnd="16dp"
+        android:paddingEnd="20dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_signal"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/ic_sensor_broadcast"
             android:tint="#1B5BCE" />
     </LinearLayout>
 
