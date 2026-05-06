@@ -8,6 +8,7 @@
 
     <!-- TOP APP BAR -->
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
@@ -15,14 +16,15 @@
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:paddingStart="4dp"
-            android:paddingEnd="16dp">
+            android:layout_height="56dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingStart="4dp"
+                android:paddingEnd="16dp">
 
                 <ImageView
                     android:id="@+id/ivBack"
@@ -34,7 +36,8 @@
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:clickable="true"
-                    android:focusable="true" />
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackgroundBorderless" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -49,6 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:gravity="center_vertical"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true">
 
@@ -56,10 +60,9 @@
                         android:id="@+id/ivNotification"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:padding="4dp"
-                        android:src="@drawable/ic_notification"
-                        android:tint="#FFFFFF"
-                        android:layout_marginEnd="12dp"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_notification_badge"
+                        android:layout_marginEnd="10dp"
                         android:clickable="true"
                         android:focusable="true"
                         android:background="?attr/selectableItemBackgroundBorderless" />
@@ -68,7 +71,7 @@
                         android:id="@+id/ivSettings"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:padding="4dp"
+                        android:padding="6dp"
                         android:src="@drawable/ic_settings"
                         android:tint="#FFFFFF"
                         android:clickable="true"
@@ -91,8 +94,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="12dp"
-            android:paddingTop="14dp">
+            android:padding="14dp">
 
             <!-- ═══════════════════════════════════════════ -->
             <!-- CARD 1: Kapasitas & Penggunaan (Bar Chart) -->
@@ -100,15 +102,15 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="14dp"
+                app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="12dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="14dp"
+                    android:padding="16dp"
                     android:background="#FFFFFF">
 
                     <!-- Header dengan Title dan Filter -->
@@ -200,15 +202,15 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="14dp"
+                app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="12dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="14dp"
+                    android:padding="16dp"
                     android:background="#FFFFFF">
 
                     <!-- Header row: judul + filter sejajar -->
@@ -263,26 +265,31 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="14dp"
+                app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="12dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="12dp"
                     android:background="#FFFFFF">
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnLaporanLengkap"
                         android:layout_width="match_parent"
                         android:layout_height="46dp"
-                        android:text="📄  Laporan Lengkap"
-                        android:textSize="13sp"
+                        android:text="Laporan Lengkap"
+                        android:textAllCaps="false"
                         android:textColor="#FFFFFF"
-                        android:background="@drawable/bg_button_primary"
-                        android:backgroundTint="@null"
-                        app:backgroundTint="@null"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:cornerRadius="10dp"
+                        app:icon="@drawable/ic_analytics"
+                        app:iconGravity="textStart"
+                        app:iconPadding="8dp"
+                        app:iconTint="#FFFFFF"
+                        app:backgroundTint="#1B5BCE"
                         android:stateListAnimator="@null" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -293,15 +300,15 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="14dp"
+                app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="24dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="14dp"
+                    android:padding="16dp"
                     android:background="#FFFFFF">
 
                     <!-- Section header -->
@@ -322,18 +329,17 @@
                         android:orientation="horizontal"
                         android:gravity="top">
 
-                        <!-- Icon circle -->
                         <FrameLayout
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:background="@drawable/bg_insight_icon"
+                            android:layout_width="42dp"
+                            android:layout_height="42dp"
+                            android:background="@drawable/bg_icon_blue"
                             android:layout_marginEnd="12dp">
 
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:src="@drawable/ic_water_drop"
-                                android:tint="#FFFFFF"
+                                android:tint="#1B5BCE"
                                 android:layout_gravity="center" />
                         </FrameLayout>
 
