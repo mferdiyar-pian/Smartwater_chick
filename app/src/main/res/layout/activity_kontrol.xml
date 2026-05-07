@@ -649,148 +649,29 @@
                         android:textColor="#8A8FA8"
                         android:layout_marginBottom="12dp" />
 
-                    <!-- Jadwal 1: 07.00 -->
-                    <androidx.cardview.widget.CardView
+                    <!-- RecyclerView: Daftar Jadwal Dinamis -->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvJadwal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:cardCornerRadius="12dp"
-                        app:cardElevation="0dp"
-                        android:layout_marginBottom="8dp">
+                        android:nestedScrollingEnabled="false"
+                        android:layout_marginBottom="12dp" />
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="14dp"
-                            android:background="#F4F6FB">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_centerVertical="true">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="07.00"
-                                    android:textSize="20sp"
-                                    android:textStyle="bold"
-                                    android:textColor="#1A1A2E" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Setiap hari"
-                                    android:textSize="11sp"
-                                    android:textColor="#8A8FA8" />
-                            </LinearLayout>
-
-                            <androidx.appcompat.widget.SwitchCompat
-                                android:id="@+id/switchJadwal1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:checked="true"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                app:thumbTint="#FFFFFF"
-                                app:trackTint="@color/switch_track_color" />
-                        </RelativeLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- Jadwal 2: 15.00 -->
-                    <androidx.cardview.widget.CardView
+                    <!-- Tombol Tambah Jadwal -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnTambahJadwal"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:cardCornerRadius="12dp"
-                        app:cardElevation="0dp"
-                        android:layout_marginBottom="8dp">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="14dp"
-                            android:background="#F4F6FB">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_centerVertical="true">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="15.00"
-                                    android:textSize="20sp"
-                                    android:textStyle="bold"
-                                    android:textColor="#1A1A2E" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Setiap hari"
-                                    android:textSize="11sp"
-                                    android:textColor="#8A8FA8" />
-                            </LinearLayout>
-
-                            <androidx.appcompat.widget.SwitchCompat
-                                android:id="@+id/switchJadwal2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:checked="true"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                app:thumbTint="#FFFFFF"
-                                app:trackTint="@color/switch_track_color" />
-                        </RelativeLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- Jadwal 3: 22.00 -->
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:cardCornerRadius="12dp"
-                        app:cardElevation="0dp">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="14dp"
-                            android:background="#F4F6FB">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_centerVertical="true">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="22.00"
-                                    android:textSize="20sp"
-                                    android:textStyle="bold"
-                                    android:textColor="#1A1A2E" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Setiap hari"
-                                    android:textSize="11sp"
-                                    android:textColor="#8A8FA8" />
-                            </LinearLayout>
-
-                            <androidx.appcompat.widget.SwitchCompat
-                                android:id="@+id/switchJadwal3"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:checked="false"
-                                android:layout_alignParentEnd="true"
-                                android:layout_centerVertical="true"
-                                app:thumbTint="#FFFFFF"
-                                app:trackTint="@color/switch_track_color" />
-                        </RelativeLayout>
-                    </androidx.cardview.widget.CardView>
+                        android:layout_height="46dp"
+                        android:text="+ Tambah Jadwal"
+                        android:textAllCaps="false"
+                        android:textColor="#1B5BCE"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:cornerRadius="10dp"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#1B5BCE"
+                        android:backgroundTint="#EEF3FF"
+                        android:stateListAnimator="@null" />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

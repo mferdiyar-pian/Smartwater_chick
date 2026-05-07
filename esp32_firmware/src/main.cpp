@@ -69,7 +69,15 @@ bool isOnline = false;       // WiFi terhubung
 bool firebaseReady = false;  // Firebase terhubung
 
 bool isAutoMode = false;
-bool schedule07 = false, schedule15 = false, schedule22 = false;
+
+// Jadwal dinamis (maks MAX_JADWAL entri, diisi dari Firebase /jadwal)
+struct JadwalItem {
+    int jam;
+    int menit;
+    bool aktif;
+};
+JadwalItem jadwalList[MAX_JADWAL];
+int jadwalCount = 0;
 
 unsigned long lastSendTime = 0;
 unsigned long lastWifiRetryTime = 0;
@@ -98,6 +106,7 @@ void handleCommand(String command);
 void listenFirebaseStream();
 void checkSchedule();
 void notifyBleStatus(String status);
+void fetchJadwalFromFirebase();
 unsigned long getEstimatedEpoch();
 String epochToDate(unsigned long epoch);
 String epochToTime(unsigned long epoch);
@@ -417,6 +426,7 @@ String epochToTime(unsigned long epoch) {
 // ──────────────────────────────────────────
 void checkSchedule() {
     if (!isAutoMode) return;
+    if (jadwalCount == 0) return;
 
     unsigned long epoch = isOnline ? timeClient.getEpochTime() : getEstimatedEpoch();
     if (epoch == 0) return; // Belum pernah sync waktu, skip
@@ -425,12 +435,15 @@ void checkSchedule() {
     int menit = getMinuteFromEpoch(epoch);
     if (menit > 1) return; // Hanya jalankan di menit ke-0 dan ke-1
 
-    if ((schedule07 && jam == 7) || (schedule15 && jam == 15) || (schedule22 && jam == 22)) {
-        Serial.printf("[JADWAL] Jam %02d:00 — Isi air otomatis (online=%s)\n",
-                      jam, isOnline ? "YA" : "TIDAK");
-        controlPump(true, false);
-        delay(10000);
-        controlPump(false, false);
+    for (int i = 0; i < jadwalCount; i++) {
+        if (jadwalList[i].aktif && jadwalList[i].jam == jam && jadwalList[i].menit == 0) {
+            Serial.printf("[JADWAL] Jam %02d:%02d — Isi air otomatis (online=%s)\n",
+                          jam, menit, isOnline ? "YA" : "TIDAK");
+            controlPump(true, false);
+            delay(10000);
+            controlPump(false, false);
+            break; // Cukup jalankan sekali per iterasi
+        }
     }
 }
 
@@ -542,6 +555,7 @@ void connectFirebase() {
         Serial.println("\n✅ Firebase Terhubung!");
         firebaseReady = true;
         Firebase.RTDB.beginStream(&fbdoCommand, "/kontrol");
+        fetchJadwalFromFirebase(); // Muat jadwal dari Firebase
         lcd.clear();
         lcd.setCursor(0, 0); lcd.print("Firebase OK!    ");
         lcd.setCursor(0, 1); lcd.print("Sistem Siap     ");
@@ -644,7 +658,44 @@ void listenFirebaseStream() {
     if (path == "/perintah" && fbdoCommand.stringData().length() > 0)
         handleCommand(fbdoCommand.stringData());
     else if (path == "/otomatis") isAutoMode = fbdoCommand.boolData();
-    else if (path == "/jadwal_07") schedule07 = fbdoCommand.boolData();
-    else if (path == "/jadwal_15") schedule15 = fbdoCommand.boolData();
-    else if (path == "/jadwal_22") schedule22 = fbdoCommand.boolData();
+}
+
+// ──────────────────────────────────────────
+// FUNGSI: Baca semua jadwal dari Firebase /jadwal
+// Dipanggil sekali saat startup online
+// ──────────────────────────────────────────
+void fetchJadwalFromFirebase() {
+    if (!Firebase.ready()) return;
+    FirebaseJson json;
+    FirebaseData fbdoJadwal;
+    fbdoJadwal.setBSSLBufferSize(2048, 1024);
+    if (Firebase.RTDB.get(&fbdoJadwal, "/jadwal")) {
+        jadwalCount = 0;
+        FirebaseJsonData result;
+        FirebaseJson* jsonPtr = fbdoJadwal.jsonObjectPtr();
+        if (jsonPtr == nullptr) return;
+        size_t len = jsonPtr->iteratorBegin();
+        String key, value;
+        int type;
+        for (size_t i = 0; i < len && jadwalCount < MAX_JADWAL; i++) {
+            jsonPtr->iteratorGet(i, type, key, value);
+            // Ambil sub-field jam, menit, aktif untuk setiap ID
+            FirebaseJson sub;
+            sub.setJsonData(value);
+            FirebaseJsonData jamData, menitData, aktifData;
+            sub.get(jamData, "jam");
+            sub.get(menitData, "menit");
+            sub.get(aktifData, "aktif");
+            if (jamData.success && menitData.success && aktifData.success) {
+                jadwalList[jadwalCount].jam   = jamData.intValue;
+                jadwalList[jadwalCount].menit = menitData.intValue;
+                jadwalList[jadwalCount].aktif = aktifData.boolValue;
+                jadwalCount++;
+            }
+        }
+        jsonPtr->iteratorEnd();
+        Serial.printf("[JADWAL] Berhasil memuat %d jadwal dari Firebase.\n", jadwalCount);
+    } else {
+        Serial.println("[JADWAL] Gagal membaca jadwal dari Firebase.");
+    }
 }
