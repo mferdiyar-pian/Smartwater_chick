@@ -11,7 +11,10 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
         android:background="@color/blue_header"
+        app:backgroundTint="@color/blue_header"
+        app:liftOnScroll="false"
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
