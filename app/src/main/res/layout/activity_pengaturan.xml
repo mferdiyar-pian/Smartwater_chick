@@ -6,19 +6,72 @@
     android:layout_height="match_parent"
     android:background="#F0F4FF">
 
+    <!-- TOP APP BAR -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:background="@color/blue_header"
+        app:backgroundTint="@color/blue_header"
+        app:liftOnScroll="false"
+        app:elevation="0dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Profil &amp; Pengaturan"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_centerInParent="true" />
+
+                <!-- Edit icon (Circular as in image) -->
+                <FrameLayout
+                    android:id="@+id/btnEdit"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:background="@drawable/bg_edit_button"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/ic_edit"
+                        android:tint="#FFFFFF"
+                        android:layout_gravity="center" />
+                </FrameLayout>
+            </RelativeLayout>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
     <!-- SCROLLABLE CONTENT -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="72dp"
-        android:clipToPadding="false">
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- TOP HEADER (As shown in reference image) -->
+            <!-- Profile Info Background (Connecting from AppBar) -->
             <LinearLayout
                 android:id="@+id/headerLayout"
                 android:layout_width="match_parent"
@@ -27,44 +80,8 @@
                 android:background="@color/blue_header"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:paddingTop="24dp"
-                android:paddingBottom="48dp">
-
-                <!-- Title row with Edit button -->
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="24dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Profil &amp; Pengaturan"
-                        android:textColor="#FFFFFF"
-                        android:textSize="20sp"
-                        android:textStyle="bold"
-                        android:layout_centerVertical="true" />
-
-                    <!-- Edit icon (Circular as in image) -->
-                    <FrameLayout
-                        android:id="@+id/btnEdit"
-                        android:layout_width="38dp"
-                        android:layout_height="38dp"
-                        android:background="@drawable/bg_edit_button"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?attr/selectableItemBackgroundBorderless">
-
-                        <ImageView
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:src="@drawable/ic_edit"
-                            android:tint="#FFFFFF"
-                            android:layout_gravity="center" />
-                    </FrameLayout>
-                </RelativeLayout>
+                android:paddingBottom="48dp"
+                android:paddingTop="8dp">
 
                 <!-- Profile info -->
                 <LinearLayout
@@ -457,62 +474,6 @@
                             android:tint="#C4C9D9"
                             android:rotation="180" />
                     </LinearLayout>
-
-                    <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#F0F2F8" android:layout_marginStart="68dp" />
-
-                    <!-- Bahasa -->
-                    <LinearLayout
-                        android:id="@+id/menuBahasa"
-                        android:layout_width="match_parent"
-                        android:layout_height="64dp"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="16dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:background="?attr/selectableItemBackground">
-
-                        <FrameLayout
-                            android:layout_width="38dp"
-                            android:layout_height="38dp"
-                            android:background="@drawable/bg_menu_icon_green_light"
-                            android:layout_marginEnd="14dp">
-                            <ImageView
-                                android:layout_width="22dp"
-                                android:layout_height="22dp"
-                                android:src="@drawable/ic_language"
-                                android:tint="#2ECC71"
-                                android:layout_gravity="center" />
-                        </FrameLayout>
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Bahasa"
-                            android:textSize="15sp"
-                            android:textColor="#1A1A2E" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Indonesia"
-                            android:textSize="13sp"
-                            android:textColor="#8A8FA8"
-                            android:layout_marginEnd="4dp" />
-
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:src="@drawable/ic_arrow_back"
-                            android:tint="#C4C9D9"
-                            android:rotation="180" />
-                    </LinearLayout>
-
-                    <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#F0F2F8" android:layout_marginStart="68dp" />
 
                     <!-- Pusat Bantuan -->
                     <LinearLayout

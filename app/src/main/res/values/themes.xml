@@ -10,6 +10,8 @@
 
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/blue_header</item>
+        <!-- Pastikan ikon status bar (jam, sinyal, baterai) berwarna putih (bukan hitam) -->
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
     <style name="Theme.SmartWaterChick" parent="Base.Theme.SmartWaterChick" />

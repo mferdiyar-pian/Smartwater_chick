@@ -97,15 +97,6 @@ public class PengaturanActivity extends AppCompatActivity {
         findViewById(R.id.menuBackup).setOnClickListener(v ->
                 Toast.makeText(this, "Backup Data...", Toast.LENGTH_SHORT).show());
 
-        findViewById(R.id.menuBahasa).setOnClickListener(v -> {
-            String[] bahasa = {"Indonesia", "English"};
-            new AlertDialog.Builder(this)
-                    .setTitle("Pilih Bahasa")
-                    .setItems(bahasa, (dialog, which) ->
-                            Toast.makeText(this, "Bahasa: " + bahasa[which], Toast.LENGTH_SHORT).show())
-                    .show();
-        });
-
         findViewById(R.id.menuBantuan).setOnClickListener(v ->
                 Toast.makeText(this, "Pusat Bantuan", Toast.LENGTH_SHORT).show());
 
