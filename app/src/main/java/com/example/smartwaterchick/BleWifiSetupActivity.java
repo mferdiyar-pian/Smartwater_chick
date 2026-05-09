@@ -1,4 +1,4 @@
-package com.example.smartwaterchick;
+﻿package com.example.smartwaterchick;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -71,9 +71,9 @@ public class BleWifiSetupActivity extends BaseActivity {
 
     private final Handler handler = new Handler(Looper.getMainLooper());
 
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    // SCAN CALLBACK â€” dipanggil setiap ada device BLE ditemukan
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ──────────────────────────────────────────
+    // SCAN CALLBACK — dipanggil setiap ada device BLE ditemukan
+    // ──────────────────────────────────────────
     private final ScanCallback scanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
@@ -89,9 +89,9 @@ public class BleWifiSetupActivity extends BaseActivity {
                 final String finalName = name; // Dibutuhkan oleh lambda runOnUiThread
                 runOnUiThread(() -> {
                     tvDeviceList.setVisibility(View.GONE);
-                    tvDeviceName.setText(finalName + " â€” " + result.getDevice().getAddress());
+                    tvDeviceName.setText(finalName + " — " + result.getDevice().getAddress());
                     layoutDeviceFound.setVisibility(View.VISIBLE);
-                    appendLog("âœ… Perangkat ditemukan: " + finalName);
+                    appendLog("✅ Perangkat ditemukan: " + finalName);
                     updateStatus("Perangkat ditemukan", "#2ECC71");
                 });
             }
@@ -100,7 +100,7 @@ public class BleWifiSetupActivity extends BaseActivity {
         @Override
         public void onScanFailed(int errorCode) {
             runOnUiThread(() -> {
-                appendLog("âŒ Scan gagal (kode: " + errorCode + ")");
+                appendLog("❌ Scan gagal (kode: " + errorCode + ")");
                 updateStatus("Scan gagal", "#E74C3C");
                 progressBle.setVisibility(View.GONE);
                 btnScan.setEnabled(true);
@@ -108,20 +108,20 @@ public class BleWifiSetupActivity extends BaseActivity {
         }
     };
 
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-    // GATT CALLBACK â€” event koneksi & komunikasi BLE
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ──────────────────────────────────────────
+    // GATT CALLBACK — event koneksi & komunikasi BLE
+    // ──────────────────────────────────────────
     private final BluetoothGattCallback gattCallback = new BluetoothGattCallback() {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             if (newState == BluetoothGatt.STATE_CONNECTED) {
                 isConnected = true;
                 runOnUiThread(() -> {
-                    updateStatus("Terhubung ke ESP32 âœ“", "#2ECC71");
-                    appendLog("âœ… BLE Terhubung! Menemukan layanan...");
+                    updateStatus("Terhubung ke ESP32 ✓", "#2ECC71");
+                    appendLog("✅ BLE Terhubung! Menemukan layanan...");
                     progressBle.setVisibility(View.GONE);
                     cardWifiInput.setVisibility(View.VISIBLE);
-                    btnConnect.setText("Terhubung âœ“");
+                    btnConnect.setText("Terhubung ✓");
                     btnConnect.setEnabled(false);
                 });
                 if (ActivityCompat.checkSelfPermission(BleWifiSetupActivity.this,
@@ -133,7 +133,7 @@ public class BleWifiSetupActivity extends BaseActivity {
                 isConnected = false;
                 runOnUiThread(() -> {
                     updateStatus("Terputus dari ESP32", "#E74C3C");
-                    appendLog("âš ï¸ Koneksi BLE terputus");
+                    appendLog("⚠️ Koneksi BLE terputus");
                     cardWifiInput.setVisibility(View.GONE);
                     btnConnect.setText("Hubungkan");
                     btnConnect.setEnabled(true);
@@ -145,23 +145,23 @@ public class BleWifiSetupActivity extends BaseActivity {
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                runOnUiThread(() -> appendLog("âœ… Layanan BLE ditemukan. Siap kirim data WiFi."));
+                runOnUiThread(() -> appendLog("✅ Layanan BLE ditemukan. Siap kirim data WiFi."));
             } else {
-                runOnUiThread(() -> appendLog("âš ï¸ Gagal menemukan layanan BLE (status: " + status + ")"));
+                runOnUiThread(() -> appendLog("⚠️ Gagal menemukan layanan BLE (status: " + status + ")"));
             }
         }
 
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             if (characteristic.getUuid().equals(CHAR_SSID_UUID)) {
-                // SSID berhasil dikirim â†’ sekarang kirim password
-                runOnUiThread(() -> appendLog("âœ… SSID terkirim. Mengirim password..."));
+                // SSID berhasil dikirim → sekarang kirim password
+                runOnUiThread(() -> appendLog("✅ SSID terkirim. Mengirim password..."));
                 sendPassword();
             } else if (characteristic.getUuid().equals(CHAR_PASS_UUID)) {
                 runOnUiThread(() -> {
-                    appendLog("âœ… Password terkirim!");
-                    appendLog("â³ Menunggu ESP32 terhubung ke WiFi...");
-                    updateStatus("Data WiFi dikirim âœ“", "#1B5BCE");
+                    appendLog("✅ Password terkirim!");
+                    appendLog("⏳ Menunggu ESP32 terhubung ke WiFi...");
+                    updateStatus("Data WiFi dikirim ✓", "#1B5BCE");
                     btnSendWifi.setEnabled(true);
                     btnSendWifi.setText("ðŸ“¡  Kirim ke ESP32");
                 });
@@ -174,13 +174,13 @@ public class BleWifiSetupActivity extends BaseActivity {
             if (characteristic.getUuid().equals(CHAR_STATUS_UUID)) {
                 String status = new String(characteristic.getValue(), StandardCharsets.UTF_8);
                 runOnUiThread(() -> {
-                    appendLog("ðŸ“Ÿ Status ESP32: " + status);
+                    appendLog("📡 Status ESP32: " + status);
                     if (status.startsWith("CONNECTED")) {
-                        updateStatus("ESP32 Online âœ“", "#2ECC71");
-                        appendLog("ðŸŽ‰ ESP32 berhasil terhubung ke WiFi & Firebase!");
+                        updateStatus("ESP32 Online ✓", "#2ECC71");
+                        appendLog("🎉 ESP32 berhasil terhubung ke WiFi & Firebase!");
                     } else if (status.startsWith("FAILED")) {
                         updateStatus("WiFi Gagal!", "#E74C3C");
-                        appendLog("âŒ ESP32 gagal konek WiFi. Periksa nama/password.");
+                        appendLog("❌ ESP32 gagal konek WiFi. Periksa nama/password.");
                     }
                 });
             }
@@ -258,14 +258,14 @@ public class BleWifiSetupActivity extends BaseActivity {
             }
             btnSendWifi.setEnabled(false);
             btnSendWifi.setText("Mengirim...");
-            appendLog("ðŸ“¤ Mengirim SSID: " + ssid);
+            appendLog("📤 Mengirim SSID: " + ssid);
             sendSsid(ssid);
         });
     }
 
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ──────────────────────────────────────────
     // SCAN BLE
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ──────────────────────────────────────────
     private void startScan() {
         if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
             Toast.makeText(this, "Aktifkan Bluetooth terlebih dahulu", Toast.LENGTH_SHORT).show();
@@ -282,7 +282,7 @@ public class BleWifiSetupActivity extends BaseActivity {
         progressBle.setVisibility(View.VISIBLE);
         btnScan.setEnabled(false);
         updateStatus("Scanning...", "#F39C12");
-        appendLog("ðŸ” Memulai scan BLE...");
+        appendLog("Memulai scan BLE...");
 
         bleScanner = bluetoothAdapter.getBluetoothLeScanner();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN)
@@ -297,7 +297,7 @@ public class BleWifiSetupActivity extends BaseActivity {
                 runOnUiThread(() -> {
                     tvDeviceList.setText("Perangkat tidak ditemukan. Coba lagi.");
                     updateStatus("Tidak ditemukan", "#E74C3C");
-                    appendLog("âŒ Scan selesai. SmartWaterChick tidak ditemukan.");
+                    appendLog("❌ Scan selesai. SmartWaterChick tidak ditemukan.");
                     progressBle.setVisibility(View.GONE);
                     btnScan.setEnabled(true);
                 });
@@ -318,9 +318,9 @@ public class BleWifiSetupActivity extends BaseActivity {
         });
     }
 
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ──────────────────────────────────────────
     // CONNECT KE PERANGKAT BLE
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ──────────────────────────────────────────
     @SuppressLint("MissingPermission")
     private void connectToDevice() {
         if (foundDevice == null) return;
@@ -331,26 +331,26 @@ public class BleWifiSetupActivity extends BaseActivity {
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT)
                 == PackageManager.PERMISSION_GRANTED || Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-            appendLog("ðŸ”— Menghubungkan ke " + foundDevice.getName() + "...");
+            appendLog("🔗 Menghubungkan ke " + foundDevice.getName() + "...");
             bluetoothGatt = foundDevice.connectGatt(this, false, gattCallback);
         } else {
-            appendLog("âŒ Gagal menghubungkan: Izin Bluetooth tidak diberikan.");
+            appendLog("❌ Gagal menghubungkan: Izin Bluetooth tidak diberikan.");
         }
     }
 
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ──────────────────────────────────────────
     // KIRIM SSID VIA BLE
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ──────────────────────────────────────────
     private void sendSsid(String ssid) {
         if (bluetoothGatt == null) return;
         BluetoothGattService service = bluetoothGatt.getService(SERVICE_UUID);
         if (service == null) {
-            appendLog("âŒ Layanan BLE tidak ditemukan pada perangkat");
+            appendLog("❌ Layanan BLE tidak ditemukan pada perangkat");
             return;
         }
         BluetoothGattCharacteristic charSsid = service.getCharacteristic(CHAR_SSID_UUID);
         if (charSsid == null) {
-            appendLog("âŒ Karakteristik SSID tidak ditemukan");
+            appendLog("❌ Karakteristik SSID tidak ditemukan");
             return;
         }
         charSsid.setValue(ssid.getBytes(StandardCharsets.UTF_8));
@@ -361,9 +361,9 @@ public class BleWifiSetupActivity extends BaseActivity {
         }
     }
 
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ──────────────────────────────────────────
     // KIRIM PASSWORD VIA BLE (dipanggil setelah SSID sukses)
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ──────────────────────────────────────────
     private void sendPassword() {
         if (bluetoothGatt == null) return;
         BluetoothGattService service = bluetoothGatt.getService(SERVICE_UUID);
@@ -380,9 +380,9 @@ public class BleWifiSetupActivity extends BaseActivity {
         }
     }
 
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ──────────────────────────────────────────
     // HELPER UI
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ──────────────────────────────────────────
     private void updateStatus(String text, String colorHex) {
         tvBleStatus.setText(text);
         tvBleStatus.setTextColor(android.graphics.Color.parseColor(colorHex));
@@ -394,9 +394,9 @@ public class BleWifiSetupActivity extends BaseActivity {
         tvLog.setText(current + (current.isEmpty() ? "" : "\n") + message);
     }
 
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ──────────────────────────────────────────
     // CEK DAN MINTA PERMISSION BLE
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ──────────────────────────────────────────
     private boolean checkAndRequestPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN)

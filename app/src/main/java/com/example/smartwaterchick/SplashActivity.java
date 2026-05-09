@@ -48,7 +48,7 @@ public class SplashActivity extends BaseActivity {
 
                     handler.postDelayed(this, interval);
                 } else {
-                    // Selesai loading â€” cek status login Firebase
+                    // Selesai loading — cek status login Firebase
                     checkLoginAndNavigate();
                 }
             }
@@ -61,11 +61,11 @@ public class SplashActivity extends BaseActivity {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (currentUser != null) {
-            // Pengguna sudah login sebelumnya â†’ langsung ke Dashboard
+            // Pengguna sudah login sebelumnya → langsung ke Dashboard
             Intent intent = new Intent(SplashActivity.this, DashboardActivity.class);
             startActivity(intent);
         } else {
-            // Belum login â†’ arahkan ke halaman Login
+            // Belum login → arahkan ke halaman Login
             Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
             startActivity(intent);
         }

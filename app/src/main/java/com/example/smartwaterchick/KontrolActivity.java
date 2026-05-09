@@ -80,7 +80,7 @@ public class KontrolActivity extends BaseActivity {
         setProgressBar(R.id.viewProgressTangki, 0.65f);
         setProgressBar(R.id.viewProgressKontrol, 0.65f);
 
-        // â”€â”€ Cek pH â”€â”€
+        // ── Cek pH â”€â”€
         findViewById(R.id.btnCekPh).setOnClickListener(v -> {
             dbKontrol.getParent().child("monitoring").limitToLast(1)
                     .get().addOnSuccessListener(snapshot -> {
@@ -93,19 +93,19 @@ public class KontrolActivity extends BaseActivity {
                             Toast.makeText(this, "Gagal membaca pH dari Firebase", Toast.LENGTH_SHORT).show());
         });
 
-        // â”€â”€ Isi Air Manual â”€â”€
+        // ── Isi Air Manual â”€â”€
         findViewById(R.id.btnIsiAir).setOnClickListener(v ->
                 dbKontrol.child("perintah").setValue("isi_air")
                         .addOnSuccessListener(u -> Toast.makeText(this, "Perintah isi air dikirim!", Toast.LENGTH_SHORT).show())
                         .addOnFailureListener(e -> Toast.makeText(this, "Gagal mengirim perintah", Toast.LENGTH_SHORT).show()));
 
-        // â”€â”€ Buang Air Manual â”€â”€
+        // ── Buang Air Manual â”€â”€
         findViewById(R.id.btnBuangAir).setOnClickListener(v ->
                 dbKontrol.child("perintah").setValue("buang_air")
                         .addOnSuccessListener(u -> Toast.makeText(this, "Perintah buang air dikirim!", Toast.LENGTH_SHORT).show())
                         .addOnFailureListener(e -> Toast.makeText(this, "Gagal mengirim perintah", Toast.LENGTH_SHORT).show()));
 
-        // â”€â”€ Switch Otomatis â”€â”€
+        // ── Switch Otomatis â”€â”€
         switchOtomatis = findViewById(R.id.switchOtomatis);
         switchOtomatis.setOnCheckedChangeListener((btn, checked) -> {
             isOtomatisAktif = checked;
@@ -118,7 +118,7 @@ public class KontrolActivity extends BaseActivity {
             }
         });
 
-        // â”€â”€ RecyclerView Jadwal â”€â”€
+        // ── RecyclerView Jadwal â”€â”€
         rvJadwal = findViewById(R.id.rvJadwal);
         rvJadwal.setLayoutManager(new LinearLayoutManager(this));
         jadwalAdapter = new JadwalAdapter(jadwalList, new JadwalAdapter.OnJadwalActionListener() {
@@ -147,7 +147,7 @@ public class KontrolActivity extends BaseActivity {
         });
         rvJadwal.setAdapter(jadwalAdapter);
 
-        // â”€â”€ Listener realtime dari Firebase untuk daftar jadwal â”€â”€
+        // ── Listener realtime dari Firebase untuk daftar jadwal â”€â”€
         dbJadwal.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -176,11 +176,11 @@ public class KontrolActivity extends BaseActivity {
             }
         });
 
-        // â”€â”€ Tombol Tambah Jadwal â”€â”€
+        // ── Tombol Tambah Jadwal â”€â”€
         MaterialButton btnTambahJadwal = findViewById(R.id.btnTambahJadwal);
         btnTambahJadwal.setOnClickListener(v -> tampilkanDialogJadwal(null));
 
-        // â”€â”€ Bottom Navigation â”€â”€
+        // ── Bottom Navigation â”€â”€
         BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
         bottomNav.setSelectedItemId(R.id.nav_controls);
         bottomNav.setOnItemSelectedListener(item -> {
@@ -212,11 +212,11 @@ public class KontrolActivity extends BaseActivity {
         });
     }
 
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ──â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // Dialog Tambah / Edit Jadwal
-    // item == null â†’ Tambah baru
-    // item != null â†’ Edit yang sudah ada
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // item == null → Tambah baru
+    // item != null → Edit yang sudah ada
+    // ──â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     private void tampilkanDialogJadwal(JadwalItem item) {
         View dialogView = LayoutInflater.from(this)
                 .inflate(R.layout.dialog_tambah_jadwal, null);
@@ -226,7 +226,7 @@ public class KontrolActivity extends BaseActivity {
         timePicker.setIs24HourView(true);
 
         if (item != null) {
-            // Mode edit â†’ isi dengan nilai lama
+            // Mode edit → isi dengan nilai lama
             tvJudul.setText("Edit Jadwal");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 timePicker.setHour(item.jam);
@@ -281,9 +281,9 @@ public class KontrolActivity extends BaseActivity {
         });
     }
 
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ──â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // Matikan semua jadwal saat switch Otomatis dimatikan
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ──â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     private void matikanSemuaJadwal() {
         for (JadwalItem j : jadwalList) {
             dbJadwal.child(j.id).child("aktif").setValue(false);
