@@ -1,4 +1,4 @@
-﻿package com.example.smartwaterchick;
+package com.example.smartwaterchick;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
