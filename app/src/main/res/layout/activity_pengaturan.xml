@@ -90,19 +90,48 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
 
-                    <!-- Avatar -->
+                    <!-- Avatar dengan tombol kamera -->
                     <FrameLayout
-                        android:layout_width="72dp"
-                        android:layout_height="72dp"
-                        android:layout_marginEnd="16dp">
+                        android:id="@+id/frameAvatar"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginEnd="16dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackgroundBorderless">
 
-                        <ImageView
-                            android:id="@+id/ivAvatar"
-                            android:layout_width="72dp"
-                            android:layout_height="72dp"
-                            android:src="@drawable/ic_avatar_default"
-                            android:background="@drawable/bg_avatar_circle"
-                            android:scaleType="centerCrop" />
+                        <!-- CardView untuk memotong gambar menjadi bulat -->
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            app:cardCornerRadius="40dp"
+                            app:cardElevation="0dp"
+                            app:cardBackgroundColor="@android:color/transparent">
+
+                            <ImageView
+                                android:id="@+id/ivAvatar"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/ic_avatar_default"
+                                android:background="@drawable/bg_avatar_circle"
+                                android:scaleType="centerCrop" />
+                        </androidx.cardview.widget.CardView>
+
+                        <!-- Overlay kamera di pojok bawah kanan -->
+                        <FrameLayout
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:layout_gravity="bottom|end"
+                            android:background="@drawable/bg_camera_badge"
+                            android:elevation="4dp">
+
+                            <ImageView
+                                android:layout_width="14dp"
+                                android:layout_height="14dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_camera"
+                                android:tint="#FFFFFF" />
+                        </FrameLayout>
                     </FrameLayout>
 
                     <!-- Name & role -->
