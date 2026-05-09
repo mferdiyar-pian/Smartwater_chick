@@ -16,7 +16,7 @@
         android:text="Tambah Jadwal"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="#1A1A2E"
+        android:textColor="@color/text_primary"
         android:layout_marginBottom="16dp" />
 
     <!-- TimePicker -->
@@ -40,7 +40,7 @@
             android:layout_weight="1"
             android:text="Batal"
             android:textAllCaps="false"
-            android:textColor="#8A8FA8"
+            android:textColor="@color/text_secondary"
             android:textSize="14sp"
             android:textStyle="bold"
             app:cornerRadius="10dp"
@@ -65,3 +65,4 @@
             android:stateListAnimator="@null" />
     </LinearLayout>
 </LinearLayout>
+

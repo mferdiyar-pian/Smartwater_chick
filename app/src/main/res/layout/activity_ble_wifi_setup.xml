@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F0F4FF">
+    android:background="@color/blue_header"
+    android:fitsSystemWindows="true">
 
     <!-- HEADER -->
     <LinearLayout
@@ -56,6 +57,7 @@
 
     <!-- SCROLLABLE CONTENT -->
     <androidx.core.widget.NestedScrollView
+        android:background="@color/bg_screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="110dp"
@@ -82,7 +84,7 @@
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
                     android:padding="16dp"
-                    android:background="#FFFFFF">
+                    android:background="@color/bg_card">
 
                     <FrameLayout
                         android:layout_width="44dp"
@@ -110,7 +112,7 @@
                             android:text="STATUS BLUETOOTH"
                             android:textSize="10sp"
                             android:textStyle="bold"
-                            android:textColor="#8A8FA8"
+                            android:textColor="@color/text_secondary"
                             android:letterSpacing="0.06" />
 
                         <TextView
@@ -146,15 +148,15 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp"
-                    android:background="#FFFFFF">
+                    android:background="@color/bg_card">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="LANGKAH 1 — CARI PERANGKAT"
+                        android:text="LANGKAH 1 - CARI PERANGKAT"
                         android:textSize="11sp"
                         android:textStyle="bold"
-                        android:textColor="#8A8FA8"
+                        android:textColor="@color/text_secondary"
                         android:letterSpacing="0.06"
                         android:layout_marginBottom="12dp" />
 
@@ -162,7 +164,7 @@
                         android:id="@+id/btnScan"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:text="🔍  Scan Perangkat BLE"
+                        android:text="ðŸ”  Scan Perangkat BLE"
                         android:textAllCaps="false"
                         android:textSize="14sp"
                         android:textStyle="bold"
@@ -177,7 +179,7 @@
                         android:layout_height="wrap_content"
                         android:text="Tekan Scan untuk mencari perangkat SmartWaterChick..."
                         android:textSize="13sp"
-                        android:textColor="#8A8FA8"
+                        android:textColor="@color/text_secondary"
                         android:gravity="center"
                         android:padding="16dp"
                         android:layout_marginTop="8dp" />
@@ -189,7 +191,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
-                        android:background="#F0F8FF"
+                        android:background="@color/bg_input"
                         android:padding="12dp"
                         android:layout_marginTop="8dp"
                         android:visibility="gone">
@@ -209,7 +211,7 @@
                             android:text="SmartWaterChick"
                             android:textSize="14sp"
                             android:textStyle="bold"
-                            android:textColor="#1A1A2E" />
+                            android:textColor="@color/text_primary" />
 
                         <Button
                             android:id="@+id/btnConnect"
@@ -240,15 +242,15 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp"
-                    android:background="#FFFFFF">
+                    android:background="@color/bg_card">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="LANGKAH 2 — MASUKKAN DATA WIFI"
+                        android:text="LANGKAH 2 - MASUKKAN DATA WIFI"
                         android:textSize="11sp"
                         android:textStyle="bold"
-                        android:textColor="#8A8FA8"
+                        android:textColor="@color/text_secondary"
                         android:letterSpacing="0.06"
                         android:layout_marginBottom="16dp" />
 
@@ -258,7 +260,7 @@
                         android:layout_height="wrap_content"
                         android:text="Nama WiFi (SSID)"
                         android:textSize="13sp"
-                        android:textColor="#1A1A2E"
+                        android:textColor="@color/text_primary"
                         android:textStyle="bold"
                         android:layout_marginBottom="6dp" />
 
@@ -287,7 +289,7 @@
                             android:background="@android:color/transparent"
                             android:hint="Nama jaringan WiFi"
                             android:textColorHint="#C4C9D9"
-                            android:textColor="#1A1A2E"
+                            android:textColor="@color/text_primary"
                             android:textSize="14sp"
                             android:inputType="text"
                             android:singleLine="true" />
@@ -299,7 +301,7 @@
                         android:layout_height="wrap_content"
                         android:text="Password WiFi"
                         android:textSize="13sp"
-                        android:textColor="#1A1A2E"
+                        android:textColor="@color/text_primary"
                         android:textStyle="bold"
                         android:layout_marginBottom="6dp" />
 
@@ -328,7 +330,7 @@
                             android:background="@android:color/transparent"
                             android:hint="Password WiFi"
                             android:textColorHint="#C4C9D9"
-                            android:textColor="#1A1A2E"
+                            android:textColor="@color/text_primary"
                             android:textSize="14sp"
                             android:inputType="textPassword"
                             android:singleLine="true" />
@@ -347,7 +349,7 @@
                         android:id="@+id/btnSendWifi"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:text="📡  Kirim ke ESP32"
+                        android:text="ðŸ“¡  Kirim ke ESP32"
                         android:textAllCaps="false"
                         android:textSize="14sp"
                         android:textStyle="bold"
@@ -372,7 +374,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp"
-                    android:background="#FFFFFF">
+                    android:background="@color/bg_card">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -380,7 +382,7 @@
                         android:text="LOG KONEKSI"
                         android:textSize="11sp"
                         android:textStyle="bold"
-                        android:textColor="#8A8FA8"
+                        android:textColor="@color/text_secondary"
                         android:letterSpacing="0.06"
                         android:layout_marginBottom="10dp" />
 
@@ -390,7 +392,7 @@
                         android:layout_height="wrap_content"
                         android:text=""
                         android:textSize="13sp"
-                        android:textColor="#1A1A2E"
+                        android:textColor="@color/text_primary"
                         android:fontFamily="monospace"
                         android:lineSpacingExtra="4dp" />
                 </LinearLayout>
@@ -408,12 +410,12 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp"
-                    android:background="#FFF8E1">
+                    android:background="@color/bg_input">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="ℹ️  Petunjuk Penggunaan"
+                        android:text="Petunjuk Penggunaan"
                         android:textSize="13sp"
                         android:textStyle="bold"
                         android:textColor="#F39C12"
@@ -422,9 +424,9 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="1. Pastikan ESP32 menyala dan dalam mode BLE (LED berkedip biru)\n2. Pastikan Bluetooth HP Anda aktif\n3. Tekan Scan → pilih SmartWaterChick → Hubungkan\n4. Masukkan nama &amp; password WiFi lalu tekan Kirim\n5. ESP32 akan mencoba terhubung ke WiFi dan Firebase"
+                        android:text="1. Pastikan ESP32 menyala dan dalam mode BLE (LED berkedip biru)\n2. Pastikan Bluetooth HP Anda aktif\n3. Tekan Scan -> pilih SmartWaterChick -> Hubungkan\n4. Masukkan nama &amp; password WiFi lalu tekan Kirim\n5. ESP32 akan mencoba terhubung ke WiFi dan Firebase"
                         android:textSize="13sp"
-                        android:textColor="#7D6200"
+                        android:textColor="@color/text_secondary"
                         android:lineSpacingExtra="4dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -433,3 +435,4 @@
     </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+

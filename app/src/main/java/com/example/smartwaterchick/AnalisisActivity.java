@@ -23,7 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class AnalisisActivity extends AppCompatActivity {
+public class AnalisisActivity extends BaseActivity {
 
     private AnalisisChartView chartView;
     private BarChartView barChart;

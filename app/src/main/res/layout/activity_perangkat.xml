@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F0F4FF">
+    android:background="@color/bg_screen">
 
     <!-- TOP APP BAR -->
     <com.google.android.material.appbar.AppBarLayout
@@ -96,9 +96,9 @@
             android:orientation="vertical"
             android:padding="14dp">
 
-            <!-- ══════════════════════════════════════ -->
+            <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
             <!-- CARD 1: Status Koneksi Utama            -->
-            <!-- ══════════════════════════════════════ -->
+            <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -111,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp"
-                    android:background="#FFFFFF">
+                    android:background="@color/bg_card">
 
                     <!-- Header dengan status -->
                     <RelativeLayout
@@ -150,14 +150,14 @@
                                     android:text="Smart Water Chick"
                                     android:textSize="16sp"
                                     android:textStyle="bold"
-                                    android:textColor="#1A1A2E" />
+                                    android:textColor="@color/text_primary" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="Unit Utama - ID: SWC-001"
                                     android:textSize="12sp"
-                                    android:textColor="#8A8FA8" />
+                                    android:textColor="@color/text_secondary" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -203,7 +203,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="WiFi"
                                 android:textSize="11sp"
-                                android:textColor="#8A8FA8" />
+                                android:textColor="@color/text_secondary" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -234,7 +234,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Baterai Backup"
                                 android:textSize="11sp"
-                                android:textColor="#8A8FA8" />
+                                android:textColor="@color/text_secondary" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -265,7 +265,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Sinyal"
                                 android:textSize="11sp"
-                                android:textColor="#8A8FA8" />
+                                android:textColor="@color/text_secondary" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -279,9 +279,9 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- ══════════════════════════════════════ -->
+            <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
             <!-- CARD 2: Informasi Perangkat             -->
-            <!-- ══════════════════════════════════════ -->
+            <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -294,7 +294,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp"
-                    android:background="#FFFFFF">
+                    android:background="@color/bg_card">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -302,7 +302,7 @@
                         android:text="Informasi Perangkat"
                         android:textSize="15sp"
                         android:textStyle="bold"
-                        android:textColor="#1A1A2E"
+                        android:textColor="@color/text_primary"
                         android:layout_marginBottom="16dp" />
 
                     <!-- Firmware Version -->
@@ -316,7 +316,7 @@
                             android:layout_height="wrap_content"
                             android:text="Versi Firmware"
                             android:textSize="13sp"
-                            android:textColor="#8A8FA8"
+                            android:textColor="@color/text_secondary"
                             android:layout_alignParentStart="true"
                             android:layout_centerVertical="true" />
 
@@ -326,7 +326,7 @@
                             android:text="v2.1.4"
                             android:textSize="13sp"
                             android:textStyle="bold"
-                            android:textColor="#1A1A2E"
+                            android:textColor="@color/text_primary"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true" />
                     </RelativeLayout>
@@ -334,7 +334,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#F0F2F8"
+                        android:background="@color/bg_screen"
                         android:layout_marginBottom="14dp" />
 
                     <!-- Hardware Version -->
@@ -348,7 +348,7 @@
                             android:layout_height="wrap_content"
                             android:text="Versi Hardware"
                             android:textSize="13sp"
-                            android:textColor="#8A8FA8"
+                            android:textColor="@color/text_secondary"
                             android:layout_alignParentStart="true"
                             android:layout_centerVertical="true" />
 
@@ -358,7 +358,7 @@
                             android:text="HW-v1.2"
                             android:textSize="13sp"
                             android:textStyle="bold"
-                            android:textColor="#1A1A2E"
+                            android:textColor="@color/text_primary"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true" />
                     </RelativeLayout>
@@ -366,7 +366,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#F0F2F8"
+                        android:background="@color/bg_screen"
                         android:layout_marginBottom="14dp" />
 
                     <!-- Last Connected -->
@@ -380,7 +380,7 @@
                             android:layout_height="wrap_content"
                             android:text="Terakhir Terhubung"
                             android:textSize="13sp"
-                            android:textColor="#8A8FA8"
+                            android:textColor="@color/text_secondary"
                             android:layout_alignParentStart="true"
                             android:layout_centerVertical="true" />
 
@@ -390,7 +390,7 @@
                             android:text="Baru saja"
                             android:textSize="13sp"
                             android:textStyle="bold"
-                            android:textColor="#1A1A2E"
+                            android:textColor="@color/text_primary"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true" />
                     </RelativeLayout>
@@ -398,7 +398,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#F0F2F8"
+                        android:background="@color/bg_screen"
                         android:layout_marginBottom="14dp" />
 
                     <!-- IP Address -->
@@ -411,7 +411,7 @@
                             android:layout_height="wrap_content"
                             android:text="Alamat IP"
                             android:textSize="13sp"
-                            android:textColor="#8A8FA8"
+                            android:textColor="@color/text_secondary"
                             android:layout_alignParentStart="true"
                             android:layout_centerVertical="true" />
 
@@ -421,16 +421,16 @@
                             android:text="192.168.1.105"
                             android:textSize="13sp"
                             android:textStyle="bold"
-                            android:textColor="#1A1A2E"
+                            android:textColor="@color/text_primary"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true" />
                     </RelativeLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- ══════════════════════════════════════ -->
+            <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
             <!-- CARD 3: Monitoring Komponen             -->
-            <!-- ══════════════════════════════════════ -->
+            <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -443,7 +443,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp"
-                    android:background="#FFFFFF">
+                    android:background="@color/bg_card">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -451,7 +451,7 @@
                         android:text="Monitoring Komponen"
                         android:textSize="15sp"
                         android:textStyle="bold"
-                        android:textColor="#1A1A2E"
+                        android:textColor="@color/text_primary"
                         android:layout_marginBottom="16dp" />
 
                     <!-- Sensor pH -->
@@ -481,7 +481,7 @@
                                 android:text="Sensor pH"
                                 android:textSize="14sp"
                                 android:textStyle="bold"
-                                android:textColor="#1A1A2E" />
+                                android:textColor="@color/text_primary" />
                         </LinearLayout>
 
                         <TextView
@@ -498,7 +498,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#F0F2F8"
+                        android:background="@color/bg_screen"
                         android:layout_marginBottom="14dp" />
 
                     <!-- Sensor Ultrasonik -->
@@ -528,7 +528,7 @@
                                 android:text="Sensor Ultrasonik"
                                 android:textSize="14sp"
                                 android:textStyle="bold"
-                                android:textColor="#1A1A2E" />
+                                android:textColor="@color/text_primary" />
                         </LinearLayout>
 
                         <TextView
@@ -545,7 +545,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#F0F2F8"
+                        android:background="@color/bg_screen"
                         android:layout_marginBottom="14dp" />
 
                     <!-- Pompa Air -->
@@ -574,7 +574,7 @@
                                 android:text="Pompa Air (Relay)"
                                 android:textSize="14sp"
                                 android:textStyle="bold"
-                                android:textColor="#1A1A2E" />
+                                android:textColor="@color/text_primary" />
                         </LinearLayout>
 
                         <TextView
@@ -583,16 +583,16 @@
                             android:text="Standby"
                             android:textSize="12sp"
                             android:textStyle="bold"
-                            android:textColor="#8A8FA8"
+                            android:textColor="@color/text_secondary"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true" />
                     </RelativeLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- ══════════════════════════════════════ -->
+            <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
             <!-- CARD 4: Log Perangkat                   -->
-            <!-- ══════════════════════════════════════ -->
+            <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -605,7 +605,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp"
-                    android:background="#FFFFFF">
+                    android:background="@color/bg_card">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -618,7 +618,7 @@
                             android:text="Log Perangkat"
                             android:textSize="15sp"
                             android:textStyle="bold"
-                            android:textColor="#1A1A2E" />
+                            android:textColor="@color/text_primary" />
 
                         <TextView
                             android:id="@+id/tvLihatSemua"
@@ -661,21 +661,21 @@
                                 android:text="Perangkat Terhubung"
                                 android:textSize="13sp"
                                 android:textStyle="bold"
-                                android:textColor="#1A1A2E" />
+                                android:textColor="@color/text_primary" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Koneksi berhasil • 10 menit lalu"
+                                android:text="Koneksi berhasil â€¢ 10 menit lalu"
                                 android:textSize="11sp"
-                                android:textColor="#8A8FA8" />
+                                android:textColor="@color/text_secondary" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#F0F2F8"
+                        android:background="@color/bg_screen"
                         android:layout_marginBottom="14dp" />
 
                     <!-- Log Item 2 -->
@@ -705,14 +705,14 @@
                                 android:text="Koneksi Stabil"
                                 android:textSize="13sp"
                                 android:textStyle="bold"
-                                android:textColor="#1A1A2E" />
+                                android:textColor="@color/text_primary" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Kualitas sinyal optimal • 1 jam lalu"
+                                android:text="Kualitas sinyal optimal â€¢ 1 jam lalu"
                                 android:textSize="11sp"
-                                android:textColor="#8A8FA8" />
+                                android:textColor="@color/text_secondary" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -727,7 +727,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="#FFFFFF"
+        android:background="@color/bg_bottom_nav"
         app:itemIconSize="20dp"
         app:itemTextAppearanceActive="@style/BottomNavTextAppearance"
         app:itemTextAppearanceInactive="@style/BottomNavTextAppearance"
@@ -738,3 +738,6 @@
         app:elevation="0dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+

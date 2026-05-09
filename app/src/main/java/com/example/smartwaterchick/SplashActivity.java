@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
 
     private ProgressBar progressBar;
     private TextView tvLoadingPercent;
@@ -48,7 +48,7 @@ public class SplashActivity extends AppCompatActivity {
 
                     handler.postDelayed(this, interval);
                 } else {
-                    // Selesai loading — cek status login Firebase
+                    // Selesai loading â€” cek status login Firebase
                     checkLoginAndNavigate();
                 }
             }
@@ -61,11 +61,11 @@ public class SplashActivity extends AppCompatActivity {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (currentUser != null) {
-            // Pengguna sudah login sebelumnya → langsung ke Dashboard
+            // Pengguna sudah login sebelumnya â†’ langsung ke Dashboard
             Intent intent = new Intent(SplashActivity.this, DashboardActivity.class);
             startActivity(intent);
         } else {
-            // Belum login → arahkan ke halaman Login
+            // Belum login â†’ arahkan ke halaman Login
             Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
             startActivity(intent);
         }
@@ -80,3 +80,4 @@ public class SplashActivity extends AppCompatActivity {
         handler.removeCallbacksAndMessages(null);
     }
 }
+

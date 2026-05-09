@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Basic Colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <!-- Brand Colors (tetap sama di dark mode) -->
+    <color name="blue_primary">#1E5BB8</color>
+    <color name="blue_dark">#0A3981</color>
+    <color name="blue_light">#1A2D50</color>
+    <color name="blue_header">#1E5BB8</color>
+
+    <!-- Background (Dark Mode) -->
+    <color name="bg_screen">#121212</color>
+    <color name="bg_card">#1E1E1E</color>
+    <color name="bg_input">#2A2A2A</color>
+    <color name="bg_bottom_nav">#1E1E1E</color>
+
+    <!-- Text (Dark Mode) -->
+    <color name="text_primary">#E8E8F0</color>
+    <color name="text_secondary">#9A9FB8</color>
+    <color name="text_hint">#555870</color>
+
+    <!-- Divider & Border (Dark Mode) -->
+    <color name="border_input">#2E2E3E</color>
+    <color name="divider">#2A2A3A</color>
+
+    <!-- Alert card (Dark Mode - merah gelap) -->
+    <color name="bg_alert_card">#2D1215</color>
+    <!-- Button Abaikan (Dark Mode) -->
+    <color name="btn_abaikan_bg">#2A2A2A</color>
+
+    <!-- Nav item color selector -->
+    <color name="nav_item_selected">#6B9FFF</color>
+    <color name="nav_item_unselected">#7A7FA0</color>
+</resources>

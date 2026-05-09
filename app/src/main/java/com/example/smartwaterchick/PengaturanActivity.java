@@ -23,10 +23,11 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.File;
@@ -35,7 +36,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class PengaturanActivity extends AppCompatActivity {
+public class PengaturanActivity extends BaseActivity {
 
     private static final String PREF_PHOTO_PATH = "foto_profil_path";
     private ImageView ivAvatar;
@@ -80,6 +81,19 @@ public class PengaturanActivity extends AppCompatActivity {
         // Load foto profil jika ada
         ivAvatar = findViewById(R.id.ivAvatar);
         loadSavedPhoto();
+
+        // Setup toggle Dark Mode
+        SwitchMaterial switchDarkMode = findViewById(R.id.switchDarkMode);
+        boolean isDark = prefs.getBoolean(BaseActivity.PREF_DARK_MODE, false);
+        switchDarkMode.setChecked(isDark);
+        switchDarkMode.setOnCheckedChangeListener((btn, isChecked) -> {
+            prefs.edit().putBoolean(BaseActivity.PREF_DARK_MODE, isChecked).apply();
+            AppCompatDelegate.setDefaultNightMode(
+                    isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
+            );
+            // Recreate semua activity agar tema terapply
+            recreate();
+        });
 
         // Tap avatar → tampilkan pilihan (Pilih Foto / Hapus Foto)
         findViewById(R.id.frameAvatar).setOnClickListener(v -> tampilkanDialogFoto());

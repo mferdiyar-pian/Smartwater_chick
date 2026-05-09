@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F0F4FF">
+    android:background="@color/blue_header"
+    android:fitsSystemWindows="true">
 
     <!-- Header -->
     <LinearLayout
@@ -47,7 +48,7 @@
             android:layout_marginStart="16dp"/>
     </LinearLayout>
 
-    <ScrollView
+    <ScrollView android:background="@color/bg_screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
@@ -65,7 +66,7 @@
                 android:text="Sistem Peringatan"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:textColor="#8A8FA8"
+                android:textColor="@color/text_secondary"
                 android:layout_marginStart="8dp"
                 android:layout_marginBottom="8dp" />
 
@@ -80,7 +81,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:background="#FFFFFF">
+                    android:background="@color/bg_card">
 
                     <!-- Notifikasi Push -->
                     <LinearLayout
@@ -99,14 +100,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Pemberitahuan Push"
-                                android:textColor="#1A1A2E"
+                                android:textColor="@color/text_primary"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Terima notifikasi di perangkat"
-                                android:textColor="#8A8FA8"
+                                android:textColor="@color/text_secondary"
                                 android:textSize="12sp"
                                 android:layout_marginTop="2dp" />
                         </LinearLayout>
@@ -136,7 +137,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Peringatan Suhu &amp; pH"
-                                android:textColor="#1A1A2E"
+                                android:textColor="@color/text_primary"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
                             <TextView
@@ -173,14 +174,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Notifikasi Level Air"
-                                android:textColor="#1A1A2E"
+                                android:textColor="@color/text_primary"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Saat penampung hampir kosong"
-                                android:textColor="#8A8FA8"
+                                android:textColor="@color/text_secondary"
                                 android:textSize="12sp"
                                 android:layout_marginTop="2dp" />
                         </LinearLayout>
@@ -200,7 +201,7 @@
                 android:text="Suara &amp; Getaran"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:textColor="#8A8FA8"
+                android:textColor="@color/text_secondary"
                 android:layout_marginStart="8dp"
                 android:layout_marginBottom="8dp" />
 
@@ -214,7 +215,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:background="#FFFFFF">
+                    android:background="@color/bg_card">
 
                     <!-- Suara -->
                     <LinearLayout
@@ -233,7 +234,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Bunyikan Suara"
-                                android:textColor="#1A1A2E"
+                                android:textColor="@color/text_primary"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -263,7 +264,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Getar"
-                                android:textColor="#1A1A2E"
+                                android:textColor="@color/text_primary"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -280,3 +281,4 @@
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
+

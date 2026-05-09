@@ -8,7 +8,7 @@ import android.widget.PopupMenu;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class PerangkatActivity extends AppCompatActivity {
+public class PerangkatActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

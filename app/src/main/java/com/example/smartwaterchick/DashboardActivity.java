@@ -7,7 +7,7 @@ import android.widget.PopupMenu;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class DashboardActivity extends AppCompatActivity {
+public class DashboardActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,3 +75,4 @@ public class DashboardActivity extends AppCompatActivity {
         });
     }
 }
+

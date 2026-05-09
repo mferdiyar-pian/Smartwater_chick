@@ -8,7 +8,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
-public class PengaturanNotifikasiActivity extends AppCompatActivity {
+public class PengaturanNotifikasiActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,3 +61,4 @@ public class PengaturanNotifikasiActivity extends AppCompatActivity {
         });
     }
 }
+

@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F0F4FF">
+    android:background="@color/bg_screen">
 
     <!-- TOP APP BAR -->
     <com.google.android.material.appbar.AppBarLayout
@@ -214,7 +214,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:padding="16dp"
-                        android:background="#FFFFFF">
+                        android:background="@color/bg_card">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -222,7 +222,7 @@
                             android:text="STATUS AIR"
                             android:textSize="11sp"
                             android:textStyle="bold"
-                            android:textColor="#8A8FA8"
+                            android:textColor="@color/text_secondary"
                             android:letterSpacing="0.06"
                             android:layout_marginBottom="6dp" />
 
@@ -233,7 +233,7 @@
                             android:text="Normal"
                             android:textSize="20sp"
                             android:textStyle="bold"
-                            android:textColor="#1A1A2E" />
+                            android:textColor="@color/text_primary" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -250,7 +250,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:padding="16dp"
-                        android:background="#FFFFFF">
+                        android:background="@color/bg_card">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -258,7 +258,7 @@
                             android:text="STATUS SISTEM"
                             android:textSize="11sp"
                             android:textStyle="bold"
-                            android:textColor="#8A8FA8"
+                            android:textColor="@color/text_secondary"
                             android:letterSpacing="0.06"
                             android:layout_marginBottom="6dp" />
 
@@ -281,7 +281,7 @@
                 android:text="Utama"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:textColor="#8A8FA8"
+                android:textColor="@color/text_secondary"
                 android:layout_marginStart="16dp"
                 android:layout_marginBottom="12dp" />
 
@@ -299,7 +299,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:background="#FFFFFF">
+                    android:background="@color/bg_card">
 
                     <!-- Pengaturan Notifikasi -->
                     <LinearLayout
@@ -333,7 +333,7 @@
                             android:layout_weight="1"
                             android:text="Pengaturan Notifikasi"
                             android:textSize="15sp"
-                            android:textColor="#1A1A2E" />
+                            android:textColor="@color/text_primary" />
 
                         <ImageView
                             android:layout_width="16dp"
@@ -344,7 +344,7 @@
                     </LinearLayout>
 
                     <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#F0F2F8" android:layout_marginStart="68dp" />
+                        android:background="@color/divider" android:layout_marginStart="68dp" />
 
                     <!-- Manajemen Perangkat -->
                     <LinearLayout
@@ -378,7 +378,7 @@
                             android:layout_weight="1"
                             android:text="Manajemen Perangkat"
                             android:textSize="15sp"
-                            android:textColor="#1A1A2E" />
+                            android:textColor="@color/text_primary" />
 
                         <ImageView
                             android:layout_width="16dp"
@@ -389,7 +389,7 @@
                     </LinearLayout>
 
                     <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#F0F2F8" android:layout_marginStart="68dp" />
+                        android:background="@color/divider" android:layout_marginStart="68dp" />
 
                     <!-- Keamanan -->
                     <LinearLayout
@@ -423,7 +423,7 @@
                             android:layout_weight="1"
                             android:text="Keamanan"
                             android:textSize="15sp"
-                            android:textColor="#1A1A2E" />
+                            android:textColor="@color/text_primary" />
 
                         <ImageView
                             android:layout_width="16dp"
@@ -435,6 +435,72 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- Section: Tampilan -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tampilan"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_secondary"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Menu Tampilan Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginBottom="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@color/bg_card">
+
+                    <!-- Mode Gelap -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="64dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp">
+
+                        <FrameLayout
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:background="@drawable/bg_menu_icon_blue_light"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:src="@drawable/ic_dark_mode"
+                                android:tint="#1B5BCE"
+                                android:layout_gravity="center" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Mode Gelap"
+                            android:textSize="15sp"
+                            android:textColor="@color/text_primary" />
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/switchDarkMode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
             <!-- Section: Umum -->
             <TextView
                 android:layout_width="wrap_content"
@@ -442,7 +508,7 @@
                 android:text="Umum"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:textColor="#8A8FA8"
+                android:textColor="@color/text_secondary"
                 android:layout_marginStart="16dp"
                 android:layout_marginBottom="12dp" />
 
@@ -460,7 +526,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:background="#FFFFFF">
+                    android:background="@color/bg_card">
 
                     <!-- Backup Data -->
                     <LinearLayout
@@ -494,7 +560,7 @@
                             android:layout_weight="1"
                             android:text="Backup Data"
                             android:textSize="15sp"
-                            android:textColor="#1A1A2E" />
+                            android:textColor="@color/text_primary" />
 
                         <ImageView
                             android:layout_width="16dp"
@@ -536,7 +602,7 @@
                             android:layout_weight="1"
                             android:text="Pusat Bantuan"
                             android:textSize="15sp"
-                            android:textColor="#1A1A2E" />
+                            android:textColor="@color/text_primary" />
 
                         <ImageView
                             android:layout_width="16dp"
@@ -568,7 +634,7 @@
                 app:iconGravity="textStart"
                 app:iconPadding="8dp"
                 app:iconTint="#E74C3C"
-                android:backgroundTint="#FFFFFF"
+                android:backgroundTint="@color/bg_card"
                 android:stateListAnimator="@null" />
 
             <!-- Version info -->
@@ -584,14 +650,14 @@
                     android:layout_height="wrap_content"
                     android:text="SmartWaterChick v2.4.0"
                     android:textSize="11sp"
-                    android:textColor="#8A8FA8" />
+                    android:textColor="@color/text_secondary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="© 2026 AgroTech 4D Kelompok 1"
+                    android:text="Â© 2026 AgroTech 4D Kelompok 1"
                     android:textSize="11sp"
-                    android:textColor="#8A8FA8" />
+                    android:textColor="@color/text_secondary" />
             </LinearLayout>
 
         </LinearLayout>
@@ -603,7 +669,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="#FFFFFF"
+        android:background="@color/bg_bottom_nav"
         app:itemIconSize="20dp"
         app:itemTextAppearanceActive="@style/BottomNavTextAppearance"
         app:itemTextAppearanceInactive="@style/BottomNavTextAppearance"
@@ -614,3 +680,4 @@
         app:elevation="0dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+

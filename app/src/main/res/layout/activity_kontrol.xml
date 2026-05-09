@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F0F4FF">
+    android:background="@color/bg_screen">
 
     <!-- TOP APP BAR -->
     <com.google.android.material.appbar.AppBarLayout
@@ -96,9 +96,9 @@
             android:orientation="vertical"
             android:padding="14dp">
 
-            <!-- ═══════════════════════════════════ -->
+            <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
             <!-- CARD 1: Tangki Air                 -->
-            <!-- ═══════════════════════════════════ -->
+            <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -111,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp"
-                    android:background="#FFFFFF">
+                    android:background="@color/bg_card">
 
                     <!-- Header: Tangki Air + pH -->
                     <RelativeLayout
@@ -130,14 +130,14 @@
                                 android:text="Tangki Air"
                                 android:textSize="18sp"
                                 android:textStyle="bold"
-                                android:textColor="#1A1A2E" />
+                                android:textColor="@color/text_primary" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Status Tangki Air"
                                 android:textSize="12sp"
-                                android:textColor="#8A8FA8" />
+                                android:textColor="@color/text_secondary" />
                         </LinearLayout>
 
                         <TextView
@@ -200,7 +200,7 @@
                             android:layout_height="wrap_content"
                             android:text="Total Kapasitas Air"
                             android:textSize="13sp"
-                            android:textColor="#8A8FA8"
+                            android:textColor="@color/text_secondary"
                             android:layout_centerVertical="true" />
 
                         <TextView
@@ -210,7 +210,7 @@
                             android:text="650L / 1000L"
                             android:textSize="16sp"
                             android:textStyle="bold"
-                            android:textColor="#1A1A2E"
+                            android:textColor="@color/text_primary"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true" />
                     </RelativeLayout>
@@ -241,13 +241,13 @@
                 android:text="Kontrol Air"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="#1A1A2E"
+                android:textColor="@color/text_primary"
                 android:layout_marginBottom="10dp"
                 android:layout_marginStart="2dp" />
 
-            <!-- ═══════════════════════════════════ -->
+            <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
             <!-- CARD 2: Status pH Terkini          -->
-            <!-- ═══════════════════════════════════ -->
+            <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -260,7 +260,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="20dp"
-                    android:background="#FFFFFF">
+                    android:background="@color/bg_card">
 
                     <!-- Header Row -->
                     <LinearLayout
@@ -286,7 +286,7 @@
                             android:text="Status pH Terkini"
                             android:textSize="16sp"
                             android:textStyle="bold"
-                            android:textColor="#1A1A2E" />
+                            android:textColor="@color/text_primary" />
 
                         <TextView
                             android:id="@+id/tvPhKontrol"
@@ -312,7 +312,7 @@
                             android:text="ASAM"
                             android:textSize="10sp"
                             android:textStyle="bold"
-                            android:textColor="#1A1A2E" />
+                            android:textColor="@color/text_primary" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -321,7 +321,7 @@
                             android:text="NETRAL"
                             android:textSize="10sp"
                             android:textStyle="bold"
-                            android:textColor="#1A1A2E"
+                            android:textColor="@color/text_primary"
                             android:gravity="center" />
 
                         <TextView
@@ -331,7 +331,7 @@
                             android:text="BASA"
                             android:textSize="10sp"
                             android:textStyle="bold"
-                            android:textColor="#1A1A2E"
+                            android:textColor="@color/text_primary"
                             android:gravity="end" />
                     </LinearLayout>
 
@@ -362,7 +362,7 @@
                         android:text="7.2 pH"
                         android:textSize="11sp"
                         android:textStyle="bold"
-                        android:textColor="#1A1A2E"
+                        android:textColor="@color/text_primary"
                         android:gravity="center"
                         android:layout_marginBottom="8dp" />
 
@@ -378,7 +378,7 @@
                             android:text="Keterangan pH"
                             android:textSize="15sp"
                             android:textStyle="bold"
-                            android:textColor="#1A1A2E"
+                            android:textColor="@color/text_primary"
                             android:layout_centerVertical="true" />
 
                         <TextView
@@ -415,9 +415,9 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- ═══════════════════════════════════ -->
+            <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
             <!-- CARD 3: Kontrol Tangki              -->
-            <!-- ═══════════════════════════════════ -->
+            <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -430,7 +430,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp"
-                    android:background="#FFFFFF">
+                    android:background="@color/bg_card">
 
                     <!-- Header -->
                     <LinearLayout
@@ -455,7 +455,7 @@
                             android:text="Kontrol Tangki"
                             android:textSize="15sp"
                             android:textStyle="bold"
-                            android:textColor="#1A1A2E" />
+                            android:textColor="@color/text_primary" />
                     </LinearLayout>
 
                     <!-- Total Kapasitas -->
@@ -469,7 +469,7 @@
                             android:layout_height="wrap_content"
                             android:text="Total Kapasitas Air"
                             android:textSize="12sp"
-                            android:textColor="#8A8FA8"
+                            android:textColor="@color/text_secondary"
                             android:layout_centerVertical="true" />
 
                         <TextView
@@ -478,7 +478,7 @@
                             android:text="650L / 1000L"
                             android:textSize="15sp"
                             android:textStyle="bold"
-                            android:textColor="#1A1A2E"
+                            android:textColor="@color/text_primary"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true" />
                     </RelativeLayout>
@@ -519,7 +519,7 @@
                             app:cornerRadius="10dp"
                             app:strokeWidth="1dp"
                             app:strokeColor="#1B5BCE"
-                            android:backgroundTint="#FFFFFF"
+                            android:backgroundTint="@android:color/transparent"
                             android:stateListAnimator="@null"
                             android:layout_marginEnd="10dp" />
 
@@ -536,15 +536,15 @@
                             app:cornerRadius="10dp"
                             app:strokeWidth="1dp"
                             app:strokeColor="#BE123C"
-                            android:backgroundTint="#FFFFFF"
+                            android:backgroundTint="@android:color/transparent"
                             android:stateListAnimator="@null" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- ═══════════════════════════════════ -->
+            <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
             <!-- CARD 4: Pengisian Minum Ayam        -->
-            <!-- ═══════════════════════════════════ -->
+            <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -557,7 +557,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp"
-                    android:background="#FFFFFF">
+                    android:background="@color/bg_card">
 
                     <!-- Header -->
                     <LinearLayout
@@ -582,7 +582,7 @@
                             android:text="Pengisian Minum Ayam"
                             android:textSize="15sp"
                             android:textStyle="bold"
-                            android:textColor="#1A1A2E" />
+                            android:textColor="@color/text_primary" />
                     </LinearLayout>
 
                     <!-- Toggle: Isi Minum Ayam Otomatis -->
@@ -602,14 +602,14 @@
                                 android:text="Isi Minum Ayam Otomatis"
                                 android:textSize="14sp"
                                 android:textStyle="bold"
-                                android:textColor="#1A1A2E" />
+                                android:textColor="@color/text_primary" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Mengisi wadah air secara otomatis"
                                 android:textSize="11sp"
-                                android:textColor="#8A8FA8" />
+                                android:textColor="@color/text_secondary" />
                         </LinearLayout>
 
                         <androidx.appcompat.widget.SwitchCompat
@@ -627,7 +627,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#F0F2F8"
+                        android:background="@color/bg_screen"
                         android:layout_marginTop="12dp"
                         android:layout_marginBottom="12dp" />
 
@@ -638,7 +638,7 @@
                         android:text="Atur Jadwal"
                         android:textSize="14sp"
                         android:textStyle="bold"
-                        android:textColor="#1A1A2E"
+                        android:textColor="@color/text_primary"
                         android:layout_marginBottom="2dp" />
 
                     <TextView
@@ -646,7 +646,7 @@
                         android:layout_height="wrap_content"
                         android:text="Atur jadwal pengisian wadah air otomatis"
                         android:textSize="11sp"
-                        android:textColor="#8A8FA8"
+                        android:textColor="@color/text_secondary"
                         android:layout_marginBottom="12dp" />
 
                     <!-- RecyclerView: Daftar Jadwal Dinamis -->
@@ -670,7 +670,7 @@
                         app:cornerRadius="10dp"
                         app:strokeWidth="1dp"
                         app:strokeColor="#1B5BCE"
-                        android:backgroundTint="#EEF3FF"
+                        android:backgroundTint="@android:color/transparent"
                         android:stateListAnimator="@null" />
 
                 </LinearLayout>
@@ -685,7 +685,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="#FFFFFF"
+        android:background="@color/bg_bottom_nav"
         app:itemIconSize="20dp"
         app:itemTextAppearanceActive="@style/BottomNavTextAppearance"
         app:itemTextAppearanceInactive="@style/BottomNavTextAppearance"
@@ -696,3 +696,6 @@
         app:elevation="0dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+
