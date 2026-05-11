@@ -51,7 +51,6 @@
 // ──────────────────────────────────────────
 #define SEND_INTERVAL_MS  30000   // Kirim data sensor setiap 30 detik
 #define TIMEZONE_OFFSET   28800   // WIB = UTC+8 = 8*3600 = 28800 detik
-#define MAX_JADWAL        10      // Maksimum jumlah jadwal yang disimpan di RAM ESP32
 
 // ──────────────────────────────────────────
 // KALIBRASI SENSOR pH
