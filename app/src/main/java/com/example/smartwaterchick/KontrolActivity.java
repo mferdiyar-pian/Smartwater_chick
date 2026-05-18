@@ -42,6 +42,11 @@ public class KontrolActivity extends BaseActivity {
 
     private SwitchCompat switchOtomatis;
     private boolean isOtomatisAktif = false;
+    private boolean isRelayIsiOn = false;
+    private boolean isRelayBuangOn = false;
+    private boolean isUpdatingFromFirebase = false;
+    private SwitchCompat switchIsiAir;
+    private SwitchCompat switchBuangAir;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,21 +98,38 @@ public class KontrolActivity extends BaseActivity {
                             Toast.makeText(this, "Gagal membaca pH dari Firebase", Toast.LENGTH_SHORT).show());
         });
 
-        // ── Isi Air Manual â”€â”€
-        findViewById(R.id.btnIsiAir).setOnClickListener(v ->
-                dbKontrol.child("perintah").setValue("isi_air")
-                        .addOnSuccessListener(u -> Toast.makeText(this, "Perintah isi air dikirim!", Toast.LENGTH_SHORT).show())
-                        .addOnFailureListener(e -> Toast.makeText(this, "Gagal mengirim perintah", Toast.LENGTH_SHORT).show()));
+        // ── Inisialisasi Tombol ──
+        switchIsiAir = findViewById(R.id.switchIsiAir);
+        switchBuangAir = findViewById(R.id.switchBuangAir);
 
-        // ── Buang Air Manual â”€â”€
-        findViewById(R.id.btnBuangAir).setOnClickListener(v ->
-                dbKontrol.child("perintah").setValue("buang_air")
-                        .addOnSuccessListener(u -> Toast.makeText(this, "Perintah buang air dikirim!", Toast.LENGTH_SHORT).show())
-                        .addOnFailureListener(e -> Toast.makeText(this, "Gagal mengirim perintah", Toast.LENGTH_SHORT).show()));
+        switchIsiAir.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (!isUpdatingFromFirebase) {
+                dbKontrol.child("relay_isi").setValue(isChecked).addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Toast.makeText(KontrolActivity.this, "Gagal kirim: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(KontrolActivity.this, isChecked ? "Menyalakan Pompa Isi..." : "Mematikan Pompa Isi...", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
 
-        // ── Switch Otomatis â”€â”€
+        switchBuangAir.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (!isUpdatingFromFirebase) {
+                dbKontrol.child("relay_buang").setValue(isChecked).addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Toast.makeText(KontrolActivity.this, "Gagal kirim: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(KontrolActivity.this, isChecked ? "Menyalakan Pompa Buang..." : "Mematikan Pompa Buang...", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
+        // ── Switch Otomatis ──
         switchOtomatis = findViewById(R.id.switchOtomatis);
-        switchOtomatis.setOnCheckedChangeListener((btn, checked) -> {
+        switchOtomatis.setOnClickListener(v -> {
+            boolean checked = switchOtomatis.isChecked();
             isOtomatisAktif = checked;
             dbKontrol.child("otomatis").setValue(checked);
             Toast.makeText(this, checked ? "Mode otomatis aktif" : "Mode otomatis nonaktif", Toast.LENGTH_SHORT).show();
@@ -118,7 +140,45 @@ public class KontrolActivity extends BaseActivity {
             }
         });
 
-        // ── RecyclerView Jadwal â”€â”€
+        // ── Listener realtime untuk Status Kontrol ──
+        dbKontrol.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                isUpdatingFromFirebase = true;
+                
+                Boolean relayIsi = snapshot.child("relay_isi").getValue(Boolean.class);
+                if (relayIsi != null) {
+                    isRelayIsiOn = relayIsi;
+                    switchIsiAir.setChecked(isRelayIsiOn);
+                } else {
+                    isRelayIsiOn = false;
+                    switchIsiAir.setChecked(false);
+                }
+
+                Boolean relayBuang = snapshot.child("relay_buang").getValue(Boolean.class);
+                if (relayBuang != null) {
+                    isRelayBuangOn = relayBuang;
+                    switchBuangAir.setChecked(isRelayBuangOn);
+                } else {
+                    isRelayBuangOn = false;
+                    switchBuangAir.setChecked(false);
+                }
+                
+                isUpdatingFromFirebase = false;
+
+                Boolean otomatis = snapshot.child("otomatis").getValue(Boolean.class);
+                if (otomatis != null) {
+                    isOtomatisAktif = otomatis;
+                    switchOtomatis.setChecked(otomatis);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
+        // ── RecyclerView Jadwal ──
         rvJadwal = findViewById(R.id.rvJadwal);
         rvJadwal.setLayoutManager(new LinearLayoutManager(this));
         jadwalAdapter = new JadwalAdapter(jadwalList, new JadwalAdapter.OnJadwalActionListener() {

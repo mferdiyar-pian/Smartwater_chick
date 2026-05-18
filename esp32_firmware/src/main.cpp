@@ -15,10 +15,6 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <Preferences.h>
-#include <BLEDevice.h>
-#include <BLEServer.h>
-#include <BLEUtils.h>
-#include <BLE2902.h>
 #include <Firebase_ESP_Client.h>
 #include <DHT.h>
 #include <NTPClient.h>
@@ -28,14 +24,6 @@
 #include "config.h"
 #include "addons/TokenHelper.h"
 #include "addons/RTDBHelper.h"
-
-// ──────────────────────────────────────────
-// UUID BLE — harus sama dengan BleWifiSetupActivity.java
-// ──────────────────────────────────────────
-#define SERVICE_UUID     "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
-#define CHAR_SSID_UUID   "beb5483e-36e1-4688-b7f5-ea07361b26a8"
-#define CHAR_PASS_UUID   "beb5483e-36e1-4688-b7f5-ea07361b26a9"
-#define CHAR_STATUS_UUID "beb5483e-36e1-4688-b7f5-ea07361b26aa"
 
 // Interval retry koneksi WiFi saat offline (ms)
 #define WIFI_RETRY_INTERVAL_MS 30000
@@ -55,16 +43,7 @@ WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "pool.ntp.org", TIMEZONE_OFFSET, 60000);
 Preferences preferences;
 
-// BLE
-BLEServer* pServer = nullptr;
-BLECharacteristic* pStatusChar = nullptr;
-bool bleDeviceConnected = false;
-bool wifiCredentialsReceived = false;
-String pendingSsid = "";
-String pendingPass = "";
-
 // Status sistem
-bool isBleMode = false;      // Mode BLE (setup pertama, belum ada WiFi tersimpan)
 bool isOnline = false;       // WiFi terhubung
 bool firebaseReady = false;  // Firebase terhubung
 
@@ -78,14 +57,12 @@ unsigned long lastWifiRetryTime = 0;
 unsigned long lastEpochSync = 0;    // Epoch time saat NTP terakhir berhasil
 unsigned long millisAtLastSync = 0; // millis() saat NTP terakhir berhasil
 
-// WiFi tersimpan
-String savedSsid = "";
-String savedPass = "";
+unsigned long lastPollTime = 0;     // millis() saat terakhir polling Firebase
+const unsigned long POLL_INTERVAL_MS = 2000; // Polling tiap 2 detik
 
 // ──────────────────────────────────────────
 // DEKLARASI FUNGSI
 // ──────────────────────────────────────────
-void startBleProvisioning();
 bool connectToWifi(String ssid, String pass, bool silent = false);
 void connectFirebase();
 void readAndSendSensorData();
@@ -94,50 +71,13 @@ float readPH();
 float readWaterLevel();
 float levelToLiter(float heightCm);
 void controlPump(bool fillOn, bool drainOn);
-void handleCommand(String command);
-void listenFirebaseStream();
+void pollFirebase();
 void checkSchedule();
-void notifyBleStatus(String status);
 unsigned long getEstimatedEpoch();
 String epochToDate(unsigned long epoch);
 String epochToTime(unsigned long epoch);
 int getHourFromEpoch(unsigned long epoch);
 int getMinuteFromEpoch(unsigned long epoch);
-
-// ──────────────────────────────────────────
-// BLE CALLBACKS
-// ──────────────────────────────────────────
-class MyServerCallbacks : public BLEServerCallbacks {
-    void onConnect(BLEServer* p)    {
-        bleDeviceConnected = true;
-        Serial.println("[BLE] Aplikasi terhubung!");
-        lcd.clear();
-        lcd.setCursor(0, 0); lcd.print("App Terhubung! ");
-        lcd.setCursor(0, 1); lcd.print("Kirim Info WiFi");
-    }
-    void onDisconnect(BLEServer* p) {
-        bleDeviceConnected = false;
-        BLEDevice::startAdvertising();
-        lcd.clear();
-        lcd.setCursor(0, 0); lcd.print("Mode Setup BLE ");
-        lcd.setCursor(0, 1); lcd.print("Buka App di HP ");
-    }
-};
-
-class SsidCallback : public BLECharacteristicCallbacks {
-    void onWrite(BLECharacteristic* pChar) {
-        pendingSsid = String(pChar->getValue().c_str());
-        Serial.println("[BLE] SSID: " + pendingSsid);
-    }
-};
-
-class PassCallback : public BLECharacteristicCallbacks {
-    void onWrite(BLECharacteristic* pChar) {
-        pendingPass = String(pChar->getValue().c_str());
-        wifiCredentialsReceived = true;
-        Serial.println("[BLE] Password diterima.");
-    }
-};
 
 // ──────────────────────────────────────────
 // SETUP
@@ -162,59 +102,45 @@ void setup() {
     digitalWrite(RELAY_BUANG_PIN, HIGH);
     dht.begin();
 
-    // Baca WiFi tersimpan
-    preferences.begin("wifi-creds", false);
-    savedSsid = preferences.getString("ssid", "");
-    savedPass = preferences.getString("pass", "");
-    preferences.end();
+    // ── Coba connect WiFi langsung ──
+    Serial.println("Mencoba connect ke WiFi yang di-hardcode...");
+    lcd.clear();
+    lcd.setCursor(0, 0); lcd.print("Koneksi WiFi... ");
+    lcd.setCursor(0, 1); lcd.print(String(WIFI_SSID).substring(0, 16));
+    bool ok = connectToWifi(WIFI_SSID, WIFI_PASSWORD);
 
-    if (savedSsid.length() == 0) {
-        // ── SKENARIO 1: Belum ada WiFi → BLE Mode ──
-        Serial.println("Belum ada WiFi tersimpan → Mode BLE (Setup Pertama)");
-        isBleMode = true;
-        startBleProvisioning();
-    } else {
-        // ── SKENARIO 2 & 3: Ada WiFi tersimpan → Coba connect ──
-        Serial.println("WiFi tersimpan: " + savedSsid + " → Mencoba connect...");
+    if (ok) {
+        // WiFi berhasil → Init NTP & Firebase
         lcd.clear();
-        lcd.setCursor(0, 0); lcd.print("Koneksi WiFi... ");
-        lcd.setCursor(0, 1); lcd.print(savedSsid.substring(0, 16));
-        bool ok = connectToWifi(savedSsid, savedPass);
-
-        if (ok) {
-            // WiFi berhasil → Init NTP & Firebase
-            lcd.clear();
-            lcd.setCursor(0, 0); lcd.print("WiFi Terhubung! ");
-            lcd.setCursor(0, 1); lcd.print(WiFi.localIP().toString());
-            delay(1000);
-            
-            lcd.clear();
-            lcd.setCursor(0, 0); lcd.print("Sinkron Waktu...");
-            Serial.println("Memulai NTP...");
-            timeClient.begin();
-            timeClient.setTimeOffset(TIMEZONE_OFFSET);
-            timeClient.update();
-            lastEpochSync = timeClient.getEpochTime();
-            millisAtLastSync = millis();
-            
-            Serial.println("Memulai Firebase...");
-            connectFirebase();
-            isOnline = true;
-        } else {
-            // WiFi gagal → OFFLINE Mode (bukan BLE Mode!)
-            Serial.println("");
-            Serial.println("═══════════════════════════════════════");
-            Serial.println("  ⚠️  MODE OFFLINE AKTIF");
-            Serial.println("  Sensor & Jadwal tetap berjalan.");
-            Serial.println("  Akan retry WiFi setiap 30 detik...");
-            Serial.println("═══════════════════════════════════════");
-            lcd.clear();
-            lcd.setCursor(0, 0); lcd.print("[OFFLINE] MODE  ");
-            lcd.setCursor(0, 1); lcd.print("Retry WiFi 30s  ");
-            delay(1500);
-            isOnline = false;
-            isBleMode = false;
-        }
+        lcd.setCursor(0, 0); lcd.print("WiFi Terhubung! ");
+        lcd.setCursor(0, 1); lcd.print(WiFi.localIP().toString());
+        delay(1000);
+        
+        lcd.clear();
+        lcd.setCursor(0, 0); lcd.print("Sinkron Waktu...");
+        Serial.println("Memulai NTP...");
+        timeClient.begin();
+        timeClient.setTimeOffset(TIMEZONE_OFFSET);
+        timeClient.update();
+        lastEpochSync = timeClient.getEpochTime();
+        millisAtLastSync = millis();
+        
+        Serial.println("Memulai Firebase...");
+        connectFirebase();
+        isOnline = true;
+    } else {
+        // WiFi gagal → OFFLINE Mode
+        Serial.println("");
+        Serial.println("═══════════════════════════════════════");
+        Serial.println("  ⚠️  MODE OFFLINE AKTIF");
+        Serial.println("  Sensor & Jadwal tetap berjalan.");
+        Serial.println("  Akan retry WiFi setiap 30 detik...");
+        Serial.println("═══════════════════════════════════════");
+        lcd.clear();
+        lcd.setCursor(0, 0); lcd.print("[OFFLINE] MODE  ");
+        lcd.setCursor(0, 1); lcd.print("Retry WiFi 30s  ");
+        delay(1500);
+        isOnline = false;
     }
 }
 
@@ -223,60 +149,14 @@ void setup() {
 // ──────────────────────────────────────────
 void loop() {
 
-    // ─── CABANG A: Mode BLE (setup pertama) ───
-    if (isBleMode) {
-        if (wifiCredentialsReceived) {
-            wifiCredentialsReceived = false;
-            notifyBleStatus("CONNECTING...");
-
-            lcd.clear();
-            lcd.setCursor(0, 0); lcd.print("Koneksi WiFi... ");
-            lcd.setCursor(0, 1); lcd.print(pendingSsid.substring(0, 16));
-
-            bool ok = connectToWifi(pendingSsid, pendingPass);
-            if (ok) {
-                lcd.clear();
-                lcd.setCursor(0, 0); lcd.print("WiFi Terhubung! ");
-                lcd.setCursor(0, 1); lcd.print(WiFi.localIP().toString());
-                delay(1000);
-
-                // Simpan ke flash
-                preferences.begin("wifi-creds", false);
-                preferences.putString("ssid", pendingSsid);
-                preferences.putString("pass", pendingPass);
-                preferences.end();
-                savedSsid = pendingSsid;
-                savedPass = pendingPass;
-
-                notifyBleStatus("CONNECTED:" + WiFi.localIP().toString());
-                
-                lcd.clear();
-                lcd.setCursor(0, 0); lcd.print("Setup Berhasil! ");
-                lcd.setCursor(0, 1); lcd.print("Restarting...   ");
-                delay(2000);
-
-                // Restart ESP32 untuk membersihkan memori RAM dari proses BLE
-                // Setelah nyala, otomatis masuk ke skenario koneksi WiFi normal
-                ESP.restart();
-            } else {
-                notifyBleStatus("FAILED:WiFi tidak dapat terhubung");
-                lcd.clear();
-                lcd.setCursor(0, 0); lcd.print("WiFi GAGAL!     ");
-                lcd.setCursor(0, 1); lcd.print("Cek SSID/Pass   ");
-            }
-        }
-        delay(100);
-        return;
-    }
-
-    // ─── CABANG B: Mode Offline — Coba reconnect WiFi ───
+    // ─── Mode Offline — Coba reconnect WiFi ───
     if (!isOnline) {
         unsigned long now = millis();
         if (now - lastWifiRetryTime >= WIFI_RETRY_INTERVAL_MS || lastWifiRetryTime == 0) {
             lastWifiRetryTime = now;
-            Serial.println("[WiFi] Mencoba reconnect ke: " + savedSsid);
+            Serial.println(String("[WiFi] Mencoba reconnect ke: ") + WIFI_SSID);
 
-            bool ok = connectToWifi(savedSsid, savedPass, true); // silent=true
+            bool ok = connectToWifi(WIFI_SSID, WIFI_PASSWORD, true); // silent=true
             if (ok) {
                 Serial.println("[WiFi] ✅ Kembali online!");
                 isOnline = true;
@@ -304,10 +184,15 @@ void loop() {
         }
     }
 
-    // ─── CABANG C: Mode Normal (Online) — Kirim data & dengarkan perintah ───
+    // ─── CABANG C: Mode Normal (Online) — Kirim data & Polling perintah ───
     if (isOnline && firebaseReady) {
         if (Firebase.isTokenExpired()) Firebase.refreshToken(&firebaseConfig);
-        listenFirebaseStream();
+        
+        unsigned long now = millis();
+        if (now - lastPollTime >= POLL_INTERVAL_MS || lastPollTime == 0) {
+            lastPollTime = now;
+            pollFirebase();
+        }
 
         // Cek apakah WiFi masih konek
         if (WiFi.status() != WL_CONNECTED) {
@@ -435,54 +320,6 @@ void checkSchedule() {
 }
 
 // ──────────────────────────────────────────
-// FUNGSI: Start BLE Provisioning
-// ──────────────────────────────────────────
-void startBleProvisioning() {
-    lcd.clear();
-    lcd.setCursor(0, 0); lcd.print("Inisialisasi BLE");
-    lcd.setCursor(0, 1); lcd.print("Mohon tunggu... ");
-
-    BLEDevice::init("SmartWaterChick");
-    pServer = BLEDevice::createServer();
-    pServer->setCallbacks(new MyServerCallbacks());
-
-    BLEService* pService = pServer->createService(SERVICE_UUID);
-
-    BLECharacteristic* pSsidChar = pService->createCharacteristic(
-        CHAR_SSID_UUID, BLECharacteristic::PROPERTY_WRITE);
-    pSsidChar->setCallbacks(new SsidCallback());
-
-    BLECharacteristic* pPassChar = pService->createCharacteristic(
-        CHAR_PASS_UUID, BLECharacteristic::PROPERTY_WRITE);
-    pPassChar->setCallbacks(new PassCallback());
-
-    pStatusChar = pService->createCharacteristic(
-        CHAR_STATUS_UUID,
-        BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY);
-    pStatusChar->addDescriptor(new BLE2902());
-    pStatusChar->setValue("WAITING");
-
-    pService->start();
-    BLEAdvertising* pAdv = BLEDevice::getAdvertising();
-    pAdv->addServiceUUID(SERVICE_UUID);
-    pAdv->setScanResponse(true);
-    BLEDevice::startAdvertising();
-
-    Serial.println("[BLE] Advertising aktif. Menunggu setup dari aplikasi...");
-
-    lcd.clear();
-    lcd.setCursor(0, 0); lcd.print("Mode Setup BLE  ");
-    lcd.setCursor(0, 1); lcd.print("Buka App di HP  ");
-}
-
-void notifyBleStatus(String status) {
-    if (pStatusChar && bleDeviceConnected) {
-        pStatusChar->setValue(status.c_str());
-        pStatusChar->notify();
-    }
-}
-
-// ──────────────────────────────────────────
 // FUNGSI: Koneksi WiFi
 // silent=true → tidak print progress dots
 // ──────────────────────────────────────────
@@ -541,7 +378,6 @@ void connectFirebase() {
     if (Firebase.ready()) {
         Serial.println("\n✅ Firebase Terhubung!");
         firebaseReady = true;
-        Firebase.RTDB.beginStream(&fbdoCommand, "/kontrol");
         lcd.clear();
         lcd.setCursor(0, 0); lcd.print("Firebase OK!    ");
         lcd.setCursor(0, 1); lcd.print("Sistem Siap     ");
@@ -621,30 +457,45 @@ void controlPump(bool fillOn, bool drainOn) {
     digitalWrite(RELAY_BUANG_PIN, drainOn ? LOW : HIGH);
 }
 
-void handleCommand(String cmd) {
-    if (cmd == "isi_air") {
-        controlPump(true, false); delay(5000); controlPump(false, false);
-        Firebase.RTDB.setString(&fbdo, "/kontrol/perintah", "");
-    } else if (cmd == "buang_air") {
-        controlPump(false, true); delay(5000); controlPump(false, false);
-        Firebase.RTDB.setString(&fbdo, "/kontrol/perintah", "");
-    }
-}
-
-void listenFirebaseStream() {
+void pollFirebase() {
     if (!Firebase.ready()) return;
-    if (!Firebase.RTDB.readStream(&fbdoCommand)) {
-        if (fbdoCommand.streamTimeout())
-            Firebase.RTDB.beginStream(&fbdoCommand, "/kontrol");
-        return;
-    }
-    if (!fbdoCommand.streamAvailable()) return;
 
-    String path = fbdoCommand.dataPath();
-    if (path == "/perintah" && fbdoCommand.stringData().length() > 0)
-        handleCommand(fbdoCommand.stringData());
-    else if (path == "/otomatis") isAutoMode = fbdoCommand.boolData();
-    else if (path == "/jadwal_07") schedule07 = fbdoCommand.boolData();
-    else if (path == "/jadwal_15") schedule15 = fbdoCommand.boolData();
-    else if (path == "/jadwal_22") schedule22 = fbdoCommand.boolData();
+    // Cek Relay Isi
+    if (Firebase.RTDB.getBool(&fbdoCommand, "/kontrol/relay_isi")) {
+        bool state = fbdoCommand.boolData();
+        digitalWrite(RELAY_ISI_PIN, state ? LOW : HIGH);
+        
+        static bool lastRelayIsi = false;
+        if (state != lastRelayIsi) {
+            lastRelayIsi = state;
+            Serial.printf("[FIREBASE] relay_isi: %s\n", state ? "ON" : "OFF");
+            lcd.clear();
+            lcd.setCursor(0, 0); lcd.print("Pompa Isi Air:  ");
+            lcd.setCursor(0, 1); lcd.print(state ? ">>> ON <<<      " : ">>> OFF <<<     ");
+        }
+    } else {
+        Serial.printf("[FIREBASE] Gagal baca relay_isi: %s\n", fbdoCommand.errorReason().c_str());
+    }
+
+    // Cek Relay Buang
+    if (Firebase.RTDB.getBool(&fbdoCommand, "/kontrol/relay_buang")) {
+        bool state = fbdoCommand.boolData();
+        digitalWrite(RELAY_BUANG_PIN, state ? LOW : HIGH);
+        
+        static bool lastRelayBuang = false;
+        if (state != lastRelayBuang) {
+            lastRelayBuang = state;
+            Serial.printf("[FIREBASE] relay_buang: %s\n", state ? "ON" : "OFF");
+            lcd.clear();
+            lcd.setCursor(0, 0); lcd.print("Pompa Buang Air:");
+            lcd.setCursor(0, 1); lcd.print(state ? ">>> ON <<<      " : ">>> OFF <<<     ");
+        }
+    } else {
+        Serial.printf("[FIREBASE] Gagal baca relay_buang: %s\n", fbdoCommand.errorReason().c_str());
+    }
+
+    // Ambil mode otomatis (tidak perlu diprint error-nya agar terminal tidak spam)
+    if (Firebase.RTDB.getBool(&fbdoCommand, "/kontrol/otomatis")) {
+        isAutoMode = fbdoCommand.boolData();
+    }
 }

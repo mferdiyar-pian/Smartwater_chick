@@ -150,8 +150,7 @@ public class PengaturanActivity extends BaseActivity {
 
         // Setup WiFi ESP32 via BLE
         findViewById(R.id.menuManajemen).setOnClickListener(v -> {
-            startActivity(new Intent(this, BleWifiSetupActivity.class));
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            Toast.makeText(this, "Manajemen Perangkat dinonaktifkan karena perangkat Anda tidak memerlukan koneksi Bluetooth.", Toast.LENGTH_LONG).show();
         });
 
         findViewById(R.id.menuKeamanan).setOnClickListener(v ->

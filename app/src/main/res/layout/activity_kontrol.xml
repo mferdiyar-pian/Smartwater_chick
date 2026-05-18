@@ -501,44 +501,78 @@
                             android:background="@drawable/bg_progress_kapasitas" />
                     </FrameLayout>
 
-                    <LinearLayout
+                    <!-- Toggle: Isi Air (Manual) -->
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_marginBottom="12dp">
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnIsiAir"
-                            android:layout_width="0dp"
-                            android:layout_height="46dp"
-                            android:layout_weight="1"
-                            android:text="Isi Air"
-                            android:textAllCaps="false"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="#1B5BCE"
-                            app:cornerRadius="10dp"
-                            app:strokeWidth="1dp"
-                            app:strokeColor="#1B5BCE"
-                            android:backgroundTint="@android:color/transparent"
-                            android:stateListAnimator="@null"
-                            android:layout_marginEnd="10dp" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnBuangAir"
-                            android:layout_width="0dp"
-                            android:layout_height="46dp"
-                            android:layout_weight="1"
-                            android:text="Buang Air"
-                            android:textAllCaps="false"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="#BE123C"
-                            app:cornerRadius="10dp"
-                            app:strokeWidth="1dp"
-                            app:strokeColor="#BE123C"
-                            android:backgroundTint="@android:color/transparent"
-                            android:stateListAnimator="@null" />
-                    </LinearLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Isi Air"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Nyalakan pompa pengisian"
+                                android:textSize="11sp"
+                                android:textColor="@color/text_secondary" />
+                        </LinearLayout>
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/switchIsiAir"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            app:thumbTint="#FFFFFF"
+                            app:trackTint="@color/switch_track_color" />
+                    </RelativeLayout>
+
+                    <!-- Toggle: Buang Air (Manual) -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Buang Air"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Nyalakan pompa pembuangan"
+                                android:textSize="11sp"
+                                android:textColor="@color/text_secondary" />
+                        </LinearLayout>
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/switchBuangAir"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            app:thumbTint="#FFFFFF"
+                            app:trackTint="@color/switch_track_color" />
+                    </RelativeLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

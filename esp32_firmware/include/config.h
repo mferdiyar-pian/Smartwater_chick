@@ -6,14 +6,18 @@
 // WAJIB diisi sesuai dengan data WiFi dan Firebase Anda
 // ============================================================
 
-// (Konfigurasi WiFi telah dihapus karena SSID dan Password sekarang diatur melalui BLE Provisioning dari Aplikasi Android)
+// ──────────────────────────────────────────
+// KONFIGURASI WIFI
+// ──────────────────────────────────────────
+#define WIFI_SSID       "POLITEKNIK NEGERI TANAH LAUT"
+#define WIFI_PASSWORD   "Sejak@2009#"
 
 // ──────────────────────────────────────────
 // KONFIGURASI FIREBASE
 // Ambil dari: Firebase Console → Project Settings → General
 // ──────────────────────────────────────────
 #define FIREBASE_API_KEY      "AIzaSyBX_GuuTxQi5uHxPJ7i-pnaki95eAFWTMs"
-#define FIREBASE_DATABASE_URL "https://smartwater-chick-77b9d-default-rtdb.firebaseio.com"
+#define FIREBASE_DATABASE_URL "smartwater-chick-77b9d-default-rtdb.firebaseio.com"
 
 // (Konfigurasi Email & Password dihapus. ESP32 akan masuk tanpa akun / Test Mode)
 
@@ -22,7 +26,7 @@
 // ──────────────────────────────────────────
 
 // Sensor DHT22 (Suhu & Kelembaban)
-#define DHT_PIN   4       // GPIO4
+#define DHT_PIN   15      // GPIO15
 #define DHT_TYPE  DHT22   // Tipe sensor: DHT22 (lebih akurat) atau DHT11
 
 // Sensor pH Analog
@@ -33,8 +37,8 @@
 #define ECHO_PIN  18      // GPIO18
 
 // Relay Pompa Isi Air (aktif LOW = relay ON saat pin LOW)
-#define RELAY_ISI_PIN    23   // GPIO23 — Pompa pengisian
-#define RELAY_BUANG_PIN  17   // GPIO17 — Pompa pembuangan
+#define RELAY_ISI_PIN    4    // Diubah menjadi D4 agar terhubung ke fisik pompa
+#define RELAY_BUANG_PIN  2    // Diubah menjadi D2
 
 // ──────────────────────────────────────────
 // KONFIGURASI TANGKI
