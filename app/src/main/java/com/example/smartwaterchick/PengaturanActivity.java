@@ -29,6 +29,8 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -159,6 +161,32 @@ public class PengaturanActivity extends BaseActivity {
         // ── MENU UMUM ──
         findViewById(R.id.menuBackup).setOnClickListener(v ->
                 Toast.makeText(this, "Backup Data...", Toast.LENGTH_SHORT).show());
+
+        findViewById(R.id.menuHapusDatabase).setOnClickListener(v -> {
+            new AlertDialog.Builder(this)
+                    .setTitle("Hapus Database Monitoring")
+                    .setMessage("Apakah Anda yakin ingin menghapus seluruh data riwayat monitoring secara permanen dari Firebase?")
+                    .setIcon(R.drawable.ic_warning)
+                    .setPositiveButton("Hapus", (dialog, which) -> {
+                        Toast.makeText(this, "Menghapus database...", Toast.LENGTH_SHORT).show();
+                        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+                        dbRef.child("monitoring").removeValue().addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                dbRef.child("volume_air").removeValue().addOnCompleteListener(task2 -> {
+                                    if (task2.isSuccessful()) {
+                                        Toast.makeText(PengaturanActivity.this, "Database monitoring berhasil dihapus secara permanen!", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(PengaturanActivity.this, "Gagal menghapus volume air: " + task2.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            } else {
+                                Toast.makeText(PengaturanActivity.this, "Gagal menghapus data monitoring: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    })
+                    .setNegativeButton("Batal", null)
+                    .show();
+        });
 
         findViewById(R.id.menuBantuan).setOnClickListener(v ->
                 Toast.makeText(this, "Pusat Bantuan", Toast.LENGTH_SHORT).show());

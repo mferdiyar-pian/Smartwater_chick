@@ -120,6 +120,32 @@ public class AnalisisActivity extends BaseActivity {
         findViewById(R.id.btnLaporanLengkap).setOnClickListener(v ->
                 Toast.makeText(this, "Membuka laporan lengkap...", Toast.LENGTH_SHORT).show());
 
+        // Hapus Database Monitoring
+        findViewById(R.id.btnHapusMonitoring).setOnClickListener(v -> {
+            new android.app.AlertDialog.Builder(AnalisisActivity.this)
+                    .setTitle("Hapus Database Monitoring")
+                    .setMessage("Apakah Anda yakin ingin menghapus seluruh data riwayat monitoring secara permanen dari Firebase?")
+                    .setIcon(R.drawable.ic_warning)
+                    .setPositiveButton("Hapus", (dialog, which) -> {
+                        Toast.makeText(this, "Menghapus database...", Toast.LENGTH_SHORT).show();
+                        dbRef.child("monitoring").removeValue().addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                dbRef.child("volume_air").removeValue().addOnCompleteListener(task2 -> {
+                                    if (task2.isSuccessful()) {
+                                        Toast.makeText(AnalisisActivity.this, "Database monitoring berhasil dihapus secara permanen!", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(AnalisisActivity.this, "Gagal menghapus volume air: " + task2.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            } else {
+                                Toast.makeText(AnalisisActivity.this, "Gagal menghapus data monitoring: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    })
+                    .setNegativeButton("Batal", null)
+                    .show();
+        });
+
         // Bottom Navigation
         BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
         bottomNav.setSelectedItemId(R.id.nav_analytics);

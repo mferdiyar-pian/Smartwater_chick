@@ -9,8 +9,8 @@
 // ──────────────────────────────────────────
 // KONFIGURASI WIFI
 // ──────────────────────────────────────────
-#define WIFI_SSID       "POLITEKNIK NEGERI TANAH LAUT"
-#define WIFI_PASSWORD   "Sejak@2009#"
+#define WIFI_SSID       "Ferdiy"
+#define WIFI_PASSWORD   "1234567881010"
 
 // ──────────────────────────────────────────
 // KONFIGURASI FIREBASE
