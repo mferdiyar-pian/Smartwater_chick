@@ -187,17 +187,17 @@
                         <!-- Indicator line -->
                         <View
                             android:id="@+id/ivPhIndicator"
-                            android:layout_width="2.5dp"
+                            android:layout_width="3dp"
                             android:layout_height="24dp"
                             android:background="@color/text_primary"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="5dp" />
+                            android:layout_gravity="start|center_vertical" />
                     </FrameLayout>
 
                     <TextView
+                        android:id="@+id/tvPhBarLabel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="7.2 pH"
+                        android:text="7.0 pH"
                         android:textSize="11sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_primary"
@@ -220,6 +220,7 @@
                             android:layout_centerVertical="true" />
 
                         <TextView
+                            android:id="@+id/tvPhStatus"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="AMAN"
@@ -396,6 +397,7 @@
 
             <!-- CARD: Peringatan Kritis -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardAlert"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp"

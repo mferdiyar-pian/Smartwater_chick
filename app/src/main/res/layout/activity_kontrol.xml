@@ -152,8 +152,9 @@
                             android:layout_centerVertical="true" />
                     </RelativeLayout>
 
-                    <!-- Badge Cukup -->
+                    <!-- Badge Status Air -->
                     <LinearLayout
+                        android:id="@+id/llWaterBadge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
@@ -166,6 +167,7 @@
                         android:layout_marginBottom="16dp">
 
                         <ImageView
+                            android:id="@+id/ivWaterStatusIcon"
                             android:layout_width="16dp"
                             android:layout_height="16dp"
                             android:src="@drawable/ic_water_drop"
@@ -173,9 +175,10 @@
                             android:layout_marginEnd="6dp" />
 
                         <TextView
+                            android:id="@+id/tvWaterStatusText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Cukup"
+                            android:text="Memuat..."
                             android:textSize="12sp"
                             android:textStyle="bold"
                             android:textColor="#2ECC71" />
@@ -349,17 +352,18 @@
 
                         <!-- Indicator line -->
                         <View
-                            android:id="@+id/ivPhIndicator"
-                            android:layout_width="2.5dp"
+                            android:id="@+id/ivPhIndicatorKontrol"
+                            android:layout_width="3dp"
                             android:layout_height="24dp"
-                            android:background="#1A1A2E"
-                            android:layout_gravity="center" />
+                            android:background="@color/text_primary"
+                            android:layout_gravity="start|center_vertical" />
                     </FrameLayout>
 
                     <TextView
+                        android:id="@+id/tvPhBarLabelKontrol"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="7.2 pH"
+                        android:text="-- pH"
                         android:textSize="11sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_primary"
@@ -382,9 +386,10 @@
                             android:layout_centerVertical="true" />
 
                         <TextView
+                            android:id="@+id/tvPhStatusKontrol"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="AMAN"
+                            android:text="Memuat..."
                             android:textSize="12sp"
                             android:textStyle="bold"
                             android:textColor="#2ECC71"
@@ -473,9 +478,10 @@
                             android:layout_centerVertical="true" />
 
                         <TextView
+                            android:id="@+id/tvKapasitasKontrol"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="650L / 1000L"
+                            android:text="-- L / 200L"
                             android:textSize="15sp"
                             android:textStyle="bold"
                             android:textColor="@color/text_primary"
@@ -651,6 +657,43 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checked="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            app:thumbTint="#FFFFFF"
+                            app:trackTint="@color/switch_track_color" />
+                    </RelativeLayout>
+
+                    <!-- Toggle: Kran Air Minum (Valve IN3) -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Kran Air Minum"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Nyalakan kran (valve) ke tempat minum"
+                                android:textSize="11sp"
+                                android:textColor="@color/text_secondary" />
+                        </LinearLayout>
+
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/switchKranMinum"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
                             app:thumbTint="#FFFFFF"
