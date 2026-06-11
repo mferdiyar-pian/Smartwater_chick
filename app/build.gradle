@@ -31,6 +31,8 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+
+
 }
 
 dependencies {
@@ -44,6 +46,8 @@ dependencies {
     implementation libs.firebase.database
     implementation libs.firebase.auth
     implementation libs.play.services.auth
+
+    // XLSX digenerate manual dengan ZipOutputStream — tidak perlu library eksternal
 
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit

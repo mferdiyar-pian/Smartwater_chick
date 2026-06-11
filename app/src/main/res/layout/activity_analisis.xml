@@ -96,9 +96,7 @@
             android:orientation="vertical"
             android:padding="14dp">
 
-            <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
             <!-- CARD 1: Kapasitas & Penggunaan (Bar Chart) -->
-            <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -113,7 +111,6 @@
                     android:padding="16dp"
                     android:background="@color/bg_card">
 
-                    <!-- Header dengan Title dan Filter -->
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -155,14 +152,12 @@
 
                     </RelativeLayout>
 
-                    <!-- Bar Chart â€” tinggi proporsional -->
                     <com.example.smartwaterchick.BarChartView
                         android:id="@+id/barChart"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
                         android:layout_marginBottom="10dp" />
 
-                    <!-- Legend -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -196,9 +191,7 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
-            <!-- CARD 2: Riwayat Analisis â€” Tren pH        -->
-            <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+            <!-- CARD 2: Riwayat Analisis – Tren pH -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -213,7 +206,6 @@
                     android:padding="16dp"
                     android:background="@color/bg_card">
 
-                    <!-- Header row: judul + filter sejajar -->
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -222,7 +214,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Riwayat Analisis"
+                            android:text="Riwayat kondisi pH"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:textColor="@color/text_primary"
@@ -241,17 +233,15 @@
 
                     </RelativeLayout>
 
-                    <!-- Line Chart â€” tinggi lebih proporsional -->
                     <com.example.smartwaterchick.AnalisisChartView
                         android:id="@+id/chartPh"
                         android:layout_width="match_parent"
                         android:layout_height="160dp" />
 
-                    <!-- Keterangan pH -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="pH normal air minum: 6.5 â€“ 7.5"
+                        android:text="pH normal air minum: 6.5 – 7.5"
                         android:textSize="9.5sp"
                         android:textColor="#9AAABF"
                         android:layout_marginTop="6dp" />
@@ -259,9 +249,7 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
-            <!-- CARD 3: Laporan Lengkap                   -->
-            <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+            <!-- CARD 3: Laporan Lengkap -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -293,31 +281,10 @@
                         app:backgroundTint="#1B5BCE"
                         android:layout_marginBottom="8dp"
                         android:stateListAnimator="@null" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnHapusMonitoring"
-                        android:layout_width="match_parent"
-                        android:layout_height="46dp"
-                        android:text="Hapus Database Monitoring"
-                        android:textAllCaps="false"
-                        android:textColor="#E74C3C"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        app:cornerRadius="10dp"
-                        app:strokeWidth="1.5dp"
-                        app:strokeColor="#E74C3C"
-                        app:icon="@drawable/ic_delete"
-                        app:iconGravity="textStart"
-                        app:iconPadding="8dp"
-                        app:iconTint="#E74C3C"
-                        android:backgroundTint="@color/bg_card"
-                        android:stateListAnimator="@null" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
-            <!-- CARD 4: INFORMASI TERKINI                 -->
-            <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+            <!-- CARD 4: INFORMASI TERKINI (Dinamis) -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -326,13 +293,13 @@
                 android:layout_marginBottom="24dp">
 
                 <LinearLayout
+                    android:id="@+id/layoutInformasiTerkini"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp"
                     android:background="@color/bg_card">
 
-                    <!-- Section header -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -341,21 +308,22 @@
                         android:textStyle="bold"
                         android:textColor="@color/text_primary"
                         android:letterSpacing="0.07"
-                        android:layout_marginBottom="12dp" />
+                        android:layout_marginBottom="14dp" />
 
-                    <!-- Insight row -->
+                    <!-- Row 1: Efisiensi Air Meningkat (biru) -->
                     <LinearLayout
+                        android:id="@+id/rowEfisiensi"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:gravity="top">
-
+                        android:gravity="top"
+                        android:layout_marginBottom="14dp"
+                        android:visibility="gone">
                         <FrameLayout
                             android:layout_width="42dp"
                             android:layout_height="42dp"
                             android:background="@drawable/bg_icon_blue"
                             android:layout_marginEnd="12dp">
-
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
@@ -363,32 +331,173 @@
                                 android:tint="#1B5BCE"
                                 android:layout_gravity="center" />
                         </FrameLayout>
-
-                        <!-- Text content -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical">
-
                             <TextView
+                                android:id="@+id/tvEfisiensiJudul"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Efisiensi Meningkat"
                                 android:textSize="13sp"
                                 android:textStyle="bold"
                                 android:textColor="@color/text_primary"
-                                android:layout_marginBottom="5dp" />
-
+                                android:layout_marginBottom="4dp" />
                             <TextView
+                                android:id="@+id/tvEfisiensiDesc"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Konsumsi air turun 12% dibanding minggu lalu. Hal ini menunjukkan sistem otomatisasi katup bekerja dengan optimal sesuai jadwal pemberian minum."
                                 android:textSize="11sp"
                                 android:textColor="#9AAABF"
-                                android:lineSpacingMultiplier="1.55" />
+                                android:lineSpacingMultiplier="1.5" />
                         </LinearLayout>
                     </LinearLayout>
+
+                    <!-- Row 2: Penggunaan Air Boros (oranye) -->
+                    <LinearLayout
+                        android:id="@+id/rowBoros"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="top"
+                        android:layout_marginBottom="14dp"
+                        android:visibility="gone">
+                        <FrameLayout
+                            android:layout_width="42dp"
+                            android:layout_height="42dp"
+                            android:background="@drawable/bg_icon_orange"
+                            android:layout_marginEnd="12dp">
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_water_drop"
+                                android:tint="#E65100"
+                                android:layout_gravity="center" />
+                        </FrameLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/tvBorosJudul"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary"
+                                android:layout_marginBottom="4dp" />
+                            <TextView
+                                android:id="@+id/tvBorosDesc"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="11sp"
+                                android:textColor="#9AAABF"
+                                android:lineSpacingMultiplier="1.5" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Row 3: pH Stabil (hijau) -->
+                    <LinearLayout
+                        android:id="@+id/rowPhStabil"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="top"
+                        android:layout_marginBottom="14dp"
+                        android:visibility="gone">
+                        <FrameLayout
+                            android:layout_width="42dp"
+                            android:layout_height="42dp"
+                            android:background="@drawable/bg_icon_green"
+                            android:layout_marginEnd="12dp">
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_ph_monitoring"
+                                android:tint="#2E7D32"
+                                android:layout_gravity="center" />
+                        </FrameLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/tvPhStabilJudul"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary"
+                                android:layout_marginBottom="4dp" />
+                            <TextView
+                                android:id="@+id/tvPhStabilDesc"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="11sp"
+                                android:textColor="#9AAABF"
+                                android:lineSpacingMultiplier="1.5" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Row 4: pH Tidak Stabil / Buruk (merah) -->
+                    <LinearLayout
+                        android:id="@+id/rowPhBuruk"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="top"
+                        android:layout_marginBottom="2dp"
+                        android:visibility="gone">
+                        <FrameLayout
+                            android:layout_width="42dp"
+                            android:layout_height="42dp"
+                            android:background="@drawable/bg_icon_red"
+                            android:layout_marginEnd="12dp">
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_ph_monitoring"
+                                android:tint="#C62828"
+                                android:layout_gravity="center" />
+                        </FrameLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/tvPhBurukJudul"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary"
+                                android:layout_marginBottom="4dp" />
+                            <TextView
+                                android:id="@+id/tvPhBurukDesc"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="11sp"
+                                android:textColor="#9AAABF"
+                                android:lineSpacingMultiplier="1.5" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Placeholder saat data belum tersedia -->
+                    <TextView
+                        android:id="@+id/tvInfoKosong"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Menunggu data sensor..."
+                        android:textSize="12sp"
+                        android:textColor="#9AAABF"
+                        android:gravity="center"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
+                        android:visibility="visible" />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -413,6 +522,3 @@
         app:elevation="0dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-
-

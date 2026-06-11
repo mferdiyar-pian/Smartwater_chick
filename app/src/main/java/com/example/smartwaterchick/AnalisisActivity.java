@@ -1,7 +1,7 @@
 package com.example.smartwaterchick;
 
 import android.content.Intent;
-import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -10,8 +10,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.PopupMenu;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
@@ -21,7 +22,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class AnalisisActivity extends BaseActivity {
 
@@ -29,240 +32,448 @@ public class AnalisisActivity extends BaseActivity {
     private BarChartView barChart;
     private Spinner spinnerFilter;
     private Spinner spinnerFilterBar;
-
     private DatabaseReference dbRef;
 
-    // Simpan listener aktif agar bisa dilepas saat filter berubah atau Activity ditutup
     private ValueEventListener phListener;
     private Query phQuery;
-
     private ValueEventListener barListener;
     private Query barQuery;
+
+    // View untuk Informasi Terkini
+    private View rowEfisiensi;
+    private View rowBoros;
+    private View rowPhStabil;
+    private View rowPhBuruk;
+    private android.widget.TextView tvEfisiensiJudul;
+    private android.widget.TextView tvEfisiensiDesc;
+    private android.widget.TextView tvBorosJudul;
+    private android.widget.TextView tvBorosDesc;
+    private android.widget.TextView tvPhStabilJudul;
+    private android.widget.TextView tvPhStabilDesc;
+    private android.widget.TextView tvPhBurukJudul;
+    private android.widget.TextView tvPhBurukDesc;
+    private android.widget.TextView tvInfoKosong;
+
+    // Dideklarasikan sebagai field, diinisialisasi di onCreate()
+    private ActivityResultLauncher<Intent> saveLauncher;
+
+    private List<String> dailyVolData   = new ArrayList<>();
+    private List<String> weeklyVolData  = new ArrayList<>();
+    private List<String> monthlyVolData = new ArrayList<>();
+    private List<String> dailyPhData    = new ArrayList<>();
+    private List<String> weeklyPhData   = new ArrayList<>();
+    private List<String> monthlyPhData  = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_analisis);
-
         if (getSupportActionBar() != null) getSupportActionBar().hide();
 
-        dbRef = FirebaseDatabase.getInstance().getReference();
+        // Harus di dalam onCreate(), setelah super.onCreate()
+        saveLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK
+                        && result.getData() != null
+                        && result.getData().getData() != null) {
+                    writeExcelToUri(result.getData().getData());
+                }
+            }
+        );
 
-        chartView = findViewById(R.id.chartPh);
-        barChart = findViewById(R.id.barChart);
-        spinnerFilter = findViewById(R.id.spinnerFilter);
+        dbRef = FirebaseDatabase.getInstance().getReference();
+        chartView        = findViewById(R.id.chartPh);
+        barChart         = findViewById(R.id.barChart);
+        spinnerFilter    = findViewById(R.id.spinnerFilter);
         spinnerFilterBar = findViewById(R.id.spinnerFilterBar);
 
-        // Setup Dropdown pH
-        String[] filter = {"1 Hari", "1 Minggu", "1 Bulan"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, filter);
-        spinnerFilter.setAdapter(adapter);
-        spinnerFilter.setSelection(2);
-        listenPhChart(30);
+        // Inisialisasi View Informasi Terkini
+        rowEfisiensi     = findViewById(R.id.rowEfisiensi);
+        rowBoros         = findViewById(R.id.rowBoros);
+        rowPhStabil      = findViewById(R.id.rowPhStabil);
+        rowPhBuruk       = findViewById(R.id.rowPhBuruk);
 
-        // Setup Dropdown Volume Air
-        String[] barFilterOptions = {"1 Hari", "1 Minggu", "1 Bulan"};
-        ArrayAdapter<String> barAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, barFilterOptions);
-        spinnerFilterBar.setAdapter(barAdapter);
+        tvEfisiensiJudul = findViewById(R.id.tvEfisiensiJudul);
+        tvEfisiensiDesc  = findViewById(R.id.tvEfisiensiDesc);
+        tvBorosJudul     = findViewById(R.id.tvBorosJudul);
+        tvBorosDesc      = findViewById(R.id.tvBorosDesc);
+        tvPhStabilJudul  = findViewById(R.id.tvPhStabilJudul);
+        tvPhStabilDesc   = findViewById(R.id.tvPhStabilDesc);
+        tvPhBurukJudul   = findViewById(R.id.tvPhBurukJudul);
+        tvPhBurukDesc    = findViewById(R.id.tvPhBurukDesc);
+        tvInfoKosong     = findViewById(R.id.tvInfoKosong);
+
+        String[] filter = {"1 Hari", "1 Minggu", "1 Bulan"};
+        spinnerFilter.setAdapter(new ArrayAdapter<>(this,
+            android.R.layout.simple_spinner_dropdown_item, filter));
+        spinnerFilter.setSelection(2);
+        listenPhChart(30, "monthly");
+
+        String[] barOpts = {"1 Hari", "1 Minggu", "1 Bulan"};
+        spinnerFilterBar.setAdapter(new ArrayAdapter<>(this,
+            android.R.layout.simple_spinner_dropdown_item, barOpts));
         spinnerFilterBar.setSelection(2);
         listenBarChart("monthly", 30);
 
-        // Event Filter Volume Air
         spinnerFilterBar.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0: listenBarChart("daily", 1); break;
-                    case 1: listenBarChart("weekly", 7); break;
+            @Override public void onItemSelected(AdapterView<?> p, View v, int pos, long id) {
+                switch (pos) {
+                    case 0: listenBarChart("daily",   1);  break;
+                    case 1: listenBarChart("weekly",  7);  break;
                     case 2: listenBarChart("monthly", 30); break;
                 }
             }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            @Override public void onNothingSelected(AdapterView<?> p) {}
         });
 
-        // Event Filter pH
         spinnerFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) listenPhChart(1);
-                else if (position == 1) listenPhChart(7);
-                else listenPhChart(30);
+            @Override public void onItemSelected(AdapterView<?> p, View v, int pos, long id) {
+                switch (pos) {
+                    case 0: listenPhChart(1,  "daily");   break;
+                    case 1: listenPhChart(7,  "weekly");  break;
+                    case 2: listenPhChart(30, "monthly"); break;
+                }
             }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            @Override public void onNothingSelected(AdapterView<?> p) {}
         });
 
-        // Back Button
         findViewById(R.id.ivBack).setOnClickListener(v -> {
-            Intent intent = new Intent(AnalisisActivity.this, DashboardActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            startActivity(new Intent(this, DashboardActivity.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             finish();
         });
 
-        // Notifikasi
         findViewById(R.id.ivNotification).setOnClickListener(v -> {
-            PopupMenu popup = new PopupMenu(AnalisisActivity.this, v);
+            PopupMenu popup = new PopupMenu(this, v);
             popup.getMenu().add("Peringatan: pH Air di Tangki 1 Rendah (5.5)");
             popup.getMenu().add("Info: Kapasitas Air berkurang.");
             popup.show();
         });
 
-        // Settings
         findViewById(R.id.ivSettings).setOnClickListener(v -> {
-            startActivity(new Intent(AnalisisActivity.this, PengaturanActivity.class));
+            startActivity(new Intent(this, PengaturanActivity.class));
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         });
 
-        // Laporan Lengkap
-        findViewById(R.id.btnLaporanLengkap).setOnClickListener(v ->
-                Toast.makeText(this, "Membuka laporan lengkap...", Toast.LENGTH_SHORT).show());
-
-        // Hapus Database Monitoring
-        findViewById(R.id.btnHapusMonitoring).setOnClickListener(v -> {
-            new android.app.AlertDialog.Builder(AnalisisActivity.this)
-                    .setTitle("Hapus Database Monitoring")
-                    .setMessage("Apakah Anda yakin ingin menghapus seluruh data riwayat monitoring secara permanen dari Firebase?")
-                    .setIcon(R.drawable.ic_warning)
-                    .setPositiveButton("Hapus", (dialog, which) -> {
-                        Toast.makeText(this, "Menghapus database...", Toast.LENGTH_SHORT).show();
-                        dbRef.child("monitoring").removeValue().addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                dbRef.child("volume_air").removeValue().addOnCompleteListener(task2 -> {
-                                    if (task2.isSuccessful()) {
-                                        Toast.makeText(AnalisisActivity.this, "Database monitoring berhasil dihapus secara permanen!", Toast.LENGTH_LONG).show();
-                                    } else {
-                                        Toast.makeText(AnalisisActivity.this, "Gagal menghapus volume air: " + task2.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            } else {
-                                Toast.makeText(AnalisisActivity.this, "Gagal menghapus data monitoring: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    })
-                    .setNegativeButton("Batal", null)
-                    .show();
+        findViewById(R.id.btnLaporanLengkap).setOnClickListener(v -> {
+            Toast.makeText(this, "Menyiapkan laporan...", Toast.LENGTH_SHORT).show();
+            // Jika real-time listener sudah mengisi data, langsung export.
+            // Jika belum (misalnya koneksi lambat), fetch dulu dari Firebase.
+            if (hasAnyData()) {
+                openSaveDialog();
+            } else {
+                fetchAllDataThenExport();
+            }
         });
 
-        // Bottom Navigation
         BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
         bottomNav.setSelectedItemId(R.id.nav_analytics);
         bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.nav_beranda) {
                 startActivity(new Intent(this, DashboardActivity.class));
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                finish();
-                return true;
-            } else if (id == R.id.nav_analytics) {
-                return true;
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out); finish(); return true;
+            } else if (id == R.id.nav_analytics) { return true;
             } else if (id == R.id.nav_controls) {
                 startActivity(new Intent(this, KontrolActivity.class));
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                return true;
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out); return true;
             } else if (id == R.id.nav_devices) {
                 startActivity(new Intent(this, PerangkatActivity.class));
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                finish();
-                return true;
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out); finish(); return true;
             } else if (id == R.id.nav_settings) {
                 startActivity(new Intent(this, PengaturanActivity.class));
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                finish();
-                return true;
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out); finish(); return true;
             }
             return false;
         });
     }
 
-    // ======================
-    // LISTENER REAL-TIME GRAFIK pH
-    // ======================
-    private void listenPhChart(int limit) {
-        if (phListener != null && phQuery != null) {
-            phQuery.removeEventListener(phListener);
-        }
+    // ── Cek apakah sudah ada data dari real-time listener ──────────────────
+    private boolean hasAnyData() {
+        return !monthlyVolData.isEmpty() || !monthlyPhData.isEmpty()
+            || !weeklyVolData.isEmpty()  || !weeklyPhData.isEmpty()
+            || !dailyVolData.isEmpty()   || !dailyPhData.isEmpty();
+    }
 
+    // ── Fetch dari Firebase (fallback jika listener belum mengisi data) ────
+    private void fetchAllDataThenExport() {
+        dbRef.child("volume_air").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override public void onDataChange(@NonNull DataSnapshot snap) {
+                if (dailyVolData.isEmpty())   dailyVolData   = extractLiters(snap.child("daily"));
+                if (weeklyVolData.isEmpty())  weeklyVolData  = extractLiters(snap.child("weekly"));
+                if (monthlyVolData.isEmpty()) monthlyVolData = extractLiters(snap.child("monthly"));
+
+                dbRef.child("monitoring").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override public void onDataChange(@NonNull DataSnapshot phSnap) {
+                        if (monthlyPhData.isEmpty()) {
+                            List<String> all = new ArrayList<>();
+                            for (DataSnapshot ds : phSnap.getChildren()) {
+                                Object ph = ds.child("ph").getValue();
+                                if (ph != null) all.add(ph.toString());
+                            }
+                            monthlyPhData = new ArrayList<>(all);
+                            int sz = all.size();
+                            weeklyPhData = sz >= 7
+                                ? new ArrayList<>(all.subList(sz - 7, sz))
+                                : new ArrayList<>(all);
+                            dailyPhData = sz >= 1
+                                ? new ArrayList<>(all.subList(sz - 1, sz))
+                                : new ArrayList<>(all);
+                        }
+                        openSaveDialog();
+                    }
+                    @Override public void onCancelled(@NonNull DatabaseError e) {
+                        Toast.makeText(AnalisisActivity.this,
+                            "Gagal ambil pH: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+            @Override public void onCancelled(@NonNull DatabaseError e) {
+                Toast.makeText(AnalisisActivity.this,
+                    "Gagal ambil volume: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private List<String> extractLiters(DataSnapshot snap) {
+        List<String> list = new ArrayList<>();
+        if (snap.exists()) {
+            for (DataSnapshot ds : snap.getChildren()) {
+                Object liter = ds.child("liter").getValue();
+                if (liter != null) list.add(liter.toString());
+            }
+        }
+        return list;
+    }
+
+    // ── Buka dialog simpan file ────────────────────────────────────────────
+    private void openSaveDialog() {
+        try {
+            Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            // XLSX — lebih kompatibel, tidak memerlukan library tambahan
+            intent.setType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            intent.putExtra(Intent.EXTRA_TITLE, "Laporan_SmartWaterChick.xlsx");
+            saveLauncher.launch(intent);
+        } catch (Exception e) {
+            Toast.makeText(this, "Gagal buka dialog: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    // ── Tulis XLSX ke URI yang dipilih user (background thread) ───────────
+    private void writeExcelToUri(Uri uri) {
+        // Snapshot data agar thread-safe
+        final List<String> dv = new ArrayList<>(dailyVolData);
+        final List<String> wv = new ArrayList<>(weeklyVolData);
+        final List<String> mv = new ArrayList<>(monthlyVolData);
+        final List<String> dp = new ArrayList<>(dailyPhData);
+        final List<String> wp = new ArrayList<>(weeklyPhData);
+        final List<String> mp = new ArrayList<>(monthlyPhData);
+
+        new Thread(() -> {
+            try (OutputStream out = getContentResolver().openOutputStream(uri)) {
+                if (out == null) throw new Exception("Tidak bisa membuka file output");
+                new XlsxWriter(dv, wv, mv, dp, wp, mp).write(out);
+                out.flush();
+                runOnUiThread(() ->
+                    Toast.makeText(AnalisisActivity.this,
+                        "Laporan berhasil disimpan!", Toast.LENGTH_LONG).show());
+            } catch (Exception e) {
+                String msg = e.getMessage() != null ? e.getMessage() : e.getClass().getSimpleName();
+                runOnUiThread(() ->
+                    Toast.makeText(AnalisisActivity.this,
+                        "Gagal: " + msg, Toast.LENGTH_LONG).show());
+            }
+        }).start();
+    }
+
+    // =====================================================================
+    // LISTENER REAL-TIME pH
+    // =====================================================================
+    private void listenPhChart(int limit, String period) {
+        if (phListener != null && phQuery != null) phQuery.removeEventListener(phListener);
         phQuery = dbRef.child("monitoring").limitToLast(limit);
         phListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<Float> dataList = new ArrayList<>();
+            @Override public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<Float> fl = new ArrayList<>();
+                List<String> sl    = new ArrayList<>();
                 for (DataSnapshot entry : snapshot.getChildren()) {
-                    Object phValue = entry.child("ph").getValue();
-                    if (phValue != null) {
-                        float ph = 0f;
-                        if (phValue instanceof Double) ph = ((Double) phValue).floatValue();
-                        else if (phValue instanceof Long) ph = ((Long) phValue).floatValue();
-                        dataList.add(ph);
+                    Object v = entry.child("ph").getValue();
+                    if (v != null) {
+                        float ph = v instanceof Double ? ((Double)v).floatValue()
+                                 : v instanceof Long   ? ((Long)v).floatValue() : 0f;
+                        fl.add(ph); sl.add(String.valueOf(ph));
                     }
                 }
-                if (dataList.isEmpty()) {
-                    chartView.setData(new float[]{6.8f}, Color.parseColor("#1565C0"));
+                // Update list untuk export XLS
+                if ("daily".equals(period))       dailyPhData   = sl;
+                else if ("weekly".equals(period)) weeklyPhData  = sl;
+                else                              monthlyPhData = sl;
+
+                updateInformasiTerkini();
+
+                if (fl.isEmpty()) {
+                    chartView.setData(new float[]{6.8f},
+                        android.graphics.Color.parseColor("#1565C0"));
                     return;
                 }
-                float[] arr = new float[dataList.size()];
-                for (int i = 0; i < dataList.size(); i++) arr[i] = dataList.get(i);
-                chartView.setData(arr, Color.parseColor("#1565C0"));
+                float[] arr = new float[fl.size()];
+                for (int i = 0; i < fl.size(); i++) arr[i] = fl.get(i);
+                chartView.setData(arr, android.graphics.Color.parseColor("#1565C0"));
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(AnalisisActivity.this, "Gagal memuat data pH: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            @Override public void onCancelled(@NonNull DatabaseError e) {
+                Toast.makeText(AnalisisActivity.this,
+                    "Gagal memuat pH: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         };
         phQuery.addValueEventListener(phListener);
     }
 
-    // ======================
-    // LISTENER REAL-TIME DIAGRAM BATANG VOLUME AIR
-    // ======================
+    // =====================================================================
+    // LISTENER REAL-TIME Volume Air
+    // =====================================================================
     private void listenBarChart(String tipe, int limit) {
-        if (barListener != null && barQuery != null) {
-            barQuery.removeEventListener(barListener);
-        }
-
+        if (barListener != null && barQuery != null) barQuery.removeEventListener(barListener);
         barQuery = dbRef.child("volume_air").child(tipe).limitToLast(limit);
         barListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<Float> dataList = new ArrayList<>();
-                ArrayList<String> labelList = new ArrayList<>();
+            @Override public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<Float>  fl  = new ArrayList<>();
+                ArrayList<String> lbs = new ArrayList<>();
+                List<String>      sl  = new ArrayList<>();
                 for (DataSnapshot entry : snapshot.getChildren()) {
                     Object liter = entry.child("liter").getValue();
                     if (liter != null) {
-                        float val = 0f;
-                        if (liter instanceof Double) val = ((Double) liter).floatValue();
-                        else if (liter instanceof Long) val = ((Long) liter).floatValue();
-                        dataList.add(val);
+                        float val = liter instanceof Double ? ((Double)liter).floatValue()
+                                  : liter instanceof Long   ? ((Long)liter).floatValue() : 0f;
+                        fl.add(val); sl.add(String.valueOf(val));
                     }
-                    if (entry.child("label").getValue() != null) {
-                        labelList.add(String.valueOf(entry.child("label").getValue()));
-                    } else {
-                        labelList.add(entry.getKey());
-                    }
+                    lbs.add(entry.child("label").getValue() != null
+                        ? String.valueOf(entry.child("label").getValue()) : entry.getKey());
                 }
-                barChart.loadDataFromDatabase(dataList, labelList, tipe);
-            }
+                // Update list untuk export XLS
+                if ("daily".equals(tipe))       dailyVolData   = sl;
+                else if ("weekly".equals(tipe)) weeklyVolData  = sl;
+                else                            monthlyVolData = sl;
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(AnalisisActivity.this, "Gagal memuat data volume: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                updateInformasiTerkini();
+
+                barChart.loadDataFromDatabase(fl, lbs, tipe);
+            }
+            @Override public void onCancelled(@NonNull DatabaseError e) {
+                Toast.makeText(AnalisisActivity.this,
+                    "Gagal memuat volume: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         };
         barQuery.addValueEventListener(barListener);
     }
 
+    private void updateInformasiTerkini() {
+        // Cek data volume air
+        List<String> activeVolData = null;
+        if (!dailyVolData.isEmpty()) {
+            activeVolData = dailyVolData;
+        } else if (!weeklyVolData.isEmpty()) {
+            activeVolData = weeklyVolData;
+        } else if (!monthlyVolData.isEmpty()) {
+            activeVolData = monthlyVolData;
+        }
+
+        // Cek data pH
+        List<String> activePhData = null;
+        if (!dailyPhData.isEmpty()) {
+            activePhData = dailyPhData;
+        } else if (!weeklyPhData.isEmpty()) {
+            activePhData = weeklyPhData;
+        } else if (!monthlyPhData.isEmpty()) {
+            activePhData = monthlyPhData;
+        }
+
+        boolean hasData = false;
+
+        // Evaluasi Volume Air
+        if (activeVolData != null && !activeVolData.isEmpty()) {
+            hasData = true;
+            try {
+                float sum = 0;
+                float latestVol = 0;
+                int count = 0;
+                for (String s : activeVolData) {
+                    try {
+                        float v = Float.parseFloat(s);
+                        sum += v;
+                        latestVol = v;
+                        count++;
+                    } catch (NumberFormatException ignored) {}
+                }
+                float avg = count > 0 ? sum / count : 0;
+
+                // Tentukan boros vs efisien
+                // Jika latestVol di atas rata-rata (atau di atas 110L), maka boros. Jika di bawah, efisien.
+                if (latestVol > avg || latestVol > 110f) {
+                    rowBoros.setVisibility(View.VISIBLE);
+                    rowEfisiensi.setVisibility(View.GONE);
+                    tvBorosJudul.setText("Penggunaan Air Boros");
+                    tvBorosDesc.setText("Konsumsi air meningkat di angka " + String.format("%.1f", latestVol) + " Liter (di atas rata-rata " + String.format("%.1f", avg) + " L). Harap pantau jika terjadi kebocoran pipa atau pemborosan air.");
+                } else {
+                    rowEfisiensi.setVisibility(View.VISIBLE);
+                    rowBoros.setVisibility(View.GONE);
+                    tvEfisiensiJudul.setText("Efisiensi Air Meningkat");
+                    tvEfisiensiDesc.setText("Konsumsi air terpantau hemat di angka " + String.format("%.1f", latestVol) + " Liter (di bawah rata-rata " + String.format("%.1f", avg) + " L). Otomatisasi tangki berjalan optimal sesuai jadwal.");
+                }
+            } catch (Exception e) {
+                rowEfisiensi.setVisibility(View.GONE);
+                rowBoros.setVisibility(View.GONE);
+            }
+        } else {
+            rowEfisiensi.setVisibility(View.GONE);
+            rowBoros.setVisibility(View.GONE);
+        }
+
+        // Evaluasi pH Air
+        if (activePhData != null && !activePhData.isEmpty()) {
+            hasData = true;
+            try {
+                float latestPh = 0;
+                for (String s : activePhData) {
+                    try {
+                        latestPh = Float.parseFloat(s);
+                    } catch (NumberFormatException ignored) {}
+                }
+
+                // Tentukan stabil vs tidak stabil
+                if (latestPh >= 6.5f && latestPh <= 7.5f) {
+                    rowPhStabil.setVisibility(View.VISIBLE);
+                    rowPhBuruk.setVisibility(View.GONE);
+                    tvPhStabilJudul.setText("pH Air Stabil");
+                    tvPhStabilDesc.setText("Tingkat pH air terpantau aman di angka " + String.format("%.1f", latestPh) + ". Kualitas air sangat ideal untuk kesehatan pencernaan dan sanitasi ayam.");
+                } else {
+                    rowPhBuruk.setVisibility(View.VISIBLE);
+                    rowPhStabil.setVisibility(View.GONE);
+                    tvPhBurukJudul.setText("pH Air Tidak Stabil / Buruk");
+                    tvPhBurukDesc.setText("Tingkat pH terdeteksi buruk di angka " + String.format("%.1f", latestPh) + " (di luar batas ideal 6.5 - 7.5). Mohon segera lakukan pembersihan tangki atau filtrasi air.");
+                }
+            } catch (Exception e) {
+                rowPhStabil.setVisibility(View.GONE);
+                rowPhBuruk.setVisibility(View.GONE);
+            }
+        } else {
+            rowPhStabil.setVisibility(View.GONE);
+            rowPhBuruk.setVisibility(View.GONE);
+        }
+
+        if (hasData) {
+            tvInfoKosong.setVisibility(View.GONE);
+        } else {
+            tvInfoKosong.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (phListener != null && phQuery != null) {
-            phQuery.removeEventListener(phListener);
-        }
-        if (barListener != null && barQuery != null) {
-            barQuery.removeEventListener(barListener);
-        }
+        if (phListener  != null && phQuery  != null) phQuery.removeEventListener(phListener);
+        if (barListener != null && barQuery != null) barQuery.removeEventListener(barListener);
     }
 }

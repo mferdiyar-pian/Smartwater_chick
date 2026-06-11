@@ -264,7 +264,7 @@
                 <!-- Kapasitas Air -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     app:cardCornerRadius="@dimen/card_radius"
                     app:cardElevation="0dp"
@@ -272,7 +272,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:padding="16dp"
                         android:background="@color/bg_card">
@@ -288,16 +288,7 @@
                                 android:src="@drawable/ic_water_capacity"
                                 android:tint="#1B5BCE"
                                 android:background="@drawable/bg_icon_blue"
-                                android:padding="8dp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="-1.2%"
-                                android:textSize="12sp"
-                                android:textStyle="bold"
-                                android:textColor="#E74C3C"
-                                android:layout_alignParentEnd="true" />
+                                android:padding="6dp" />
                         </RelativeLayout>
 
                         <TextView
@@ -314,7 +305,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="65%"
-                            android:textSize="28sp"
+                            android:textSize="24sp"
                             android:textStyle="bold"
                             android:textColor="@color/text_primary" />
                     </LinearLayout>
@@ -323,14 +314,14 @@
                 <!-- Status Irigasi -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     app:cardCornerRadius="@dimen/card_radius"
                     app:cardElevation="0dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:padding="16dp"
                         android:background="@color/bg_card">
@@ -338,16 +329,16 @@
                         <ImageView
                             android:layout_width="36dp"
                             android:layout_height="36dp"
-                            android:src="@drawable/ic_tank"
+                            android:src="@drawable/ic_water_fill"
                             android:tint="#F39C12"
                             android:background="@drawable/bg_icon_orange"
-                            android:padding="16dp"
+                            android:padding="8dp"
                             android:layout_marginBottom="12dp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="STATUS AIR"
+                            android:text="Status Pengisian Air"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:textColor="@color/text_primary"
@@ -358,7 +349,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Aktif"
-                            android:textSize="28sp"
+                            android:textSize="24sp"
                             android:textStyle="bold"
                             android:textColor="@color/text_primary" />
                     </LinearLayout>
