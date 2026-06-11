@@ -46,7 +46,6 @@ public class KontrolActivity extends BaseActivity {
 
     // ─── Views pH ───
     private TextView  tvPhKontrol;       // Nilai pH di header card pH
-    private TextView  tvPhTangki;        // Nilai pH di header card tangki
     private TextView  tvPhBarLabelKontrol;
     private TextView  tvPhStatusKontrol;
     private View      ivPhIndicatorKontrol;
@@ -54,9 +53,7 @@ public class KontrolActivity extends BaseActivity {
     // ─── Views Air ───
     private TankView  tankView;
     private TextView  tvKapasitasTangki;  // Card 1 "650L / 1000L"
-    private TextView  tvKapasitasKontrol; // Card 3
     private View      viewProgressTangki;
-    private View      viewProgressKontrol;
     private TextView  tvWaterStatusText;
     private ImageView ivWaterStatusIcon;
     private LinearLayout llWaterBadge;
@@ -79,8 +76,8 @@ public class KontrolActivity extends BaseActivity {
     // ─── Konstanta pH air ayam ───
     private static final float PH_SAFE_MIN = 6.5f;
     private static final float PH_SAFE_MAX = 7.5f;
-    // Konstanta volume tangki (sesuai config.h)
-    private static final float TANK_MAX_LITER = 200f;
+    // Konstanta volume tangki (sesuai wadah yang dipakai)
+    private static final float TANK_MAX_LITER = 1.4f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +92,6 @@ public class KontrolActivity extends BaseActivity {
 
         // ─── Bind views pH ───
         tvPhKontrol          = findViewById(R.id.tvPhKontrol);
-        tvPhTangki           = findViewById(R.id.tvPhTangki);
         tvPhBarLabelKontrol  = findViewById(R.id.tvPhBarLabelKontrol);
         tvPhStatusKontrol    = findViewById(R.id.tvPhStatusKontrol);
         ivPhIndicatorKontrol = findViewById(R.id.ivPhIndicatorKontrol);
@@ -103,9 +99,7 @@ public class KontrolActivity extends BaseActivity {
         // ─── Bind views air ───
         tankView             = findViewById(R.id.tankView);
         tvKapasitasTangki    = findViewById(R.id.tvKapasitasTangki);
-        tvKapasitasKontrol   = findViewById(R.id.tvKapasitasKontrol);
         viewProgressTangki   = findViewById(R.id.viewProgressTangki);
-        viewProgressKontrol  = findViewById(R.id.viewProgressKontrol);
         tvWaterStatusText    = findViewById(R.id.tvWaterStatusText);
         ivWaterStatusIcon    = findViewById(R.id.ivWaterStatusIcon);
         llWaterBadge         = findViewById(R.id.llWaterBadge);
@@ -345,15 +339,14 @@ public class KontrolActivity extends BaseActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (!snapshot.exists()) return;
-                float liter  = 0f, persen = 0f;
-
-                Object valL = snapshot.child("kapasitas_liter").getValue();
-                if (valL instanceof Double) liter = ((Double) valL).floatValue();
-                else if (valL instanceof Long) liter = ((Long) valL).floatValue();
+                float persen = 0f;
 
                 Object valP = snapshot.child("kapasitas_persen").getValue();
                 if (valP instanceof Double) persen = ((Double) valP).floatValue();
                 else if (valP instanceof Long) persen = ((Long) valP).floatValue();
+
+                // Hitung liter dari persentase agar selalu sinkron
+                float liter = (persen / 100f) * TANK_MAX_LITER;
 
                 updateWaterUI(liter, persen);
             }
@@ -386,9 +379,8 @@ public class KontrolActivity extends BaseActivity {
             bgColor  = Color.parseColor("#EAFAF1");
         }
 
-        // Nilai di header dua card
+        // Nilai di header card pH
         if (tvPhKontrol != null) { tvPhKontrol.setText(phText); tvPhKontrol.setTextColor(colorInt); }
-        if (tvPhTangki  != null) { tvPhTangki.setText(phText);  tvPhTangki.setTextColor(colorInt); }
 
         // Label di bawah bar
         if (tvPhBarLabelKontrol != null) tvPhBarLabelKontrol.setText(phText);
@@ -429,14 +421,12 @@ public class KontrolActivity extends BaseActivity {
         // TankView
         if (tankView != null) tankView.setFillPercent(fraction);
 
-        // Teks kapasitas
-        String kapText = String.format("%.0fL / %.0fL", liter, TANK_MAX_LITER);
+        // Teks kapasitas (2 desimal karena max hanya 1.4L)
+        String kapText = String.format("%.2fL / %.1fL", liter, TANK_MAX_LITER);
         if (tvKapasitasTangki  != null) tvKapasitasTangki.setText(kapText);
-        if (tvKapasitasKontrol != null) tvKapasitasKontrol.setText(kapText);
 
         // Progress bar
-        updateProgressBar(viewProgressTangki,  fraction);
-        updateProgressBar(viewProgressKontrol, fraction);
+        updateProgressBar(viewProgressTangki, fraction);
 
         // Status badge air
         String waterStatus;

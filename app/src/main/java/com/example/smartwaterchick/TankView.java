@@ -114,7 +114,14 @@ public class TankView extends View {
         canvas.drawRoundRect(shine, 8f, 8f, shinePaint);
 
         // ── Percentage text ──
-        float textY = bodyT + (bodyB - bodyT) * (1f - fillPercent) + (bodyB - bodyT) * fillPercent * 0.55f;
-        canvas.drawText((int)(fillPercent * 100) + "%", w / 2f, textY + 18f, textPaint);
+        float centerY = bodyT + (bodyB - bodyT) / 2f;
+        if (waterTop < centerY) {
+            textPaint.setColor(Color.WHITE);
+        } else {
+            textPaint.setColor(Color.parseColor("#1B5BCE"));
+        }
+        Paint.FontMetrics fm = textPaint.getFontMetrics();
+        float textOffset = (fm.descent + fm.ascent) / 2f;
+        canvas.drawText((int)(fillPercent * 100) + "%", w / 2f, centerY - textOffset, textPaint);
     }
 }
