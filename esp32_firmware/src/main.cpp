@@ -44,6 +44,8 @@ bool isOnline      = false;
 bool firebaseReady = false;
 bool isAutoMode    = false;
 bool schedule07 = false, schedule15 = false, schedule22 = false;
+bool isPhConnected = false;
+bool isUltrasonicConnected = false;
 
 unsigned long lastSendTime       = 0;
 unsigned long lastWifiRetryTime  = 0;
@@ -248,6 +250,12 @@ void readAndSendSensorData() {
     Firebase.RTDB.setFloat(&fbdo, "/kontrol_status/kapasitas_persen", persen);
     Firebase.RTDB.setFloat(&fbdo, "/kontrol_status/ph_terkini",       ph);
 
+    // Kirim status hardware tambahan
+    Firebase.RTDB.setInt(&fbdo, "/kontrol_status/last_seen", (int)timeClient.getEpochTime());
+    Firebase.RTDB.setInt(&fbdo, "/kontrol_status/rssi", WiFi.status() == WL_CONNECTED ? (int)WiFi.RSSI() : -100);
+    Firebase.RTDB.setBool(&fbdo, "/kontrol_status/sensor_ph_connected", isPhConnected);
+    Firebase.RTDB.setBool(&fbdo, "/kontrol_status/sensor_ultrasonic_connected", isUltrasonicConnected);
+
     Firebase.RTDB.setFloat(&fbdo,  "/volume_air/daily/" + tanggal + "/liter", liter);
     Firebase.RTDB.setString(&fbdo, "/volume_air/daily/" + tanggal + "/label", "Hari Ini");
 
@@ -313,6 +321,13 @@ float readPH() {
     }
     float avgAdc = avgval / 6.0f;
 
+    // Deteksi jika sensor terhubung (jika ADC di luar batas ekstrim)
+    if (avgAdc <= 5.0f || avgAdc >= 4090.0f) {
+        isPhConnected = false;
+    } else {
+        isPhConnected = true;
+    }
+
     // Konversi ke voltase
     float volt = avgAdc * (3.3f / 4095.0f);
 
@@ -321,7 +336,7 @@ float readPH() {
     float ph = -5.70f * volt + calibration_value;
 
     // Debug ke Serial Monitor
-    Serial.printf("[pH] ADC:%.0f  Volt:%.4fV  pH:%.2f\n", avgAdc, volt, ph);
+    Serial.printf("[pH] ADC:%.0f  Volt:%.4fV  pH:%.2f  Connected:%s\n", avgAdc, volt, ph, isPhConnected ? "YES" : "NO");
 
     return constrain(ph, 0.0f, 14.0f);
 }
@@ -353,8 +368,11 @@ float readWaterLevel() {
     // Jika semua sampel gagal (tidak ada echo) → anggap kosong
     if (validCount == 0) {
         Serial.println("[ULTRASONIC] ⚠️ Tidak ada echo! Cek kabel/sensor.");
+        isUltrasonicConnected = false;
         return 0.0f;
     }
+
+    isUltrasonicConnected = true;
 
     // Urutkan (bubble sort sederhana) lalu ambil nilai TENGAH (median)
     for (int i = 0; i < validCount - 1; i++) {
