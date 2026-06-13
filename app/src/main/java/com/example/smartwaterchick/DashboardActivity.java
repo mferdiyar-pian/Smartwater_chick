@@ -32,11 +32,14 @@ public class DashboardActivity extends BaseActivity {
     private TextView tvWaterCapacity;
     private TextView tvAlertMessage;
     private View     cardAlert;
+    private TextView tvIrrigationStatus;
+    private android.widget.ImageView ivIrrigationIcon;
 
     // ─── Firebase ───
     private DatabaseReference dbRef;
     private ValueEventListener phListener;
     private ValueEventListener waterListener;
+    private ValueEventListener relayListener;
 
     // ─── Batas pH aman untuk air minum ayam (umumnya 6.5 – 7.5) ───
     private static final float PH_SAFE_MIN  = 6.5f;
@@ -54,9 +57,11 @@ public class DashboardActivity extends BaseActivity {
         tvPhBarLabel    = findViewById(R.id.tvPhBarLabel);
         tvPhStatus      = findViewById(R.id.tvPhStatus);
         ivPhIndicator   = findViewById(R.id.ivPhIndicator);
-        tvWaterCapacity = findViewById(R.id.tvWaterCapacity);
-        tvAlertMessage  = findViewById(R.id.tvAlertMessage);
-        cardAlert       = findViewById(R.id.cardAlert);
+        tvWaterCapacity    = findViewById(R.id.tvWaterCapacity);
+        tvAlertMessage     = findViewById(R.id.tvAlertMessage);
+        cardAlert          = findViewById(R.id.cardAlert);
+        tvIrrigationStatus = findViewById(R.id.tvIrrigationStatus);
+        ivIrrigationIcon   = findViewById(R.id.ivIrrigationIcon);
 
         // ─── Firebase ───
         dbRef = FirebaseDatabase.getInstance().getReference();
@@ -130,6 +135,7 @@ public class DashboardActivity extends BaseActivity {
         // ─── Mulai listener Firebase real-time ───
         startPhListener();
         startWaterListener();
+        startRelayListener();
     }
 
     // =========================================================
@@ -184,6 +190,68 @@ public class DashboardActivity extends BaseActivity {
             public void onCancelled(@NonNull DatabaseError error) { }
         };
         dbRef.child("kontrol_status").child("kapasitas_persen").addValueEventListener(waterListener);
+    }
+
+    // =========================================================
+    // LISTENER STATUS RELAY REAL-TIME dari Firebase
+    // Path: /kontrol — relay_isi, relay_buang, relay_minum
+    // =========================================================
+    private void startRelayListener() {
+        relayListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean relayIsi   = getBool(snapshot, "relay_isi");
+                boolean relayBuang = getBool(snapshot, "relay_buang");
+                boolean relayMinum = getBool(snapshot, "relay_minum");
+
+                updateIrrigationStatus(relayIsi, relayBuang, relayMinum);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) { }
+        };
+        dbRef.child("kontrol").addValueEventListener(relayListener);
+    }
+
+    private boolean getBool(DataSnapshot snap, String key) {
+        Object v = snap.child(key).getValue();
+        if (v instanceof Boolean) return (Boolean) v;
+        return false;
+    }
+
+    // =========================================================
+    // UPDATE UI STATUS PENGISIAN AIR
+    // =========================================================
+    private void updateIrrigationStatus(boolean isi, boolean buang, boolean minum) {
+        if (tvIrrigationStatus == null) return;
+
+        boolean anyActive = isi || buang || minum;
+
+        if (anyActive) {
+            // Tentukan label berdasarkan relay yang aktif
+            StringBuilder label = new StringBuilder();
+            if (isi)   label.append("Pengisian ");
+            if (buang) label.append("Buang ");
+            if (minum) label.append("Minum ");
+
+            tvIrrigationStatus.setText("Aktif");
+            tvIrrigationStatus.setTextColor(Color.parseColor("#2ECC71"));
+
+            // Warna ikon hijau saat aktif
+            if (ivIrrigationIcon != null) {
+                ivIrrigationIcon.setColorFilter(Color.parseColor("#2ECC71"));
+                ivIrrigationIcon.setBackgroundResource(R.drawable.bg_icon_green);
+            }
+        } else {
+            tvIrrigationStatus.setText("Tidak Aktif");
+            tvIrrigationStatus.setTextColor(Color.parseColor("#9E9E9E"));
+
+            // Warna ikon abu saat tidak aktif
+            if (ivIrrigationIcon != null) {
+                ivIrrigationIcon.setColorFilter(Color.parseColor("#9E9E9E"));
+                ivIrrigationIcon.setBackgroundResource(R.drawable.bg_icon_blue);
+            }
+        }
     }
 
     // =========================================================
@@ -269,5 +337,7 @@ public class DashboardActivity extends BaseActivity {
             dbRef.child("kontrol_status").child("ph_terkini").removeEventListener(phListener);
         if (waterListener != null)
             dbRef.child("kontrol_status").child("kapasitas_persen").removeEventListener(waterListener);
+        if (relayListener != null)
+            dbRef.child("kontrol").removeEventListener(relayListener);
     }
 }
