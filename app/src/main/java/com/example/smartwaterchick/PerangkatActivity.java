@@ -50,9 +50,12 @@ public class PerangkatActivity extends BaseActivity {
 
     // ─── Views: Monitoring Komponen ───
     private ImageView ivPhIcon, ivUltrasonicIcon, ivPumpIcon;
+    private ImageView ivValveBuangIcon, ivValveMinumIcon;
     private TextView tvPhSensorStatus, tvPhValue;
     private TextView tvUltrasonicStatus, tvUltrasonicValue;
     private TextView tvPumpStatus, tvPumpSubtitle;
+    private TextView tvValveBuangStatus, tvValveBuangSubtitle;
+    private TextView tvValveMinumStatus, tvValveMinumSubtitle;
 
     // ─── Views: Log ───
     private LinearLayout logContainer;
@@ -99,6 +102,14 @@ public class PerangkatActivity extends BaseActivity {
         ivPumpIcon         = findViewById(R.id.ivPumpIcon);
         tvPumpStatus       = findViewById(R.id.tvPumpStatus);
         tvPumpSubtitle     = findViewById(R.id.tvPumpSubtitle);
+
+        ivValveBuangIcon     = findViewById(R.id.ivValveBuangIcon);
+        tvValveBuangStatus   = findViewById(R.id.tvValveBuangStatus);
+        tvValveBuangSubtitle = findViewById(R.id.tvValveBuangSubtitle);
+
+        ivValveMinumIcon     = findViewById(R.id.ivValveMinumIcon);
+        tvValveMinumStatus   = findViewById(R.id.tvValveMinumStatus);
+        tvValveMinumSubtitle = findViewById(R.id.tvValveMinumSubtitle);
 
         logContainer       = findViewById(R.id.logContainer);
         tvLogPlaceholder   = findViewById(R.id.tvLogPlaceholder);
@@ -290,50 +301,53 @@ public class PerangkatActivity extends BaseActivity {
         monitoringListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                allLogs.clear();
-
-                if (!snapshot.exists()) {
-                    tvLogPlaceholder.setVisibility(View.VISIBLE);
-                    tvLogPlaceholder.setText("Belum ada log data sensor.");
-                    return;
+                // Hapus hanya log sensor lama agar log relay/perangkat tidak hilang
+                java.util.Iterator<LogItem> iterator = allLogs.iterator();
+                while (iterator.hasNext()) {
+                    LogItem item = iterator.next();
+                    if (item.detail.startsWith("Data sensor")) {
+                        iterator.remove();
+                    }
                 }
 
-                // Gunakan TreeMap terbalik agar log terbaru di atas
-                TreeMap<String, DataSnapshot> sorted = new TreeMap<>();
-                for (DataSnapshot child : snapshot.getChildren()) {
-                    sorted.put(child.getKey(), child);
-                }
-
-                // Buat log dari data monitoring
-                List<String> keys = new ArrayList<>(sorted.descendingKeySet());
-                for (String key : keys) {
-                    DataSnapshot entry = sorted.get(key);
-                    if (entry == null) continue;
-
-                    Object phRaw  = entry.child("ph").getValue();
-                    Object tanggal = entry.child("tanggal").getValue();
-                    Object waktu   = entry.child("waktu").getValue();
-
-                    if (phRaw == null) continue;
-
-                    float ph = toFloat(phRaw);
-                    String tgl = (tanggal != null) ? tanggal.toString() : "-";
-                    String wkt = (waktu   != null) ? waktu.toString()   : "-";
-
-                    String title;
-                    boolean isOk;
-                    if (ph >= 6.5f && ph <= 7.5f) {
-                        title = String.format(Locale.US, "pH Normal (%.2f) — Air Aman", ph);
-                        isOk = true;
-                    } else if (ph < 6.5f) {
-                        title = String.format(Locale.US, "pH Asam (%.2f) — Perlu Perhatian", ph);
-                        isOk = false;
-                    } else {
-                        title = String.format(Locale.US, "pH Basa (%.2f) — Perlu Perhatian", ph);
-                        isOk = false;
+                if (snapshot.exists()) {
+                    // Gunakan TreeMap terbalik agar log terbaru di atas
+                    TreeMap<String, DataSnapshot> sorted = new TreeMap<>();
+                    for (DataSnapshot child : snapshot.getChildren()) {
+                        sorted.put(child.getKey(), child);
                     }
 
-                    allLogs.add(new LogItem(title, "Data sensor • " + tgl + " " + wkt, isOk));
+                    // Buat log dari data monitoring
+                    List<String> keys = new ArrayList<>(sorted.descendingKeySet());
+                    for (String key : keys) {
+                        DataSnapshot entry = sorted.get(key);
+                        if (entry == null) continue;
+
+                        Object phRaw  = entry.child("ph").getValue();
+                        Object tanggal = entry.child("tanggal").getValue();
+                        Object waktu   = entry.child("waktu").getValue();
+
+                        if (phRaw == null) continue;
+
+                        float ph = toFloat(phRaw);
+                        String tgl = (tanggal != null) ? tanggal.toString() : "-";
+                        String wkt = (waktu   != null) ? waktu.toString()   : "-";
+
+                        String title;
+                        boolean isOk;
+                        if (ph >= 6.5f && ph <= 7.5f) {
+                            title = String.format(Locale.US, "pH Normal (%.2f) — Air Aman", ph);
+                            isOk = true;
+                        } else if (ph < 6.5f) {
+                            title = String.format(Locale.US, "pH Asam (%.2f) — Perlu Perhatian", ph);
+                            isOk = false;
+                        } else {
+                            title = String.format(Locale.US, "pH Basa (%.2f) — Perlu Perhatian", ph);
+                            isOk = false;
+                        }
+
+                        allLogs.add(new LogItem(title, "Data sensor • " + tgl + " " + wkt, isOk));
+                    }
                 }
 
                 renderPreviewLogs();
@@ -360,6 +374,16 @@ public class PerangkatActivity extends BaseActivity {
                     tvPumpStatus.setTextColor(Color.parseColor("#9E9E9E"));
                     tvPumpSubtitle.setText("Data relay tidak tersedia");
                     ivPumpIcon.setColorFilter(Color.parseColor("#9E9E9E"));
+
+                    tvValveBuangStatus.setText("Tidak diketahui");
+                    tvValveBuangStatus.setTextColor(Color.parseColor("#9E9E9E"));
+                    tvValveBuangSubtitle.setText("Data relay tidak tersedia");
+                    ivValveBuangIcon.setColorFilter(Color.parseColor("#9E9E9E"));
+
+                    tvValveMinumStatus.setText("Tidak diketahui");
+                    tvValveMinumStatus.setTextColor(Color.parseColor("#9E9E9E"));
+                    tvValveMinumSubtitle.setText("Data relay tidak tersedia");
+                    ivValveMinumIcon.setColorFilter(Color.parseColor("#9E9E9E"));
                     return;
                 }
 
@@ -368,39 +392,95 @@ public class PerangkatActivity extends BaseActivity {
                 boolean relayMinum = getBool(snapshot, "relay_minum");
                 boolean otomatis   = getBool(snapshot, "otomatis");
 
-                boolean anyOn = relayIsi || relayBuang || relayMinum;
+                boolean needRenderLogs = false;
+                String now = getCurrentTimeWITA();
 
-                if (anyOn) {
-                    // Pompa aktif
-                    String detail = "";
-                    if (relayIsi)   detail += "Isi ";
-                    if (relayBuang) detail += "Buang ";
-                    if (relayMinum) detail += "Minum ";
+                // ─── Pompa Air (Relay Isi) ───
+                if (relayIsi) {
                     tvPumpStatus.setText("Aktif");
                     tvPumpStatus.setTextColor(Color.parseColor("#2ECC71"));
-                    tvPumpSubtitle.setText("Relay: " + detail.trim() +
-                            (otomatis ? " · Mode Otomatis" : " · Mode Manual"));
+                    tvPumpSubtitle.setText(otomatis ? "Mode Otomatis · Menyala" : "Mode Manual · Menyala");
                     ivPumpIcon.setColorFilter(Color.parseColor("#2ECC71"));
 
-                    // Tambahkan log pompa aktif
-                    String now = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
                     boolean alreadyLogged = false;
                     for (LogItem li : allLogs) {
-                        if (li.title.startsWith("Pompa")) { alreadyLogged = true; break; }
+                        if (li.title.equals("Pompa Air (Relay) dinyalakan")) {
+                            alreadyLogged = true;
+                            break;
+                        }
                     }
                     if (!alreadyLogged) {
                         allLogs.add(0, new LogItem(
-                                "Pompa Aktif (" + detail.trim() + ")",
+                                "Pompa Air (Relay) dinyalakan",
                                 "Relay menyala • " + now,
                                 true));
-                        renderPreviewLogs();
+                        needRenderLogs = true;
                     }
                 } else {
-                    // Standby
                     tvPumpStatus.setText("Standby");
                     tvPumpStatus.setTextColor(Color.parseColor("#9E9E9E"));
-                    tvPumpSubtitle.setText(otomatis ? "Mode Otomatis · Menunggu" : "Mode Manual · Pompa mati");
+                    tvPumpSubtitle.setText(otomatis ? "Mode Otomatis · Mati" : "Mode Manual · Mati");
                     ivPumpIcon.setColorFilter(Color.parseColor("#9E9E9E"));
+                }
+
+                // ─── Valve Buang Air (Relay Buang) ───
+                if (relayBuang) {
+                    tvValveBuangStatus.setText("Aktif");
+                    tvValveBuangStatus.setTextColor(Color.parseColor("#2ECC71"));
+                    tvValveBuangSubtitle.setText(otomatis ? "Mode Otomatis · Menyala" : "Mode Manual · Menyala");
+                    ivValveBuangIcon.setColorFilter(Color.parseColor("#2ECC71"));
+
+                    boolean alreadyLogged = false;
+                    for (LogItem li : allLogs) {
+                        if (li.title.equals("Valve Buang Air (Relay) dinyalakan")) {
+                            alreadyLogged = true;
+                            break;
+                        }
+                    }
+                    if (!alreadyLogged) {
+                        allLogs.add(0, new LogItem(
+                                "Valve Buang Air (Relay) dinyalakan",
+                                "Relay menyala • " + now,
+                                true));
+                        needRenderLogs = true;
+                    }
+                } else {
+                    tvValveBuangStatus.setText("Standby");
+                    tvValveBuangStatus.setTextColor(Color.parseColor("#9E9E9E"));
+                    tvValveBuangSubtitle.setText(otomatis ? "Mode Otomatis · Mati" : "Mode Manual · Mati");
+                    ivValveBuangIcon.setColorFilter(Color.parseColor("#9E9E9E"));
+                }
+
+                // ─── Valve Kran Air Minum (Relay Minum) ───
+                if (relayMinum) {
+                    tvValveMinumStatus.setText("Aktif");
+                    tvValveMinumStatus.setTextColor(Color.parseColor("#2ECC71"));
+                    tvValveMinumSubtitle.setText(otomatis ? "Mode Otomatis · Menyala" : "Mode Manual · Menyala");
+                    ivValveMinumIcon.setColorFilter(Color.parseColor("#2ECC71"));
+
+                    boolean alreadyLogged = false;
+                    for (LogItem li : allLogs) {
+                        if (li.title.equals("Valve Kran Air Minum (Relay) dinyalakan")) {
+                            alreadyLogged = true;
+                            break;
+                        }
+                    }
+                    if (!alreadyLogged) {
+                        allLogs.add(0, new LogItem(
+                                "Valve Kran Air Minum (Relay) dinyalakan",
+                                "Relay menyala • " + now,
+                                true));
+                        needRenderLogs = true;
+                    }
+                } else {
+                    tvValveMinumStatus.setText("Standby");
+                    tvValveMinumStatus.setTextColor(Color.parseColor("#9E9E9E"));
+                    tvValveMinumSubtitle.setText(otomatis ? "Mode Otomatis · Mati" : "Mode Manual · Mati");
+                    ivValveMinumIcon.setColorFilter(Color.parseColor("#9E9E9E"));
+                }
+
+                if (needRenderLogs) {
+                    renderPreviewLogs();
                 }
             }
 
@@ -440,6 +520,15 @@ public class PerangkatActivity extends BaseActivity {
             }
             logContainer.addView(buildLogItemView(allLogs.get(i), i < count - 1));
         }
+    }
+
+    // =========================================================
+    // HELPER: Ambil waktu sekarang sesuai WITA (Kalimantan Selatan)
+    // =========================================================
+    private String getCurrentTimeWITA() {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        sdf.setTimeZone(java.util.TimeZone.getTimeZone("Asia/Makassar"));
+        return sdf.format(new Date());
     }
 
     // =========================================================
@@ -566,6 +655,16 @@ public class PerangkatActivity extends BaseActivity {
         tvPumpSubtitle.setText("Perangkat offline");
         ivPumpIcon.setColorFilter(Color.parseColor("#9E9E9E"));
 
+        tvValveBuangStatus.setText("Tidak diketahui");
+        tvValveBuangStatus.setTextColor(Color.parseColor("#9E9E9E"));
+        tvValveBuangSubtitle.setText("Perangkat offline");
+        ivValveBuangIcon.setColorFilter(Color.parseColor("#9E9E9E"));
+
+        tvValveMinumStatus.setText("Tidak diketahui");
+        tvValveMinumStatus.setTextColor(Color.parseColor("#9E9E9E"));
+        tvValveMinumSubtitle.setText("Perangkat offline");
+        ivValveMinumIcon.setColorFilter(Color.parseColor("#9E9E9E"));
+
         // Log offline
         addOfflineLogIfNeeded();
     }
@@ -574,7 +673,7 @@ public class PerangkatActivity extends BaseActivity {
         for (LogItem li : allLogs) {
             if (li.title.equals("Perangkat Terhubung")) return;
         }
-        String now = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
+        String now = getCurrentTimeWITA();
         allLogs.add(0, new LogItem("Perangkat Terhubung",
                 "Koneksi berhasil ke Firebase • " + now, true));
         renderPreviewLogs();
@@ -584,7 +683,7 @@ public class PerangkatActivity extends BaseActivity {
         for (LogItem li : allLogs) {
             if (li.title.equals("Perangkat Offline")) return;
         }
-        String now = new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date());
+        String now = getCurrentTimeWITA();
         allLogs.add(0, new LogItem("Perangkat Offline",
                 "Tidak ada data dari sensor • " + now, false));
         renderPreviewLogs();
