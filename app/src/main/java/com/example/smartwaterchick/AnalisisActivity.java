@@ -199,11 +199,33 @@ public class AnalisisActivity extends BaseActivity {
 
     // ── Fetch dari Firebase (fallback jika listener belum mengisi data) ────
     private void fetchAllDataThenExport() {
-        dbRef.child("volume_air").addListenerForSingleValueEvent(new ValueEventListener() {
+        dbRef.child("volume_air").child("daily").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override public void onDataChange(@NonNull DataSnapshot snap) {
-                if (dailyVolData.isEmpty())   dailyVolData   = extractLiters(snap.child("daily"));
-                if (weeklyVolData.isEmpty())  weeklyVolData  = extractLiters(snap.child("weekly"));
-                if (monthlyVolData.isEmpty()) monthlyVolData = extractLiters(snap.child("monthly"));
+                // Ambil dan urutkan semua entry harian dari Firebase
+                java.util.TreeMap<String, String> sorted = new java.util.TreeMap<>();
+                for (DataSnapshot ds : snap.getChildren()) {
+                    Object liter = ds.child("liter").getValue();
+                    if (ds.getKey() != null && liter != null) {
+                        sorted.put(ds.getKey(), liter.toString());
+                    }
+                }
+                java.util.List<String> keys = new ArrayList<>(sorted.keySet());
+
+                // Slice untuk masing-masing periode
+                if (dailyVolData.isEmpty()) {
+                    dailyVolData = new ArrayList<>();
+                    if (!keys.isEmpty()) dailyVolData.add(sorted.get(keys.get(keys.size() - 1)));
+                }
+                if (weeklyVolData.isEmpty()) {
+                    int s = Math.max(0, keys.size() - 7);
+                    weeklyVolData = new ArrayList<>();
+                    for (int i = s; i < keys.size(); i++) weeklyVolData.add(sorted.get(keys.get(i)));
+                }
+                if (monthlyVolData.isEmpty()) {
+                    int s = Math.max(0, keys.size() - 30);
+                    monthlyVolData = new ArrayList<>();
+                    for (int i = s; i < keys.size(); i++) monthlyVolData.add(sorted.get(keys.get(i)));
+                }
 
                 dbRef.child("monitoring").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override public void onDataChange(@NonNull DataSnapshot phSnap) {
@@ -332,26 +354,78 @@ public class AnalisisActivity extends BaseActivity {
     }
 
     // =====================================================================
-    // LISTENER REAL-TIME Volume Air
+    // LISTENER REAL-TIME Volume Air — membaca dari /volume_air/daily
+    // dan menyusun data harian/mingguan/bulanan sendiri
     // =====================================================================
+    private android.widget.TextView tvTotalDigunakan;
+
     private void listenBarChart(String tipe, int limit) {
         if (barListener != null && barQuery != null) barQuery.removeEventListener(barListener);
-        barQuery = dbRef.child("volume_air").child(tipe).limitToLast(limit);
+
+        // Ambil referensi tvTotalDigunakan jika belum
+        if (tvTotalDigunakan == null) {
+            tvTotalDigunakan = findViewById(R.id.tvTotalDigunakan);
+        }
+
+        // Selalu baca dari /volume_air/daily — sumber data aktual ESP32
+        // Ambil 30 hari terakhir (cukup untuk semua mode filter)
+        barQuery = dbRef.child("volume_air").child("daily").limitToLast(30);
         barListener = new ValueEventListener() {
-            @Override public void onDataChange(@NonNull DataSnapshot snapshot) {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // Kumpulkan semua entry harian, diurutkan berdasarkan kunci (tanggal)
+                java.util.TreeMap<String, Float> allDaily = new java.util.TreeMap<>();
+                for (DataSnapshot entry : snapshot.getChildren()) {
+                    String key = entry.getKey(); // format: "YYYY-MM-DD"
+                    Object liter = entry.child("liter").getValue();
+                    if (key != null && liter != null) {
+                        float val = liter instanceof Double ? ((Double) liter).floatValue()
+                                : liter instanceof Long   ? ((Long) liter).floatValue()
+                                : liter instanceof Float  ? (Float) liter : 0f;
+                        allDaily.put(key, val);
+                    }
+                }
+
                 ArrayList<Float>  fl  = new ArrayList<>();
                 ArrayList<String> lbs = new ArrayList<>();
                 List<String>      sl  = new ArrayList<>();
-                for (DataSnapshot entry : snapshot.getChildren()) {
-                    Object liter = entry.child("liter").getValue();
-                    if (liter != null) {
-                        float val = liter instanceof Double ? ((Double)liter).floatValue()
-                                  : liter instanceof Long   ? ((Long)liter).floatValue() : 0f;
-                        fl.add(val); sl.add(String.valueOf(val));
+
+                java.util.List<String> sortedKeys = new ArrayList<>(allDaily.keySet());
+                // sortedKeys sudah terurut ascending (lama → baru) karena TreeMap
+
+                if (tipe.equals("daily")) {
+                    // Tampilkan hanya hari ini (entry terbaru)
+                    if (!sortedKeys.isEmpty()) {
+                        String key = sortedKeys.get(sortedKeys.size() - 1);
+                        float val  = allDaily.get(key);
+                        fl.add(val);
+                        sl.add(String.valueOf(val));
+                        // Format label: ambil hanya tanggal (bagian terakhir setelah tanda "-" ke-2)
+                        lbs.add(shortDate(key));
                     }
-                    lbs.add(entry.child("label").getValue() != null
-                        ? String.valueOf(entry.child("label").getValue()) : entry.getKey());
+
+                } else if (tipe.equals("weekly")) {
+                    // Tampilkan 7 hari terakhir
+                    int start = Math.max(0, sortedKeys.size() - 7);
+                    for (int i = start; i < sortedKeys.size(); i++) {
+                        String key = sortedKeys.get(i);
+                        float val  = allDaily.get(key);
+                        fl.add(val);
+                        sl.add(String.valueOf(val));
+                        lbs.add(shortDate(key));
+                    }
+
+                } else { // monthly — tampilkan hingga 30 hari terakhir
+                    int start = Math.max(0, sortedKeys.size() - 30);
+                    for (int i = start; i < sortedKeys.size(); i++) {
+                        String key = sortedKeys.get(i);
+                        float val  = allDaily.get(key);
+                        fl.add(val);
+                        sl.add(String.valueOf(val));
+                        lbs.add(shortDate(key));
+                    }
                 }
+
                 // Update list untuk export XLS
                 if ("daily".equals(tipe))       dailyVolData   = sl;
                 else if ("weekly".equals(tipe)) weeklyVolData  = sl;
@@ -359,14 +433,58 @@ public class AnalisisActivity extends BaseActivity {
 
                 updateInformasiTerkini();
 
-                barChart.loadDataFromDatabase(fl, lbs, tipe);
+                // Update ringkasan "Total Digunakan"
+                if (tvTotalDigunakan != null && !fl.isEmpty()) {
+                    float total = 0;
+                    for (float v : fl) total += v;
+                    if (tipe.equals("daily")) {
+                        tvTotalDigunakan.setText(String.format(java.util.Locale.getDefault(), "%.2f L", total));
+                    } else {
+                        tvTotalDigunakan.setText(String.format(java.util.Locale.getDefault(), "%.2f L", total));
+                    }
+                }
+
+                // Hitung skala Y secara dinamis
+                float maxVal = 0.001f;
+                for (float v : fl) if (v > maxVal) maxVal = v;
+                // Bulatkan ke atas ke nilai "cantik"
+                float scale = computeNiceMax(maxVal);
+
+                barChart.loadDataFromDatabase(fl, lbs, tipe, scale);
             }
-            @Override public void onCancelled(@NonNull DatabaseError e) {
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError e) {
                 Toast.makeText(AnalisisActivity.this,
                     "Gagal memuat volume: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         };
         barQuery.addValueEventListener(barListener);
+    }
+
+    /** Ambil dua digit terakhir tanggal (DD) dari key "YYYY-MM-DD" sebagai label ringkas */
+    private String shortDate(String key) {
+        if (key == null) return "-";
+        String[] parts = key.split("-");
+        if (parts.length == 3) {
+            // Buang leading zero: "08" → "8"
+            try { return String.valueOf(Integer.parseInt(parts[2])); } catch (Exception ignored) {}
+            return parts[2];
+        }
+        return key;
+    }
+
+    /** Hitung skala Y maksimum yang "bulat" di atas nilai tertinggi data */
+    private float computeNiceMax(float max) {
+        if (max <= 0) return 2.0f;
+        // Langkah yang digunakan: 0.5 L, 1 L, 2 L, 5 L, 10 L, 20 L, 50 L, dst.
+        float[] steps = {0.5f, 1f, 2f, 5f, 10f, 20f, 50f, 100f, 200f, 500f, 1000f};
+        float target = max * 1.25f; // 25% ruang di atas nilai tertinggi
+        for (float s : steps) {
+            float ceiling = (float) Math.ceil(target / s) * s;
+            if (ceiling >= target) return ceiling;
+        }
+        return (float) Math.ceil(max * 1.3f);
     }
 
     private void updateInformasiTerkini() {

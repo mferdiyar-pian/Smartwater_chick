@@ -97,7 +97,7 @@ public class BarChartView extends View {
         int w = getWidth();
         int h = getHeight();
 
-        float padLeft  = 80f;
+        float padLeft  = 90f;
         float padRight = 16f;
         float padTop   = 20f;
         float padBottom = 50f;
@@ -106,13 +106,15 @@ public class BarChartView extends View {
         float chartH = h - padTop - padBottom;
 
         // Grid lines Y
-        textPaint.setTextSize(22f);
+        textPaint.setTextSize(20f);
         for (float val : yGridValues) {
             float ratio = val / maxValue;
             float y = padTop + chartH - (ratio * chartH);
             canvas.drawLine(padLeft, y, w - padRight, y, gridPaint);
             textPaint.setTextAlign(Paint.Align.RIGHT);
-            canvas.drawText(String.valueOf((int) val), padLeft - 10f, y + 8f, textPaint);
+            // Format label Y: tampilkan dalam liter, ringkas
+            String yLabel = formatLiterLabel(val);
+            canvas.drawText(yLabel, padLeft - 6f, y + 7f, textPaint);
         }
 
         int n = data.length;
@@ -163,13 +165,18 @@ public class BarChartView extends View {
 
     private void drawTooltip(Canvas canvas, int index) {
         String labelStr = labels[index];
+        // Format nilai: gunakan desimal jika < 10 L, bulat jika >= 10 L
+        float val = data[index];
+        String valStr = val < 10f
+            ? String.format(java.util.Locale.getDefault(), "%.3f L", val)
+            : String.format(java.util.Locale.getDefault(), "%.2f L", val);
         String text;
         if (currentTipe.equals("daily")) {
-            text = "Hari ini: " + String.format("%.0f L", data[index]);
+            text = "Hari ini: " + valStr;
         } else if (currentTipe.equals("weekly")) {
-            text = "Hari " + labelStr + ": " + String.format("%.0f L", data[index]);
+            text = "Tgl " + labelStr + ": " + valStr;
         } else {
-            text = "Tgl " + labelStr + ": " + String.format("%.0f L", data[index]);
+            text = "Tgl " + labelStr + ": " + valStr;
         }
 
         float paddingX  = 18f;
@@ -242,59 +249,63 @@ public class BarChartView extends View {
         invalidate();
     }
 
-    public void loadDataFromDatabase(ArrayList<Float> dataList, ArrayList<String> labelList, String tipe) {
+    public void loadDataFromDatabase(ArrayList<Float> dataList, ArrayList<String> labelList,
+                                     String tipe, float scale) {
         this.currentTipe = tipe;
         if (dataList == null || dataList.isEmpty() || labelList == null || labelList.isEmpty()) {
             setDefaultData(tipe);
             return;
         }
 
-        float[] newData   = new float[dataList.size()];
+        float[] newData    = new float[dataList.size()];
         String[] newLabels = new String[labelList.size()];
         for (int i = 0; i < dataList.size(); i++) {
-            newData[i]   = dataList.get(i);
-            newLabels[i] = labelList.get(i);
+            newData[i]    = dataList.get(i);
+            newLabels[i]  = labelList.get(i);
         }
 
-        if (tipe.equals("weekly")) {
-            yGridValues = new float[]{0f, 40f, 80f, 120f, 160f, 200f};
-            setData(newData, newLabels, 200f);
-        } else if (tipe.equals("monthly")) {
-            yGridValues = new float[]{0f, 40f, 80f, 120f, 160f, 200f};
-            setData(newData, newLabels, 200f);
-        } else { // daily
-            yGridValues = new float[]{0f, 40f, 80f, 120f, 160f, 200f};
-            setData(newData, newLabels, 200f);
+        // Bangun grid Y: 5 garis rata dari 0 hingga scale
+        yGridValues = buildYGrid(scale, 5);
+        setData(newData, newLabels, scale);
+    }
+
+    /** Bangun array nilai grid Y yang rata (misal 5 bagian dari 0..max) */
+    private float[] buildYGrid(float max, int divisions) {
+        float[] grid = new float[divisions + 1];
+        for (int i = 0; i <= divisions; i++) {
+            grid[i] = max * i / divisions;
         }
+        return grid;
     }
 
     private void setDefaultData(String tipe) {
+        // Tampilkan placeholder kosong — data nyata belum tersedia dari Firebase
+        float[] d;
+        String[] l;
         if (tipe.equals("daily")) {
-            // 1 Hari = hanya hari ini (1 batang)
-            float[] d  = {120f};
-            String[] l = {"Hari ini"};
-            yGridValues = new float[]{0f, 40f, 80f, 120f, 160f, 200f};
-            setData(d, l, 200f);
+            d = new float[]{0f};
+            l = new String[]{"--"};
         } else if (tipe.equals("weekly")) {
-            // 1 Minggu = 7 hari terakhir
-            float[] d  = {85f, 92f, 78f, 105f, 120f, 95f, 140f};
-            String[] l = {"1","2","3","4","5","6","7"};
-            yGridValues = new float[]{0f, 40f, 80f, 120f, 160f, 200f};
-            setData(d, l, 200f);
+            d = new float[]{0f, 0f, 0f, 0f, 0f, 0f, 0f};
+            l = new String[]{"1","2","3","4","5","6","7"};
         } else {
-            // 1 Bulan = 30 hari
-            float[] d  = {
-                85f, 92f, 78f, 105f, 120f, 95f, 140f, 88f, 112f, 135f,
-                76f, 98f, 125f, 82f, 110f, 145f, 90f, 118f, 132f, 160f,
-                88f, 97f, 115f, 80f, 130f, 100f, 142f, 95f, 108f, 125f
-            };
-            String[] l = {
-                "1","2","3","4","5","6","7","8","9","10",
-                "11","12","13","14","15","16","17","18","19","20",
-                "21","22","23","24","25","26","27","28","29","30"
-            };
-            yGridValues = new float[]{0f, 40f, 80f, 120f, 160f, 200f};
-            setData(d, l, 200f);
+            d = new float[7];
+            l = new String[]{"1","7","14","21","28","29","30"};
+        }
+        yGridValues = buildYGrid(2.0f, 5);
+        setData(d, l, 2.0f);
+    }
+
+    /** Format nilai liter menjadi label ringkas untuk sumbu Y */
+    private String formatLiterLabel(float val) {
+        if (val == 0) return "0";
+        if (val >= 1f) {
+            // Nilai >= 1 L: tampilkan 1 desimal jika tidak bulat, atau bulat
+            if (val == (int) val) return String.valueOf((int) val) + "L";
+            return String.format(java.util.Locale.getDefault(), "%.1fL", val);
+        } else {
+            // Nilai < 1 L (dalam mL range): tampilkan 2 desimal
+            return String.format(java.util.Locale.getDefault(), "%.2f", val);
         }
     }
 }
