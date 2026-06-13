@@ -548,7 +548,7 @@ public class PerangkatActivity extends BaseActivity {
 
         // WiFi tidak terhubung
         ivWifiIcon.setColorFilter(Color.parseColor("#E74C3C"));
-        tvWifiStatus.setText("Tidak Terhubung");
+        tvWifiStatus.setText("Offline");
         tvWifiStatus.setTextColor(Color.parseColor("#E74C3C"));
 
         // Sinyal tidak ada

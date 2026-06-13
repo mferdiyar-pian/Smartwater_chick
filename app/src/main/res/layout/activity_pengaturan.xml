@@ -173,12 +173,14 @@
                             android:paddingBottom="3dp">
 
                             <View
+                                android:id="@+id/viewOnlineDot"
                                 android:layout_width="7dp"
                                 android:layout_height="7dp"
                                 android:background="@drawable/bg_dot_green"
                                 android:layout_marginEnd="5dp" />
 
                             <TextView
+                                android:id="@+id/tvOnlineStatus"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="ONLINE"

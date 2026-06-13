@@ -26,10 +26,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 
+import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -42,6 +46,11 @@ public class PengaturanActivity extends BaseActivity {
     private static final String PREF_PHOTO_PATH = "foto_profil_path";
     private ImageView ivAvatar;
     private SharedPreferences prefs;
+
+    private DatabaseReference dbRef;
+    private ValueEventListener statusListener;
+    private View viewOnlineDot;
+    private TextView tvOnlineStatus;
 
     // Launcher untuk membuka galeri
     private final ActivityResultLauncher<Intent> pickImageLauncher =
@@ -82,6 +91,12 @@ public class PengaturanActivity extends BaseActivity {
         // Load foto profil jika ada
         ivAvatar = findViewById(R.id.ivAvatar);
         loadSavedPhoto();
+
+        // Inisialisasi online status views & Firebase
+        viewOnlineDot = findViewById(R.id.viewOnlineDot);
+        tvOnlineStatus = findViewById(R.id.tvOnlineStatus);
+        dbRef = FirebaseDatabase.getInstance().getReference();
+        startStatusListener();
 
 
         // Tap avatar → tampilkan pilihan (Pilih Foto / Hapus Foto)
@@ -330,5 +345,83 @@ public class PengaturanActivity extends BaseActivity {
                 })
                 .setNegativeButton("Batal", null)
                 .show();
+    }
+
+    private void startStatusListener() {
+        statusListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    setDeviceOffline();
+                    return;
+                }
+
+                Object phRaw = snapshot.child("ph_terkini").getValue();
+                Object literRaw = snapshot.child("kapasitas_liter").getValue();
+                Object persenRaw = snapshot.child("kapasitas_persen").getValue();
+                Object lastSeenRaw = snapshot.child("last_seen").getValue();
+
+                boolean isOnline = false;
+                if (lastSeenRaw != null) {
+                    long lastSeen = toLong(lastSeenRaw);
+                    long currentEpoch = System.currentTimeMillis() / 1000;
+                    isOnline = Math.abs(currentEpoch - lastSeen) < 90;
+                } else {
+                    isOnline = (phRaw != null) || (literRaw != null) || (persenRaw != null);
+                }
+
+                if (isOnline) {
+                    setDeviceOnline();
+                } else {
+                    setDeviceOffline();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                setDeviceOffline();
+            }
+        };
+        dbRef.child("kontrol_status").addValueEventListener(statusListener);
+    }
+
+    private void setDeviceOnline() {
+        if (tvOnlineStatus != null) {
+            tvOnlineStatus.setText("ONLINE");
+            tvOnlineStatus.setTextColor(Color.parseColor("#2ECC71"));
+        }
+        if (viewOnlineDot != null) {
+            viewOnlineDot.setBackgroundResource(R.drawable.bg_dot_green);
+        }
+    }
+
+    private void setDeviceOffline() {
+        if (tvOnlineStatus != null) {
+            tvOnlineStatus.setText("OFFLINE");
+            tvOnlineStatus.setTextColor(Color.parseColor("#E74C3C"));
+        }
+        if (viewOnlineDot != null) {
+            viewOnlineDot.setBackgroundResource(R.drawable.bg_dot_red);
+        }
+    }
+
+    private long toLong(Object val) {
+        if (val instanceof Long)    return (Long) val;
+        if (val instanceof Double)  return ((Double) val).longValue();
+        if (val instanceof Integer) return ((Integer) val).longValue();
+        if (val instanceof Float)   return ((Float) val).longValue();
+        try {
+            return Long.parseLong(val.toString());
+        } catch (Exception e) {
+            return 0L;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (statusListener != null && dbRef != null) {
+            dbRef.child("kontrol_status").removeEventListener(statusListener);
+        }
     }
 }
