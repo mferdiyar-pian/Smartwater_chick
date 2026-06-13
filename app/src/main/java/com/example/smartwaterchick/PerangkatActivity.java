@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -127,12 +126,10 @@ public class PerangkatActivity extends BaseActivity {
         });
 
         // ─── Notifikasi ───
-        findViewById(R.id.ivNotification).setOnClickListener(v -> {
-            PopupMenu popup = new PopupMenu(PerangkatActivity.this, v);
-            popup.getMenu().add("Peringatan: pH Air di Tangki 1 Rendah (5.5)");
-            popup.getMenu().add("Info: Kapasitas Air berkurang.");
-            popup.show();
-        });
+        ImageView ivNotifIcon = findViewById(R.id.ivNotification);
+        NotificationSystem.getInstance().registerNotificationIcon(ivNotifIcon);
+        ivNotifIcon.setOnClickListener(v ->
+                NotificationSystem.getInstance().showNotificationMenu(PerangkatActivity.this, v));
 
         // ─── Settings ───
         findViewById(R.id.ivSettings).setOnClickListener(v -> {
@@ -757,6 +754,7 @@ public class PerangkatActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        NotificationSystem.getInstance().unregisterNotificationIcon(findViewById(R.id.ivNotification));
         if (statusListener != null)
             dbRef.child("kontrol_status").removeEventListener(statusListener);
         if (monitoringListener != null)

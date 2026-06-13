@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
-import android.widget.PopupMenu;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -145,11 +145,10 @@ public class AnalisisActivity extends BaseActivity {
             finish();
         });
 
-        findViewById(R.id.ivNotification).setOnClickListener(v -> {
-            PopupMenu popup = new PopupMenu(this, v);
-            popup.getMenu().add("Peringatan: pH Air di Tangki 1 Rendah (5.5)");
-            popup.getMenu().add("Info: Kapasitas Air berkurang.");
-            popup.show();
+        ImageView ivNotification = findViewById(R.id.ivNotification);
+        NotificationSystem.getInstance().registerNotificationIcon(ivNotification);
+        ivNotification.setOnClickListener(v -> {
+            NotificationSystem.getInstance().showNotificationMenu(this, v);
         });
 
         findViewById(R.id.ivSettings).setOnClickListener(v -> {
@@ -591,6 +590,7 @@ public class AnalisisActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        NotificationSystem.getInstance().unregisterNotificationIcon(findViewById(R.id.ivNotification));
         if (phListener  != null && phQuery  != null) phQuery.removeEventListener(phListener);
         if (barListener != null && barQuery != null) barQuery.removeEventListener(barListener);
     }

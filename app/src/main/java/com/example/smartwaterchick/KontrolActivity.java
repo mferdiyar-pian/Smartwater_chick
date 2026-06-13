@@ -114,12 +114,10 @@ public class KontrolActivity extends BaseActivity {
         });
 
         // ─── Notification ───
-        findViewById(R.id.ivNotification).setOnClickListener(v -> {
-            PopupMenu popup = new PopupMenu(KontrolActivity.this, v);
-            popup.getMenu().add("Peringatan: pH Air di Tangki 1 Rendah (5.5)");
-            popup.getMenu().add("Info: Kapasitas Air berkurang.");
-            popup.show();
-        });
+        ImageView ivNotification = findViewById(R.id.ivNotification);
+        NotificationSystem.getInstance().registerNotificationIcon(ivNotification);
+        ivNotification.setOnClickListener(v ->
+                NotificationSystem.getInstance().showNotificationMenu(KontrolActivity.this, v));
 
         // ─── Settings ───
         findViewById(R.id.ivSettings).setOnClickListener(v -> {
@@ -540,6 +538,7 @@ public class KontrolActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        NotificationSystem.getInstance().unregisterNotificationIcon(findViewById(R.id.ivNotification));
         if (phListener    != null) dbStatus.child("ph_terkini").removeEventListener(phListener);
         if (waterListener != null) dbStatus.removeEventListener(waterListener);
     }

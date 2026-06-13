@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.PopupMenu;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,11 +74,10 @@ public class DashboardActivity extends BaseActivity {
         }
 
         // ─── Notification icon ───
-        findViewById(R.id.ivNotification).setOnClickListener(v -> {
-            PopupMenu popup = new PopupMenu(DashboardActivity.this, v);
-            popup.getMenu().add("Peringatan: pH Air di Tangki 1 Rendah (5.5)");
-            popup.getMenu().add("Info: Kapasitas Air berkurang.");
-            popup.show();
+        ImageView ivNotification = findViewById(R.id.ivNotification);
+        NotificationSystem.getInstance().registerNotificationIcon(ivNotification);
+        ivNotification.setOnClickListener(v -> {
+            NotificationSystem.getInstance().showNotificationMenu(DashboardActivity.this, v);
         });
 
         // ─── Settings icon ───
@@ -327,12 +326,10 @@ public class DashboardActivity extends BaseActivity {
         }
     }
 
-    // =========================================================
-    // LIFECYCLE — Lepas listener saat Activity ditutup
-    // =========================================================
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        NotificationSystem.getInstance().unregisterNotificationIcon(findViewById(R.id.ivNotification));
         if (phListener != null)
             dbRef.child("kontrol_status").child("ph_terkini").removeEventListener(phListener);
         if (waterListener != null)

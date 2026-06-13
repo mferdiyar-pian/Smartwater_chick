@@ -25,6 +25,8 @@ public class PengaturanNotifikasiActivity extends BaseActivity {
         SwitchCompat switchPush = findViewById(R.id.switchPush);
         SwitchCompat switchCritical = findViewById(R.id.switchCritical);
         SwitchCompat switchWaterLevel = findViewById(R.id.switchWaterLevel);
+        SwitchCompat switchWifiStatus = findViewById(R.id.switchWifiStatus);
+        SwitchCompat switchRelayStatus = findViewById(R.id.switchRelayStatus);
         SwitchCompat switchSound = findViewById(R.id.switchSound);
         SwitchCompat switchVibrate = findViewById(R.id.switchVibrate);
 
@@ -32,6 +34,8 @@ public class PengaturanNotifikasiActivity extends BaseActivity {
         switchPush.setChecked(prefs.getBoolean("notif_push", true));
         switchCritical.setChecked(prefs.getBoolean("notif_critical", true));
         switchWaterLevel.setChecked(prefs.getBoolean("notif_water_level", true));
+        switchWifiStatus.setChecked(prefs.getBoolean("notif_wifi", true));
+        switchRelayStatus.setChecked(prefs.getBoolean("notif_relay", true));
         switchSound.setChecked(prefs.getBoolean("notif_sound", true));
         switchVibrate.setChecked(prefs.getBoolean("notif_vibrate", true));
 
@@ -50,6 +54,14 @@ public class PengaturanNotifikasiActivity extends BaseActivity {
 
         switchWaterLevel.setOnCheckedChangeListener((buttonView, isChecked) -> {
             editor.putBoolean("notif_water_level", isChecked).apply();
+        });
+
+        switchWifiStatus.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            editor.putBoolean("notif_wifi", isChecked).apply();
+        });
+
+        switchRelayStatus.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            editor.putBoolean("notif_relay", isChecked).apply();
         });
 
         switchSound.setOnCheckedChangeListener((buttonView, isChecked) -> {
