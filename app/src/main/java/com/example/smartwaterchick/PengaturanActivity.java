@@ -27,7 +27,6 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -84,18 +83,6 @@ public class PengaturanActivity extends BaseActivity {
         ivAvatar = findViewById(R.id.ivAvatar);
         loadSavedPhoto();
 
-        // Setup toggle Dark Mode
-        SwitchMaterial switchDarkMode = findViewById(R.id.switchDarkMode);
-        boolean isDark = prefs.getBoolean(BaseActivity.PREF_DARK_MODE, false);
-        switchDarkMode.setChecked(isDark);
-        switchDarkMode.setOnCheckedChangeListener((btn, isChecked) -> {
-            prefs.edit().putBoolean(BaseActivity.PREF_DARK_MODE, isChecked).apply();
-            AppCompatDelegate.setDefaultNightMode(
-                    isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
-            );
-            // Recreate semua activity agar tema terapply
-            recreate();
-        });
 
         // Tap avatar → tampilkan pilihan (Pilih Foto / Hapus Foto)
         findViewById(R.id.frameAvatar).setOnClickListener(v -> tampilkanDialogFoto());
