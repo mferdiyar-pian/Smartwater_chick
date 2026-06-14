@@ -315,34 +315,136 @@ public class AnalisisActivity extends BaseActivity {
     // =====================================================================
     private void listenPhChart(int limit, String period) {
         if (phListener != null && phQuery != null) phQuery.removeEventListener(phListener);
-        phQuery = dbRef.child("monitoring").limitToLast(limit);
+        // Selalu ambil 2000 data terakhir untuk di-grouping berdasarkan jam/hari
+        phQuery = dbRef.child("monitoring").limitToLast(2000);
         phListener = new ValueEventListener() {
             @Override public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ArrayList<Float> fl = new ArrayList<>();
-                List<String> sl    = new ArrayList<>();
-                for (DataSnapshot entry : snapshot.getChildren()) {
-                    Object v = entry.child("ph").getValue();
-                    if (v != null) {
-                        float ph = v instanceof Double ? ((Double)v).floatValue()
-                                 : v instanceof Long   ? ((Long)v).floatValue() : 0f;
-                        fl.add(ph); sl.add(String.valueOf(ph));
+                ArrayList<String> labels = new ArrayList<>();
+                List<String> sl = new ArrayList<>();
+
+                String todayStr = getTodayWitaStr();
+
+                if ("daily".equals(period)) {
+                    // Grouping per jam khusus HARI INI (atau tanggal terakhir yang ada datanya)
+                    String targetDate = todayStr;
+                    boolean hasTodayData = false;
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        String t = ds.child("tanggal").getValue(String.class);
+                        if (todayStr.equals(t)) {
+                            hasTodayData = true;
+                            break;
+                        }
                     }
+                    if (!hasTodayData) {
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            String t = ds.child("tanggal").getValue(String.class);
+                            if (t != null) targetDate = t;
+                        }
+                    }
+
+                    // Map Jam (0-23) -> List Nilai pH
+                    java.util.TreeMap<Integer, List<Float>> hourlyMap = new java.util.TreeMap<>();
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        String t = ds.child("tanggal").getValue(String.class);
+                        if (targetDate.equals(t)) {
+                            Object v = ds.child("ph").getValue();
+                            String w = ds.child("waktu").getValue(String.class);
+                            if (v != null && w != null) {
+                                float ph = v instanceof Double ? ((Double)v).floatValue()
+                                         : v instanceof Long   ? ((Long)v).floatValue() : 0f;
+                                int hour = parseHour(w);
+                                if (hour >= 0 && hour <= 23) {
+                                    if (!hourlyMap.containsKey(hour)) {
+                                        hourlyMap.put(hour, new ArrayList<>());
+                                    }
+                                    hourlyMap.get(hour).add(ph);
+                                }
+                            }
+                        }
+                    }
+
+                    for (int hour : hourlyMap.keySet()) {
+                        List<Float> values = hourlyMap.get(hour);
+                        float sum = 0f;
+                        for (float val : values) sum += val;
+                        float avg = values.isEmpty() ? 0f : sum / values.size();
+                        fl.add(avg);
+                        sl.add(String.format(java.util.Locale.US, "%.2f", avg));
+                        labels.add(String.format(java.util.Locale.US, "%02d:00", hour));
+                    }
+                    dailyPhData = sl;
+
+                } else if ("weekly".equals(period)) {
+                    // Grouping per hari untuk 7 hari terakhir
+                    java.util.TreeMap<String, List<Float>> dailyMap = new java.util.TreeMap<>();
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        String t = ds.child("tanggal").getValue(String.class);
+                        Object v = ds.child("ph").getValue();
+                        if (t != null && v != null) {
+                            float ph = v instanceof Double ? ((Double)v).floatValue()
+                                     : v instanceof Long   ? ((Long)v).floatValue() : 0f;
+                            if (!dailyMap.containsKey(t)) {
+                                dailyMap.put(t, new ArrayList<>());
+                            }
+                            dailyMap.get(t).add(ph);
+                        }
+                    }
+
+                    java.util.List<String> sortedDates = new ArrayList<>(dailyMap.keySet());
+                    int start = Math.max(0, sortedDates.size() - 7);
+                    for (int i = start; i < sortedDates.size(); i++) {
+                        String date = sortedDates.get(i);
+                        List<Float> values = dailyMap.get(date);
+                        float sum = 0f;
+                        for (float val : values) sum += val;
+                        float avg = values.isEmpty() ? 0f : sum / values.size();
+                        fl.add(avg);
+                        sl.add(String.format(java.util.Locale.US, "%.2f", avg));
+                        labels.add(shortDate(date));
+                    }
+                    weeklyPhData = sl;
+
+                } else { // monthly
+                    // Grouping per hari untuk 30 hari terakhir
+                    java.util.TreeMap<String, List<Float>> dailyMap = new java.util.TreeMap<>();
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        String t = ds.child("tanggal").getValue(String.class);
+                        Object v = ds.child("ph").getValue();
+                        if (t != null && v != null) {
+                            float ph = v instanceof Double ? ((Double)v).floatValue()
+                                     : v instanceof Long   ? ((Long)v).floatValue() : 0f;
+                            if (!dailyMap.containsKey(t)) {
+                                dailyMap.put(t, new ArrayList<>());
+                            }
+                            dailyMap.get(t).add(ph);
+                        }
+                    }
+
+                    java.util.List<String> sortedDates = new ArrayList<>(dailyMap.keySet());
+                    int start = Math.max(0, sortedDates.size() - 30);
+                    for (int i = start; i < sortedDates.size(); i++) {
+                        String date = sortedDates.get(i);
+                        List<Float> values = dailyMap.get(date);
+                        float sum = 0f;
+                        for (float val : values) sum += val;
+                        float avg = values.isEmpty() ? 0f : sum / values.size();
+                        fl.add(avg);
+                        sl.add(String.format(java.util.Locale.US, "%.2f", avg));
+                        labels.add(shortDate(date));
+                    }
+                    monthlyPhData = sl;
                 }
-                // Update list untuk export XLS
-                if ("daily".equals(period))       dailyPhData   = sl;
-                else if ("weekly".equals(period)) weeklyPhData  = sl;
-                else                              monthlyPhData = sl;
 
                 updateInformasiTerkini();
 
                 if (fl.isEmpty()) {
-                    chartView.setData(new float[]{6.8f},
-                        android.graphics.Color.parseColor("#1565C0"));
+                    chartView.setData(new float[]{6.8f}, labels, period, android.graphics.Color.parseColor("#1565C0"));
                     return;
                 }
                 float[] arr = new float[fl.size()];
                 for (int i = 0; i < fl.size(); i++) arr[i] = fl.get(i);
-                chartView.setData(arr, android.graphics.Color.parseColor("#1565C0"));
+                chartView.setData(arr, labels, period, android.graphics.Color.parseColor("#1565C0"));
             }
             @Override public void onCancelled(@NonNull DatabaseError e) {
                 Toast.makeText(AnalisisActivity.this,
@@ -471,6 +573,32 @@ public class AnalisisActivity extends BaseActivity {
             return parts[2];
         }
         return key;
+    }
+
+    /** Dapatkan tanggal hari ini dalam zona waktu WITA (UTC+8), format "YYYY-MM-DD" */
+    private String getTodayWitaStr() {
+        java.util.TimeZone wita = java.util.TimeZone.getTimeZone("Asia/Makassar");
+        java.util.Calendar cal  = java.util.Calendar.getInstance(wita);
+        return String.format(java.util.Locale.US, "%04d-%02d-%02d",
+                cal.get(java.util.Calendar.YEAR),
+                cal.get(java.util.Calendar.MONTH) + 1,
+                cal.get(java.util.Calendar.DAY_OF_MONTH));
+    }
+
+    /**
+     * Ambil angka jam dari string waktu Firebase.
+     * Mendukung format: "HH:mm:ss", "HH:mm", "HH.mm", atau hanya "HH".
+     * Mengembalikan -1 jika tidak bisa di-parse.
+     */
+    private int parseHour(String waktu) {
+        if (waktu == null || waktu.isEmpty()) return -1;
+        try {
+            // Coba split dengan titik dua atau titik
+            String[] parts = waktu.split("[:.]");
+            return Integer.parseInt(parts[0].trim());
+        } catch (Exception e) {
+            return -1;
+        }
     }
 
     /** Hitung skala Y maksimum yang "bulat" di atas nilai tertinggi data */

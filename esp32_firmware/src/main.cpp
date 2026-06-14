@@ -556,29 +556,43 @@ bool connectToWifi(String ssid, String pass, bool silent) {
 
 // ──────────────────────────────────────────
 // FUNGSI: Koneksi Firebase
-// ──────────────────────────────────────────
 void connectFirebase() {
     firebaseConfig.api_key      = FIREBASE_API_KEY;
     firebaseConfig.database_url = FIREBASE_DATABASE_URL;
-    firebaseConfig.signer.test_mode = true;
 
-    fbdo.setBSSLBufferSize(2048, 1024);
-    fbdoCommand.setBSSLBufferSize(2048, 1024);
+    // Autentikasi akun perangkat (device login)
+    firebaseAuth.user.email    = FIREBASE_USER_EMAIL;
+    firebaseAuth.user.password = FIREBASE_USER_PASSWORD;
+
+    // ── Buffer SSL lebih besar → handshake lebih cepat ──────────────────────
+    // Firebase ESP Client merekomendasikan 4096/1024 untuk koneksi stabil
+    fbdo.setBSSLBufferSize(4096, 1024);
+    fbdoCommand.setBSSLBufferSize(4096, 1024);
+
+    // Nonaktifkan reconnect otomatis yang bisa memperlambat inisialisasi awal
+    Firebase.reconnectWiFi(true);
 
     lcd.clear();
     lcd.setCursor(0, 0); lcd.print("Init Firebase...");
+    lcd.setCursor(0, 1); lcd.print("Mohon tunggu... ");
     Serial.println("Memanggil Firebase.begin()...");
 
     Firebase.begin(&firebaseConfig, &firebaseAuth);
 
-    lcd.clear();
-    lcd.setCursor(0, 0); lcd.print("Koneksi Cloud...");
-    lcd.setCursor(0, 1); lcd.print("Firebase...     ");
-
+    // ── Tunggu Firebase ready (maks 10 detik, update LCD tiap 300ms) ────────
     Serial.print("Menghubungkan ke Firebase");
     unsigned long waitStart = millis();
-    while (!Firebase.ready() && millis() - waitStart < 15000) {
-        delay(500); Serial.print(".");
+    int dotCount = 0;
+    while (!Firebase.ready() && millis() - waitStart < 10000) {
+        delay(300);
+        Serial.print(".");
+
+        // Tampilkan animasi titik pada baris ke-2 LCD agar tidak terlihat hang
+        String dots = "";
+        for (int i = 0; i < (dotCount % 4); i++) dots += ".";
+        lcd.setCursor(0, 1);
+        lcd.print("Menghubungkan" + dots + "   ");
+        dotCount++;
     }
 
     if (Firebase.ready()) {
@@ -587,13 +601,13 @@ void connectFirebase() {
         lcd.clear();
         lcd.setCursor(0, 0); lcd.print("Firebase OK!    ");
         lcd.setCursor(0, 1); lcd.print("Sistem Siap     ");
-        delay(1000);
+        delay(800);
     } else {
-        Serial.println("\n⚠️ Firebase gagal. Akan retry saat WiFi stabil.");
+        Serial.println("\n⚠️ Firebase gagal. Mode Offline aktif, retry otomatis...");
         lcd.clear();
         lcd.setCursor(0, 0); lcd.print("Firebase GAGAL! ");
         lcd.setCursor(0, 1); lcd.print("Mode Offline    ");
-        delay(1500);
+        delay(1000);
     }
 }
 

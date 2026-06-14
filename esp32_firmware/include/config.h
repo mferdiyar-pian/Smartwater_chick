@@ -7,19 +7,9 @@
 // ============================================================
 
 // ──────────────────────────────────────────
-// KONFIGURASI WIFI
+// IMPORT KREDENSIAL RAHASIA (SSID, Password, API Key, dll)
 // ──────────────────────────────────────────
-#define WIFI_SSID       "Smart Water Chick"
-#define WIFI_PASSWORD   "1234567881010"
-
-// ──────────────────────────────────────────
-// KONFIGURASI FIREBASE
-// Ambil dari: Firebase Console → Project Settings → General
-// ──────────────────────────────────────────
-#define FIREBASE_API_KEY      "AIzaSyBX_GuuTxQi5uHxPJ7i-pnaki95eAFWTMs"
-#define FIREBASE_DATABASE_URL "smartwater-chick-77b9d-default-rtdb.firebaseio.com"
-
-// (Konfigurasi Email & Password dihapus. ESP32 akan masuk tanpa akun / Test Mode)
+#include "secrets.h"
 
 // ──────────────────────────────────────────
 // KONFIGURASI PIN HARDWARE

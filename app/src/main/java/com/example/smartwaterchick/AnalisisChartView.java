@@ -96,8 +96,15 @@ public class AnalisisChartView extends View {
         tooltipTextPaint.setTextAlign(Paint.Align.CENTER);
     }
 
-    public void setData(float[] data, int color) {
+    private java.util.List<String> labels;
+    private String periodType = "monthly";
+    private float adjustedMin = 6.0f;
+    private float adjustedMax = 8.0f;
+
+    public void setData(float[] data, java.util.List<String> labels, String periodType, int color) {
         this.data = data;
+        this.labels = labels;
+        this.periodType = periodType;
         this.lineColor = color;
         this.selectedIndex = -1;
 
@@ -110,6 +117,11 @@ public class AnalisisChartView extends View {
         valueTextPaint.setColor(color);
 
         invalidate();
+    }
+
+    @Deprecated
+    public void setData(float[] data, int color) {
+        setData(data, null, "monthly", color);
     }
 
     @Override
@@ -137,8 +149,14 @@ public class AnalisisChartView extends View {
 
         if (chartW <= 0 || chartH <= 0) return;
 
-        float adjustedMin = 6.3f;
-        float adjustedMax = 7.2f;
+        float minVal = 6.5f;
+        float maxVal = 7.5f;
+        for (float val : data) {
+            if (val < minVal) minVal = val;
+            if (val > maxVal) maxVal = val;
+        }
+        adjustedMin = (float) Math.floor(minVal - 0.2f);
+        adjustedMax = (float) Math.ceil(maxVal + 0.2f);
         float range = adjustedMax - adjustedMin;
         if (range == 0f) range = 1f;
 
@@ -225,18 +243,24 @@ public class AnalisisChartView extends View {
         // Label Y-axis: tampilkan 3 nilai (max, mid, min) agar lebih informatif
         float labelX = 8f;
 
-        float midValue = 6.3f + (7.2f - 6.3f) / 2f;
+        float midValue = adjustedMin + (adjustedMax - adjustedMin) / 2f;
         float midY = chartTop + (chartBottom - chartTop) / 2f;
 
         Paint.FontMetrics fm = valueTextPaint.getFontMetrics();
 
-        canvas.drawText("7.2", labelX, chartTop - fm.ascent / 2f, valueTextPaint);
+        canvas.drawText(String.format(Locale.getDefault(), "%.1f", adjustedMax), labelX, chartTop - fm.ascent / 2f, valueTextPaint);
         canvas.drawText(String.format(Locale.getDefault(), "%.1f", midValue), labelX, midY - fm.ascent / 2f, valueTextPaint);
-        canvas.drawText("6.3", labelX, chartBottom - fm.descent, valueTextPaint);
+        canvas.drawText(String.format(Locale.getDefault(), "%.1f", adjustedMin), labelX, chartBottom - fm.descent, valueTextPaint);
     }
 
     private void drawTooltip(Canvas canvas, float x, float y, int index, float value) {
-        String text = "Hari " + (index + 1) + ": " + formatValue(value) + " pH";
+        String labelStr = (labels != null && index < labels.size()) ? labels.get(index) : String.valueOf(index + 1);
+        String text;
+        if ("daily".equals(periodType)) {
+            text = "Pukul " + labelStr + ": " + formatValue(value) + " pH";
+        } else {
+            text = "Tgl " + labelStr + ": " + formatValue(value) + " pH";
+        }
 
         float paddingX = 18f;
         float textWidth = tooltipTextPaint.measureText(text);
@@ -289,16 +313,12 @@ public class AnalisisChartView extends View {
         float labelY = chartBottom + 20f;
 
         int interval;
-        if (count <= 8) {
-            interval = 1;
-        } else if (count <= 14) {
-            interval = 2;
-        } else if (count <= 20) {
-            interval = 3;
-        } else if (count <= 30) {
-            interval = 5;
+        if ("monthly".equals(periodType)) {
+            interval = count > 15 ? 5 : 2;
+        } else if ("daily".equals(periodType)) {
+            interval = count > 12 ? 2 : 1;
         } else {
-            interval = 7;
+            interval = 1;
         }
 
         for (int i = 0; i < count; i++) {
@@ -307,7 +327,8 @@ public class AnalisisChartView extends View {
             boolean shouldDraw = isFirst || isLast || ((i + 1) % interval == 0);
 
             if (shouldDraw) {
-                canvas.drawText(String.valueOf(i + 1), pointsX[i], labelY, xLabelPaint);
+                String labelText = (labels != null && i < labels.size()) ? labels.get(i) : String.valueOf(i + 1);
+                canvas.drawText(labelText, pointsX[i], labelY, xLabelPaint);
             }
         }
     }
