@@ -51,6 +51,8 @@ public class PengaturanActivity extends BaseActivity {
     private ValueEventListener statusListener;
     private View viewOnlineDot;
     private TextView tvOnlineStatus;
+    private TextView tvStatusAir;
+    private TextView tvStatusSistem;
 
     // Launcher untuk membuka galeri
     private final ActivityResultLauncher<Intent> pickImageLauncher =
@@ -82,11 +84,19 @@ public class PengaturanActivity extends BaseActivity {
 
         prefs = getSharedPreferences("SmartWaterProfile", Context.MODE_PRIVATE);
 
-        // Load nama & role
+        // Load nama & email login
         TextView tvNama = findViewById(R.id.tvNama);
-        TextView tvRole = findViewById(R.id.tvRole);
+        TextView tvRole = findViewById(R.id.tvRole); // tvRole sekarang digunakan untuk menampilkan email login
         tvNama.setText(prefs.getString("nama", "Paimin"));
-        tvRole.setText(prefs.getString("role", "CEO Peternakan Ayam"));
+        
+        String loginEmail = "";
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            loginEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        }
+        if (loginEmail == null || loginEmail.isEmpty()) {
+            loginEmail = prefs.getString("email", "user@mail.com");
+        }
+        tvRole.setText(loginEmail);
 
         // Load foto profil jika ada
         ivAvatar = findViewById(R.id.ivAvatar);
@@ -95,6 +105,8 @@ public class PengaturanActivity extends BaseActivity {
         // Inisialisasi online status views & Firebase
         viewOnlineDot = findViewById(R.id.viewOnlineDot);
         tvOnlineStatus = findViewById(R.id.tvOnlineStatus);
+        tvStatusAir = findViewById(R.id.tvStatusAir);
+        tvStatusSistem = findViewById(R.id.tvStatusSistem);
         dbRef = FirebaseDatabase.getInstance().getReference();
         startStatusListener();
 
@@ -102,16 +114,27 @@ public class PengaturanActivity extends BaseActivity {
         // Tap avatar → tampilkan pilihan (Pilih Foto / Hapus Foto)
         findViewById(R.id.frameAvatar).setOnClickListener(v -> tampilkanDialogFoto());
 
-        // Edit profil (nama & role)
+        // Edit profil (nama)
         findViewById(R.id.btnEdit).setOnClickListener(v -> {
             View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_edit_profil, null);
             EditText etNama = dialogView.findViewById(R.id.etNama);
-            EditText etRole = dialogView.findViewById(R.id.etRole);
+            EditText etRole = dialogView.findViewById(R.id.etRole); // Field email login
             Button btnBatal = dialogView.findViewById(R.id.btnBatal);
             Button btnSimpan = dialogView.findViewById(R.id.btnSimpan);
 
             etNama.setText(tvNama.getText().toString());
-            etRole.setText(tvRole.getText().toString());
+            
+            // Tampilkan email login, nonaktifkan pengeditan
+            String currentEmail = "";
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                currentEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+            }
+            if (currentEmail == null || currentEmail.isEmpty()) {
+                currentEmail = tvRole.getText().toString();
+            }
+            etRole.setText(currentEmail);
+            etRole.setEnabled(false);
+            etRole.setFocusable(false);
 
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setView(dialogView)
@@ -124,7 +147,6 @@ public class PengaturanActivity extends BaseActivity {
             btnBatal.setOnClickListener(v1 -> dialog.dismiss());
             btnSimpan.setOnClickListener(v12 -> {
                 String newNama = etNama.getText().toString().trim();
-                String newRole = etRole.getText().toString().trim();
 
                 if (newNama.isEmpty()) {
                     Toast.makeText(this, "Nama tidak boleh kosong", Toast.LENGTH_SHORT).show();
@@ -133,11 +155,9 @@ public class PengaturanActivity extends BaseActivity {
 
                 prefs.edit()
                         .putString("nama", newNama)
-                        .putString("role", newRole)
                         .apply();
 
                 tvNama.setText(newNama);
-                tvRole.setText(newRole);
 
                 Toast.makeText(this, "Profil berhasil diperbarui", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
@@ -361,6 +381,8 @@ public class PengaturanActivity extends BaseActivity {
                 Object persenRaw = snapshot.child("kapasitas_persen").getValue();
                 Object wifiOnlineRaw = snapshot.child("wifi_online").getValue();
                 Object lastSeenRaw = snapshot.child("last_seen").getValue();
+                Object sensorPhConnRaw = snapshot.child("sensor_ph_connected").getValue();
+                Object sensorUltraConnRaw = snapshot.child("sensor_ultrasonic_connected").getValue();
 
                 // ── Deteksi online/offline: utamakan field wifi_online (boolean langsung dari ESP32)
                 boolean isOnline;
@@ -379,6 +401,48 @@ public class PengaturanActivity extends BaseActivity {
 
                 if (isOnline) {
                     setDeviceOnline();
+
+                    // Parse data sensor
+                    float ph = (phRaw != null) ? toFloat(phRaw) : 7.0f;
+                    float waterPercent = (persenRaw != null) ? toFloat(persenRaw) : 0.0f;
+
+                    // Parse status sensor
+                    boolean sensorPhConnected = false;
+                    if (sensorPhConnRaw instanceof Boolean) {
+                        sensorPhConnected = (Boolean) sensorPhConnRaw;
+                    } else {
+                        sensorPhConnected = (phRaw != null);
+                    }
+
+                    boolean sensorUltraConnected = false;
+                    if (sensorUltraConnRaw instanceof Boolean) {
+                        sensorUltraConnected = (Boolean) sensorUltraConnRaw;
+                    } else {
+                        sensorUltraConnected = (persenRaw != null);
+                    }
+
+                    // 1. Status Pengisian Air
+                    if (tvStatusAir != null) {
+                        if (!sensorUltraConnected || waterPercent < 20.0f || waterPercent > 100.0f) {
+                            tvStatusAir.setText("Tidak Normal");
+                            tvStatusAir.setTextColor(Color.parseColor("#E74C3C")); // Merah
+                        } else {
+                            tvStatusAir.setText("Normal");
+                            tvStatusAir.setTextColor(Color.parseColor("#27AE60")); // Hijau
+                        }
+                    }
+
+                    // 2. Status Sistem
+                    if (tvStatusSistem != null) {
+                        if (!sensorPhConnected || !sensorUltraConnected || ph < 6.5f || ph > 7.5f || waterPercent < 20.0f) {
+                            tvStatusSistem.setText("Tidak Optimal");
+                            tvStatusSistem.setTextColor(Color.parseColor("#E74C3C")); // Merah
+                        } else {
+                            tvStatusSistem.setText("Optimal");
+                            tvStatusSistem.setTextColor(Color.parseColor("#27AE60")); // Hijau (27AE60)
+                        }
+                    }
+
                 } else {
                     setDeviceOffline();
                 }
@@ -409,6 +473,26 @@ public class PengaturanActivity extends BaseActivity {
         }
         if (viewOnlineDot != null) {
             viewOnlineDot.setBackgroundResource(R.drawable.bg_dot_red);
+        }
+        if (tvStatusAir != null) {
+            tvStatusAir.setText("Tidak Normal");
+            tvStatusAir.setTextColor(Color.parseColor("#E74C3C"));
+        }
+        if (tvStatusSistem != null) {
+            tvStatusSistem.setText("Tidak Optimal");
+            tvStatusSistem.setTextColor(Color.parseColor("#E74C3C"));
+        }
+    }
+
+    private float toFloat(Object val) {
+        if (val instanceof Float) return (Float) val;
+        if (val instanceof Double) return ((Double) val).floatValue();
+        if (val instanceof Integer) return ((Integer) val).floatValue();
+        if (val instanceof Long) return ((Long) val).floatValue();
+        try {
+            return Float.parseFloat(val.toString());
+        } catch (Exception e) {
+            return 0.0f;
         }
     }
 
