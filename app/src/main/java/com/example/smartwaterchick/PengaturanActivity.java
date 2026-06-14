@@ -359,13 +359,20 @@ public class PengaturanActivity extends BaseActivity {
                 Object phRaw = snapshot.child("ph_terkini").getValue();
                 Object literRaw = snapshot.child("kapasitas_liter").getValue();
                 Object persenRaw = snapshot.child("kapasitas_persen").getValue();
+                Object wifiOnlineRaw = snapshot.child("wifi_online").getValue();
                 Object lastSeenRaw = snapshot.child("last_seen").getValue();
 
-                boolean isOnline = false;
-                if (lastSeenRaw != null) {
+                // ── Deteksi online/offline: utamakan field wifi_online (boolean langsung dari ESP32)
+                boolean isOnline;
+                if (wifiOnlineRaw instanceof Boolean) {
+                    isOnline = (Boolean) wifiOnlineRaw;
+                } else if (lastSeenRaw != null) {
                     long lastSeen = toLong(lastSeenRaw);
+                    if (lastSeen > 9999999999L) lastSeen = lastSeen / 1000;
                     long currentEpoch = System.currentTimeMillis() / 1000;
-                    isOnline = Math.abs(currentEpoch - lastSeen) < 90;
+                    long diffUtc  = Math.abs(currentEpoch - lastSeen);
+                    long diffWita = Math.abs((currentEpoch + 28800) - lastSeen);
+                    isOnline = (diffUtc < 45) || (diffWita < 45);
                 } else {
                     isOnline = (phRaw != null) || (literRaw != null) || (persenRaw != null);
                 }

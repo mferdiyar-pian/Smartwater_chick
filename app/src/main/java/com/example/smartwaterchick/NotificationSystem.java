@@ -83,12 +83,21 @@ public class NotificationSystem {
         dbRef.child("kontrol_status").addValueEventListener(new ValueEventListener() {
             @Override public void onDataChange(@NonNull DataSnapshot s) {
                 if (!s.exists()) return;
-                Object phRaw     = s.child("ph_terkini").getValue();
-                Object persenRaw = s.child("kapasitas_persen").getValue();
-                Object lastSeen  = s.child("last_seen").getValue();
-                if (lastSeen != null) {
+                Object phRaw        = s.child("ph_terkini").getValue();
+                Object persenRaw    = s.child("kapasitas_persen").getValue();
+                Object wifiOnlineRaw = s.child("wifi_online").getValue();
+                Object lastSeen     = s.child("last_seen").getValue();
+
+                // Utamakan field wifi_online (boolean langsung dari ESP32 heartbeat 5 detik)
+                if (wifiOnlineRaw instanceof Boolean) {
+                    isOnline = (Boolean) wifiOnlineRaw;
+                } else if (lastSeen != null) {
                     long ls = toLong(lastSeen);
-                    isOnline = Math.abs(System.currentTimeMillis() / 1000 - ls) < 90;
+                    if (ls > 9999999999L) ls = ls / 1000;
+                    long currentEpoch = System.currentTimeMillis() / 1000;
+                    long diffUtc  = Math.abs(currentEpoch - ls);
+                    long diffWita = Math.abs((currentEpoch + 28800) - ls);
+                    isOnline = (diffUtc < 45) || (diffWita < 45);
                 } else {
                     isOnline = phRaw != null;
                 }

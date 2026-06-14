@@ -47,13 +47,15 @@ bool schedule07 = false, schedule15 = false, schedule22 = false;
 bool isPhConnected = false;
 bool isUltrasonicConnected = false;
 
-unsigned long lastSendTime       = 0;
-unsigned long lastWifiRetryTime  = 0;
-unsigned long lastEpochSync      = 0;
-unsigned long millisAtLastSync   = 0;
-unsigned long lastPollTime       = 0;
+unsigned long lastSendTime        = 0;
+unsigned long lastWifiRetryTime   = 0;
+unsigned long lastEpochSync       = 0;
+unsigned long millisAtLastSync    = 0;
+unsigned long lastPollTime        = 0;
+unsigned long lastHeartbeatTime   = 0;   // Timer heartbeat WiFi status
 
-const unsigned long POLL_INTERVAL_MS = 2000;
+const unsigned long POLL_INTERVAL_MS      = 2000;
+const unsigned long HEARTBEAT_INTERVAL_MS = 5000;  // Kirim wifi_online setiap 5 detik
 
 // ──────────────────────────────────────────
 // DEKLARASI FUNGSI
@@ -62,6 +64,7 @@ bool  connectToWifi(String ssid, String pass, bool silent = false);
 void  connectFirebase();
 void  readAndSendSensorData();
 void  runOfflineTasks();
+void  sendHeartbeat(bool wifiOk);  // Kirim status WiFi ke Firebase (cepat)
 float readPH();
 float readWaterLevel();
 float levelToLiter(float heightCm);
@@ -189,8 +192,21 @@ void loop() {
 
         if (WiFi.status() != WL_CONNECTED) {
             Serial.println("[WiFi] Koneksi terputus. Masuk mode offline...");
+            // ── Kirim wifi_online=false sebelum benar-benar offline ──────────
+            // Firebase masih bisa sempat terkirim karena koneksi baru saja putus
+            FirebaseData fbdoHB;
+            fbdoHB.setBSSLBufferSize(512, 512);
+            Firebase.RTDB.setBool(&fbdoHB, "/kontrol_status/wifi_online", false);
+            Firebase.RTDB.setInt(&fbdoHB, "/kontrol_status/rssi", -100);
             isOnline      = false;
             firebaseReady = false;
+        }
+
+        // ── Heartbeat: kirim status WiFi setiap 5 detik ─────────────────────
+        unsigned long hbNow = millis();
+        if (hbNow - lastHeartbeatTime >= HEARTBEAT_INTERVAL_MS || lastHeartbeatTime == 0) {
+            lastHeartbeatTime = hbNow;
+            sendHeartbeat(true);
         }
     }
 
@@ -251,7 +267,7 @@ void readAndSendSensorData() {
     Firebase.RTDB.setFloat(&fbdo, "/kontrol_status/ph_terkini",       ph);
 
     // Kirim status hardware tambahan
-    Firebase.RTDB.setInt(&fbdo, "/kontrol_status/last_seen", (int)timeClient.getEpochTime());
+    Firebase.RTDB.setTimestamp(&fbdo, "/kontrol_status/last_seen");
     Firebase.RTDB.setInt(&fbdo, "/kontrol_status/rssi", WiFi.status() == WL_CONNECTED ? (int)WiFi.RSSI() : -100);
     Firebase.RTDB.setBool(&fbdo, "/kontrol_status/sensor_ph_connected", isPhConnected);
     Firebase.RTDB.setBool(&fbdo, "/kontrol_status/sensor_ultrasonic_connected", isUltrasonicConnected);
@@ -260,6 +276,21 @@ void readAndSendSensorData() {
     Firebase.RTDB.setString(&fbdo, "/volume_air/daily/" + tanggal + "/label", "Hari Ini");
 
     Serial.println("  ✅ Data dikirim ke Firebase.");
+}
+
+// ──────────────────────────────────────────
+// FUNGSI: Kirim heartbeat status WiFi ke Firebase (ringan, cepat)
+// Hanya tulis wifi_online + rssi — tidak ada data sensor
+// ──────────────────────────────────────────
+void sendHeartbeat(bool wifiOk) {
+    if (!Firebase.ready()) return;
+    FirebaseData fbdoHB;
+    fbdoHB.setBSSLBufferSize(512, 512);
+    int rssiVal = (wifiOk && WiFi.status() == WL_CONNECTED) ? (int)WiFi.RSSI() : -100;
+    Firebase.RTDB.setBool(&fbdoHB, "/kontrol_status/wifi_online", wifiOk);
+    Firebase.RTDB.setInt(&fbdoHB,  "/kontrol_status/rssi", rssiVal);
+    Firebase.RTDB.setTimestamp(&fbdoHB, "/kontrol_status/last_seen");
+    Serial.printf("[HB] wifi_online=%s rssi=%d\n", wifiOk ? "true" : "false", rssiVal);
 }
 
 // ──────────────────────────────────────────

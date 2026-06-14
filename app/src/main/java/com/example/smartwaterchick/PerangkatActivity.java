@@ -46,6 +46,7 @@ public class PerangkatActivity extends BaseActivity {
     private TextView tvWifiStatus;
     private ImageView ivSignalIcon;
     private TextView tvSignalStatus;
+    private TextView tvRssiDb;
 
     // ─── Views: Monitoring Komponen ───
     private ImageView ivPhIcon, ivUltrasonicIcon, ivPumpIcon;
@@ -89,6 +90,7 @@ public class PerangkatActivity extends BaseActivity {
         tvWifiStatus       = findViewById(R.id.tvWifiStatus);
         ivSignalIcon       = findViewById(R.id.ivSignalIcon);
         tvSignalStatus     = findViewById(R.id.tvSignalStatus);
+        tvRssiDb           = findViewById(R.id.tvRssiDb);
 
         ivPhIcon           = findViewById(R.id.ivPhIcon);
         tvPhSensorStatus   = findViewById(R.id.tvPhSensorStatus);
@@ -194,20 +196,28 @@ public class PerangkatActivity extends BaseActivity {
                 Object phRaw = snapshot.child("ph_terkini").getValue();
                 Object literRaw = snapshot.child("kapasitas_liter").getValue();
                 Object persenRaw = snapshot.child("kapasitas_persen").getValue();
+                Object wifiOnlineRaw = snapshot.child("wifi_online").getValue();
                 Object lastSeenRaw = snapshot.child("last_seen").getValue();
                 Object rssiRaw = snapshot.child("rssi").getValue();
                 Object sensorPhConnRaw = snapshot.child("sensor_ph_connected").getValue();
                 Object sensorUltraConnRaw = snapshot.child("sensor_ultrasonic_connected").getValue();
 
-                // Tentukan status online berdasarkan timestamp "last_seen"
-                boolean isOnline = false;
-                if (lastSeenRaw != null) {
+                // ── Deteksi online/offline: utamakan field wifi_online (boolean langsung dari ESP32)
+                // Field ini diperbarui setiap 5 detik oleh heartbeat ESP32 → deteksi sangat cepat
+                boolean isOnline;
+                if (wifiOnlineRaw instanceof Boolean) {
+                    // Firmware baru: baca boolean wifi_online langsung dari ESP32
+                    isOnline = (Boolean) wifiOnlineRaw;
+                } else if (lastSeenRaw != null) {
+                    // Fallback firmware lama: hitung dari timestamp last_seen
                     long lastSeen = toLong(lastSeenRaw);
+                    if (lastSeen > 9999999999L) lastSeen = lastSeen / 1000;
                     long currentEpoch = System.currentTimeMillis() / 1000;
-                    // Toleransi 90 detik karena perangkat mengirim data setiap 30 detik
-                    isOnline = Math.abs(currentEpoch - lastSeen) < 90;
+                    long diffUtc  = Math.abs(currentEpoch - lastSeen);
+                    long diffWita = Math.abs((currentEpoch + 28800) - lastSeen);
+                    isOnline = (diffUtc < 45) || (diffWita < 45);
                 } else {
-                    // Fallback jika field last_seen belum terisi
+                    // Fallback terakhir: ada data sensor = dianggap online
                     isOnline = (phRaw != null) || (literRaw != null) || (persenRaw != null);
                 }
 
@@ -219,27 +229,43 @@ public class PerangkatActivity extends BaseActivity {
                     tvWifiStatus.setTextColor(Color.parseColor("#2ECC71"));
                     ivWifiIcon.setColorFilter(Color.parseColor("#2ECC71"));
 
-                    // Update Status Sinyal berdasarkan RSSI
+                    // Update Kecepatan Jaringan berdasarkan RSSI dari ESP32
+                    // RSSI (dBm) → estimasi kecepatan throughput WiFi 2.4GHz (802.11n)
                     int rssi = -100;
-                    if (rssiRaw != null) {
-                        rssi = toInt(rssiRaw);
-                    }
-                    if (rssi >= -60) {
-                        tvSignalStatus.setText("Kuat");
-                        tvSignalStatus.setTextColor(Color.parseColor("#2ECC71"));
-                        ivSignalIcon.setColorFilter(Color.parseColor("#2ECC71"));
+                    if (rssiRaw != null) rssi = toInt(rssiRaw);
+
+                    // Estimasi kecepatan berdasarkan RSSI (802.11n 2.4GHz typical)
+                    // RSSI ≥ -50  → ~54–72 Mbps (kondisi ideal)
+                    // RSSI -50..-65 → ~24–54 Mbps (baik)
+                    // RSSI -65..-75 → ~12–24 Mbps (cukup)
+                    // RSSI -75..-85 → ~6–12 Mbps (lemah)
+                    // RSSI < -85  → < 6 Mbps (sangat lemah)
+                    String speedText;
+                    String color;
+                    if (rssi >= -50) {
+                        speedText = "54–72 Mbps";
+                        color = "#2ECC71";
+                    } else if (rssi >= -60) {
+                        speedText = "36–54 Mbps";
+                        color = "#27AE60";
+                    } else if (rssi >= -65) {
+                        speedText = "24–36 Mbps";
+                        color = "#F1C40F";
                     } else if (rssi >= -75) {
-                        tvSignalStatus.setText("Sedang");
-                        tvSignalStatus.setTextColor(Color.parseColor("#F1C40F"));
-                        ivSignalIcon.setColorFilter(Color.parseColor("#F1C40F"));
-                    } else if (rssi >= -90) {
-                        tvSignalStatus.setText("Lemah");
-                        tvSignalStatus.setTextColor(Color.parseColor("#E67E22"));
-                        ivSignalIcon.setColorFilter(Color.parseColor("#E67E22"));
+                        speedText = "12–24 Mbps";
+                        color = "#E67E22";
+                    } else if (rssi >= -85) {
+                        speedText = "6–12 Mbps";
+                        color = "#E74C3C";
                     } else {
-                        tvSignalStatus.setText("Tidak Ada");
-                        tvSignalStatus.setTextColor(Color.parseColor("#E74C3C"));
-                        ivSignalIcon.setColorFilter(Color.parseColor("#E74C3C"));
+                        speedText = "< 6 Mbps";
+                        color = "#C0392B";
+                    }
+                    tvSignalStatus.setText(speedText);
+                    tvSignalStatus.setTextColor(Color.parseColor(color));
+                    ivSignalIcon.setColorFilter(Color.parseColor(color));
+                    if (tvRssiDb != null) {
+                        tvRssiDb.setText("RSSI: " + rssi + " dBm");
                     }
 
                     // Update status sensor pH
@@ -253,7 +279,7 @@ public class PerangkatActivity extends BaseActivity {
                     if (phConnected && phRaw != null) {
                         float ph = toFloat(phRaw);
                         tvPhValue.setText(String.format(Locale.US, "pH terkini: %.2f", ph));
-                        setComponentConnected(ivPhIcon, tvPhSensorStatus, "#2ECC71", "Terhubung");
+                        setComponentConnected(ivPhIcon, tvPhSensorStatus, "#27AE60", "Terhubung");
                     } else {
                         tvPhValue.setText("Sensor bermasalah / terputus");
                         setComponentDisconnected(ivPhIcon, tvPhSensorStatus);
@@ -392,12 +418,12 @@ public class PerangkatActivity extends BaseActivity {
                 boolean needRenderLogs = false;
                 String now = getCurrentTimeWITA();
 
-                // ─── Pompa Air (Relay Isi) ───
+                // ─── Pompa Air (Relay Isi) → HIJAU saat aktif ───
                 if (relayIsi) {
                     tvPumpStatus.setText("Aktif");
-                    tvPumpStatus.setTextColor(Color.parseColor("#2ECC71"));
+                    tvPumpStatus.setTextColor(Color.parseColor("#27AE60"));
                     tvPumpSubtitle.setText(otomatis ? "Mode Otomatis · Menyala" : "Mode Manual · Menyala");
-                    ivPumpIcon.setColorFilter(Color.parseColor("#2ECC71"));
+                    ivPumpIcon.setColorFilter(Color.parseColor("#27AE60"));
 
                     boolean alreadyLogged = false;
                     for (LogItem li : allLogs) {
@@ -420,12 +446,12 @@ public class PerangkatActivity extends BaseActivity {
                     ivPumpIcon.setColorFilter(Color.parseColor("#9E9E9E"));
                 }
 
-                // ─── Valve Buang Air (Relay Buang) ───
+                // ─── Valve Buang Air (Relay Buang) → BIRU saat aktif ───
                 if (relayBuang) {
                     tvValveBuangStatus.setText("Aktif");
-                    tvValveBuangStatus.setTextColor(Color.parseColor("#2ECC71"));
+                    tvValveBuangStatus.setTextColor(Color.parseColor("#1B5BCE"));
                     tvValveBuangSubtitle.setText(otomatis ? "Mode Otomatis · Menyala" : "Mode Manual · Menyala");
-                    ivValveBuangIcon.setColorFilter(Color.parseColor("#2ECC71"));
+                    ivValveBuangIcon.setColorFilter(Color.parseColor("#1B5BCE"));
 
                     boolean alreadyLogged = false;
                     for (LogItem li : allLogs) {
@@ -448,12 +474,12 @@ public class PerangkatActivity extends BaseActivity {
                     ivValveBuangIcon.setColorFilter(Color.parseColor("#9E9E9E"));
                 }
 
-                // ─── Valve Kran Air Minum (Relay Minum) ───
+                // ─── Valve Kran Air Minum (Relay Minum) → HIJAU saat aktif ───
                 if (relayMinum) {
                     tvValveMinumStatus.setText("Aktif");
-                    tvValveMinumStatus.setTextColor(Color.parseColor("#2ECC71"));
+                    tvValveMinumStatus.setTextColor(Color.parseColor("#27AE60"));
                     tvValveMinumSubtitle.setText(otomatis ? "Mode Otomatis · Menyala" : "Mode Manual · Menyala");
-                    ivValveMinumIcon.setColorFilter(Color.parseColor("#2ECC71"));
+                    ivValveMinumIcon.setColorFilter(Color.parseColor("#27AE60"));
 
                     boolean alreadyLogged = false;
                     for (LogItem li : allLogs) {
@@ -641,6 +667,9 @@ public class PerangkatActivity extends BaseActivity {
         ivSignalIcon.setColorFilter(Color.parseColor("#E74C3C"));
         tvSignalStatus.setText("Tidak Ada");
         tvSignalStatus.setTextColor(Color.parseColor("#E74C3C"));
+        if (tvRssiDb != null) {
+            tvRssiDb.setText("RSSI: -- dBm");
+        }
 
         // Semua sensor tidak terhubung
         setComponentDisconnected(ivPhIcon, tvPhSensorStatus);

@@ -237,7 +237,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Sinyal"
+                                android:text="Kec. Jaringan"
                                 android:textSize="11sp"
                                 android:textColor="@color/text_secondary" />
 
@@ -245,10 +245,18 @@
                                 android:id="@+id/tvSignalStatus"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Memuat..."
-                                android:textSize="12sp"
+                                android:text="-- Mbps"
+                                android:textSize="14sp"
                                 android:textStyle="bold"
                                 android:textColor="#9E9E9E" />
+
+                            <TextView
+                                android:id="@+id/tvRssiDb"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="RSSI: -- dBm"
+                                android:textSize="10sp"
+                                android:textColor="@color/text_secondary" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -292,12 +300,13 @@
                             android:orientation="horizontal"
                             android:gravity="center_vertical">
 
+                            <!-- Komponen 1: Sensor pH → HIJAU -->
                             <ImageView
                                 android:id="@+id/ivPhIcon"
                                 android:layout_width="36dp"
                                 android:layout_height="36dp"
                                 android:src="@drawable/ic_ph_leaf"
-                                android:tint="#9E9E9E"
+                                android:tint="#27AE60"
                                 android:background="@drawable/bg_icon_green"
                                 android:padding="8dp"
                                 android:layout_marginEnd="12dp" />
@@ -329,7 +338,7 @@
                             android:id="@+id/tvPhSensorStatus"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Memuat..."
+                            android:text="Standby"
                             android:textSize="12sp"
                             android:textStyle="bold"
                             android:textColor="#9E9E9E"
@@ -352,12 +361,13 @@
                             android:orientation="horizontal"
                             android:gravity="center_vertical">
 
+                            <!-- Komponen 2: Sensor Ultrasonik → BIRU -->
                             <ImageView
                                 android:id="@+id/ivUltrasonicIcon"
                                 android:layout_width="36dp"
                                 android:layout_height="36dp"
                                 android:src="@drawable/ic_water_capacity"
-                                android:tint="#9E9E9E"
+                                android:tint="#1B5BCE"
                                 android:background="@drawable/bg_icon_blue"
                                 android:padding="8dp"
                                 android:layout_marginEnd="12dp" />
@@ -389,7 +399,7 @@
                             android:id="@+id/tvUltrasonicStatus"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Memuat..."
+                            android:text="Standby"
                             android:textSize="12sp"
                             android:textStyle="bold"
                             android:textColor="#9E9E9E"
@@ -412,13 +422,14 @@
                             android:orientation="horizontal"
                             android:gravity="center_vertical">
 
+                            <!-- Komponen 3: Pompa Air → HIJAU -->
                             <ImageView
                                 android:id="@+id/ivPumpIcon"
                                 android:layout_width="36dp"
                                 android:layout_height="36dp"
                                 android:src="@drawable/ic_tank"
-                                android:tint="#9E9E9E"
-                                android:background="@drawable/bg_icon_blue"
+                                android:tint="#27AE60"
+                                android:background="@drawable/bg_icon_green"
                                 android:padding="8dp"
                                 android:layout_marginEnd="12dp" />
 
@@ -449,7 +460,7 @@
                             android:id="@+id/tvPumpStatus"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Memuat..."
+                            android:text="Standby"
                             android:textSize="12sp"
                             android:textStyle="bold"
                             android:textColor="#9E9E9E"
@@ -472,13 +483,14 @@
                             android:orientation="horizontal"
                             android:gravity="center_vertical">
 
+                            <!-- Komponen 4: Valve Buang → BIRU -->
                             <ImageView
                                 android:id="@+id/ivValveBuangIcon"
                                 android:layout_width="36dp"
                                 android:layout_height="36dp"
                                 android:src="@drawable/ic_dispose_water_red"
-                                android:tint="#9E9E9E"
-                                android:background="@drawable/bg_icon_red"
+                                android:tint="#1B5BCE"
+                                android:background="@drawable/bg_icon_blue"
                                 android:padding="8dp"
                                 android:layout_marginEnd="12dp" />
 
@@ -509,7 +521,7 @@
                             android:id="@+id/tvValveBuangStatus"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Memuat..."
+                            android:text="Standby"
                             android:textSize="12sp"
                             android:textStyle="bold"
                             android:textColor="#9E9E9E"
@@ -531,13 +543,14 @@
                             android:orientation="horizontal"
                             android:gravity="center_vertical">
 
+                            <!-- Komponen 5: Valve Minum → HIJAU -->
                             <ImageView
                                 android:id="@+id/ivValveMinumIcon"
                                 android:layout_width="36dp"
                                 android:layout_height="36dp"
                                 android:src="@drawable/ic_water_drop"
-                                android:tint="#9E9E9E"
-                                android:background="@drawable/bg_icon_blue"
+                                android:tint="#27AE60"
+                                android:background="@drawable/bg_icon_green"
                                 android:padding="8dp"
                                 android:layout_marginEnd="12dp" />
 
@@ -568,7 +581,7 @@
                             android:id="@+id/tvValveMinumStatus"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Memuat..."
+                            android:text="Standby"
                             android:textSize="12sp"
                             android:textStyle="bold"
                             android:textColor="#9E9E9E"
