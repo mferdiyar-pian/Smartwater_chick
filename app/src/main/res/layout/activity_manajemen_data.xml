@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/blue_header"
+    android:fitsSystemWindows="true">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:background="@color/blue_header"
+        android:paddingTop="20dp" android:paddingBottom="20dp"
+        android:paddingStart="20dp" android:paddingEnd="20dp"
+        android:gravity="center_vertical">
+        <FrameLayout
+            android:id="@+id/btnBack"
+            android:layout_width="40dp" android:layout_height="40dp"
+            android:background="@drawable/bg_edit_button"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true" android:focusable="true">
+            <ImageView
+                android:layout_width="20dp" android:layout_height="20dp"
+                android:src="@drawable/ic_arrow_back" android:tint="#FFFFFF"
+                android:layout_gravity="center"/>
+        </FrameLayout>
+        <TextView
+            android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1" android:text="Manajemen Data"
+            android:textColor="#FFFFFF" android:textSize="20sp" android:textStyle="bold"
+            android:layout_marginStart="16dp"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:background="@color/bg_screen"
+        android:clipToPadding="false" android:paddingBottom="40dp">
+
+        <LinearLayout
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="16dp">
+
+            <!-- ═══════════════════════════════════ -->
+            <!-- BACKUP DATA                         -->
+            <!-- ═══════════════════════════════════ -->
+            <TextView
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="BACKUP DATA"
+                android:textSize="12sp" android:textStyle="bold"
+                android:textColor="@color/text_secondary"
+                android:layout_marginStart="8dp" android:layout_marginBottom="8dp"
+                android:letterSpacing="0.1"/>
+
+            <!-- Info Backup -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp" app:cardElevation="0dp"
+                android:layout_marginBottom="12dp">
+                <LinearLayout
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:background="#E8F4FD" android:padding="14dp"
+                    android:orientation="horizontal" android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="32dp" android:layout_height="32dp"
+                        android:src="@drawable/ic_backup" android:tint="@color/blue_header"
+                        android:layout_marginEnd="12dp"/>
+                    <LinearLayout
+                        android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Backup Aman ke Firebase"
+                            android:textColor="@color/blue_header"
+                            android:textSize="14sp" android:textStyle="bold"/>
+                        <TextView
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Semua data monitoring tersimpan otomatis di cloud Firebase"
+                            android:textColor="#5B8DB8" android:textSize="12sp"
+                            android:layout_marginTop="2dp"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Isi Backup Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp" app:cardElevation="0dp"
+                android:layout_marginBottom="12dp">
+                <LinearLayout
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:background="@color/bg_card">
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <FrameLayout
+                            android:layout_width="38dp" android:layout_height="38dp"
+                            android:background="@drawable/bg_menu_icon_blue_light"
+                            android:layout_marginEnd="14dp">
+                            <ImageView android:layout_width="22dp" android:layout_height="22dp"
+                                android:src="@drawable/ic_water_drop" android:tint="@color/blue_primary"
+                                android:layout_gravity="center"/>
+                        </FrameLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Data Volume Air" android:textColor="@color/text_primary"
+                                android:textSize="14sp" android:textStyle="bold"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Riwayat harian kapasitas tangki" android:textColor="@color/text_secondary"
+                                android:textSize="12sp" android:layout_marginTop="2dp"/>
+                        </LinearLayout>
+                        <ImageView android:layout_width="16dp" android:layout_height="16dp"
+                            android:src="@drawable/ic_check_circle" android:tint="#27AE60"/>
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <FrameLayout
+                            android:layout_width="38dp" android:layout_height="38dp"
+                            android:background="@drawable/bg_menu_icon_green_light"
+                            android:layout_marginEnd="14dp">
+                            <ImageView android:layout_width="22dp" android:layout_height="22dp"
+                                android:src="@drawable/ic_ph_monitoring" android:tint="#27AE60"
+                                android:layout_gravity="center"/>
+                        </FrameLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Data pH &amp; Suhu" android:textColor="@color/text_primary"
+                                android:textSize="14sp" android:textStyle="bold"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Log monitoring sensor real-time" android:textColor="@color/text_secondary"
+                                android:textSize="12sp" android:layout_marginTop="2dp"/>
+                        </LinearLayout>
+                        <ImageView android:layout_width="16dp" android:layout_height="16dp"
+                            android:src="@drawable/ic_check_circle" android:tint="#27AE60"/>
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <FrameLayout
+                            android:layout_width="38dp" android:layout_height="38dp"
+                            android:background="@drawable/bg_menu_icon_orange_light"
+                            android:layout_marginEnd="14dp">
+                            <ImageView android:layout_width="22dp" android:layout_height="22dp"
+                                android:src="@drawable/ic_settings" android:tint="#E67E22"
+                                android:layout_gravity="center"/>
+                        </FrameLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Pengaturan &amp; Jadwal" android:textColor="@color/text_primary"
+                                android:textSize="14sp" android:textStyle="bold"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Jadwal pompa dan konfigurasi sistem" android:textColor="@color/text_secondary"
+                                android:textSize="12sp" android:layout_marginTop="2dp"/>
+                        </LinearLayout>
+                        <ImageView android:layout_width="16dp" android:layout_height="16dp"
+                            android:src="@drawable/ic_check_circle" android:tint="#27AE60"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Keterangan Backup -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp" app:cardElevation="0dp"
+                android:layout_marginBottom="24dp">
+                <LinearLayout
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:background="@color/bg_card"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="ℹ️  Data Anda sudah dicadangkan secara otomatis oleh Firebase Realtime Database. Tidak diperlukan tindakan manual — seluruh data sensor, jadwal, dan pengaturan tersimpan aman di cloud Google selama akun Anda aktif."
+                        android:textColor="@color/text_secondary" android:textSize="13sp"
+                        android:lineSpacingExtra="3dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ═══════════════════════════════════ -->
+            <!-- HAPUS DATABASE MONITORING           -->
+            <!-- ═══════════════════════════════════ -->
+            <TextView
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="HAPUS DATABASE MONITORING"
+                android:textSize="12sp" android:textStyle="bold"
+                android:textColor="@color/text_secondary"
+                android:layout_marginStart="8dp" android:layout_marginBottom="8dp"
+                android:letterSpacing="0.1"/>
+
+            <!-- Peringatan -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp" app:cardElevation="0dp"
+                android:layout_marginBottom="12dp">
+                <LinearLayout
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:background="#FFF3CD" android:padding="14dp"
+                    android:orientation="horizontal" android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="28dp" android:layout_height="28dp"
+                        android:src="@drawable/ic_warning" android:tint="#F39C12"
+                        android:layout_marginEnd="12dp"/>
+                    <TextView
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:text="Hanya log raw sensor (monitoring) yang akan dihapus. Data grafik analisis (volume air harian) tetap aman dan tidak terpengaruh."
+                        android:textColor="#7D5800" android:textSize="12sp"
+                        android:lineSpacingExtra="2dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Pilihan Periode Hapus -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp" app:cardElevation="0dp"
+                android:layout_marginBottom="12dp">
+                <LinearLayout
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:background="@color/bg_card">
+
+                    <!-- Hapus 1 Hari -->
+                    <LinearLayout
+                        android:id="@+id/btnHapus1Hari"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical"
+                        android:clickable="true" android:focusable="true"
+                        android:background="?attr/selectableItemBackground">
+                        <FrameLayout
+                            android:layout_width="38dp" android:layout_height="38dp"
+                            android:background="@drawable/bg_menu_icon_orange_light"
+                            android:layout_marginEnd="14dp">
+                            <ImageView android:layout_width="22dp" android:layout_height="22dp"
+                                android:src="@drawable/ic_delete" android:tint="#E67E22"
+                                android:layout_gravity="center"/>
+                        </FrameLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Hapus Data 1 Hari Terakhir"
+                                android:textColor="@color/text_primary" android:textSize="14sp" android:textStyle="bold"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Menghapus log sensor dari hari ini"
+                                android:textColor="@color/text_secondary" android:textSize="12sp" android:layout_marginTop="2dp"/>
+                        </LinearLayout>
+                        <ImageView android:layout_width="16dp" android:layout_height="16dp"
+                            android:src="@drawable/ic_arrow_back" android:tint="#C4C9D9" android:rotation="180"/>
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <!-- Hapus 1 Minggu -->
+                    <LinearLayout
+                        android:id="@+id/btnHapus1Minggu"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical"
+                        android:clickable="true" android:focusable="true"
+                        android:background="?attr/selectableItemBackground">
+                        <FrameLayout
+                            android:layout_width="38dp" android:layout_height="38dp"
+                            android:background="@drawable/bg_menu_icon_red_light"
+                            android:layout_marginEnd="14dp">
+                            <ImageView android:layout_width="22dp" android:layout_height="22dp"
+                                android:src="@drawable/ic_delete" android:tint="#E74C3C"
+                                android:layout_gravity="center"/>
+                        </FrameLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Hapus Data 1 Minggu Terakhir"
+                                android:textColor="@color/text_primary" android:textSize="14sp" android:textStyle="bold"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Menghapus log sensor 7 hari terakhir"
+                                android:textColor="@color/text_secondary" android:textSize="12sp" android:layout_marginTop="2dp"/>
+                        </LinearLayout>
+                        <ImageView android:layout_width="16dp" android:layout_height="16dp"
+                            android:src="@drawable/ic_arrow_back" android:tint="#C4C9D9" android:rotation="180"/>
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <!-- Hapus 1 Bulan -->
+                    <LinearLayout
+                        android:id="@+id/btnHapus1Bulan"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical"
+                        android:clickable="true" android:focusable="true"
+                        android:background="?attr/selectableItemBackground">
+                        <FrameLayout
+                            android:layout_width="38dp" android:layout_height="38dp"
+                            android:background="@drawable/bg_menu_icon_red_light"
+                            android:layout_marginEnd="14dp">
+                            <ImageView android:layout_width="22dp" android:layout_height="22dp"
+                                android:src="@drawable/ic_warning" android:tint="#E74C3C"
+                                android:layout_gravity="center"/>
+                        </FrameLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Hapus Data 1 Bulan Terakhir"
+                                android:textColor="@color/text_primary" android:textSize="14sp" android:textStyle="bold"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Menghapus log sensor 30 hari terakhir"
+                                android:textColor="#E74C3C" android:textSize="12sp" android:layout_marginTop="2dp"/>
+                        </LinearLayout>
+                        <ImageView android:layout_width="16dp" android:layout_height="16dp"
+                            android:src="@drawable/ic_arrow_back" android:tint="#C4C9D9" android:rotation="180"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ═══════════════════════════════════ -->
+            <!-- HAPUS OTOMATIS                      -->
+            <!-- ═══════════════════════════════════ -->
+            <TextView
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="HAPUS OTOMATIS"
+                android:textSize="12sp" android:textStyle="bold"
+                android:textColor="@color/text_secondary"
+                android:layout_marginStart="8dp" android:layout_marginBottom="8dp"
+                android:letterSpacing="0.1"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp" app:cardElevation="0dp"
+                android:layout_marginBottom="12dp">
+                <LinearLayout
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:background="@color/bg_card">
+
+                    <!-- Toggle Hapus Otomatis -->
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <FrameLayout
+                            android:layout_width="38dp" android:layout_height="38dp"
+                            android:background="@drawable/bg_menu_icon_blue_light"
+                            android:layout_marginEnd="14dp">
+                            <ImageView android:layout_width="22dp" android:layout_height="22dp"
+                                android:src="@drawable/ic_refresh" android:tint="@color/blue_primary"
+                                android:layout_gravity="center"/>
+                        </FrameLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Aktifkan Hapus Otomatis"
+                                android:textColor="@color/text_primary" android:textSize="14sp" android:textStyle="bold"/>
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:id="@+id/tvAutoDeleteStatus"
+                                android:text="Nonaktif"
+                                android:textColor="@color/text_secondary" android:textSize="12sp" android:layout_marginTop="2dp"/>
+                        </LinearLayout>
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/switchAutoDelete"
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            app:thumbTint="@color/blue_primary"
+                            app:trackTint="@color/blue_light"/>
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <!-- Pilih Periode Hapus Otomatis -->
+                    <LinearLayout
+                        android:id="@+id/layoutPeriodeAuto"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical"
+                        android:visibility="gone">
+                        <FrameLayout
+                            android:layout_width="38dp" android:layout_height="38dp"
+                            android:background="@drawable/bg_menu_icon_orange_light"
+                            android:layout_marginEnd="14dp">
+                            <ImageView android:layout_width="22dp" android:layout_height="22dp"
+                                android:src="@drawable/ic_notification" android:tint="#E67E22"
+                                android:layout_gravity="center"/>
+                        </FrameLayout>
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Periode Hapus Otomatis"
+                                android:textColor="@color/text_primary" android:textSize="14sp" android:textStyle="bold"
+                                android:layout_marginBottom="10dp"/>
+                            <!-- Pilihan Radio -->
+                            <RadioGroup
+                                android:id="@+id/rgPeriodeAuto"
+                                android:layout_width="match_parent" android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <RadioButton
+                                    android:id="@+id/rb1Hari"
+                                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                    android:text="Setiap 1 Hari (hapus log kemarin)"
+                                    android:textColor="@color/text_primary" android:textSize="13sp"
+                                    android:buttonTint="@color/blue_primary"
+                                    android:layout_marginBottom="6dp"/>
+                                <RadioButton
+                                    android:id="@+id/rb1Minggu"
+                                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                    android:text="Setiap 1 Minggu (hapus log &gt; 7 hari)"
+                                    android:textColor="@color/text_primary" android:textSize="13sp"
+                                    android:buttonTint="@color/blue_primary"
+                                    android:layout_marginBottom="6dp"
+                                    android:checked="true"/>
+                                <RadioButton
+                                    android:id="@+id/rb1Bulan"
+                                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                    android:text="Setiap 1 Bulan (hapus log &gt; 30 hari)"
+                                    android:buttonTint="@color/blue_primary"
+                                    android:textColor="@color/text_primary" android:textSize="13sp"/>
+                            </RadioGroup>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Info Hapus Otomatis -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp" app:cardElevation="0dp"
+                android:layout_marginBottom="8dp">
+                <LinearLayout
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:background="@color/bg_card"
+                    android:padding="16dp">
+                    <TextView
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="ℹ️  Hapus otomatis hanya mempengaruhi log raw sensor (/monitoring). Data grafik analisis volume air harian (/volume_air/daily) tidak akan pernah dihapus untuk menjaga akurasi laporan."
+                        android:textColor="@color/text_secondary" android:textSize="13sp"
+                        android:lineSpacingExtra="3dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

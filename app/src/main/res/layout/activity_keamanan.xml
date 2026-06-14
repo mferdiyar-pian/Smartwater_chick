@@ -1,0 +1,653 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/blue_header"
+    android:fitsSystemWindows="true">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/blue_header"
+        android:paddingTop="20dp" android:paddingBottom="20dp"
+        android:paddingStart="20dp" android:paddingEnd="20dp"
+        android:gravity="center_vertical">
+        <FrameLayout
+            android:id="@+id/btnBack"
+            android:layout_width="40dp" android:layout_height="40dp"
+            android:background="@drawable/bg_edit_button"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true" android:focusable="true">
+            <ImageView
+                android:layout_width="20dp" android:layout_height="20dp"
+                android:src="@drawable/ic_arrow_back"
+                android:tint="#FFFFFF"
+                android:layout_gravity="center"/>
+        </FrameLayout>
+        <TextView
+            android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Keamanan"
+            android:textColor="#FFFFFF" android:textSize="20sp" android:textStyle="bold"
+            android:layout_marginStart="16dp"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:background="@color/bg_screen"
+        android:clipToPadding="false" android:paddingBottom="40dp">
+
+        <LinearLayout
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:padding="16dp">
+
+            <!-- Banner -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp" app:cardElevation="0dp"
+                android:layout_marginBottom="20dp">
+                <LinearLayout
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:background="#E8F4FD" android:padding="16dp"
+                    android:orientation="horizontal" android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="40dp" android:layout_height="40dp"
+                        android:src="@drawable/ic_lock"
+                        android:tint="@color/blue_header"
+                        android:layout_marginEnd="12dp"/>
+                    <LinearLayout
+                        android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Akun Anda Terlindungi"
+                            android:textColor="@color/blue_header"
+                            android:textSize="15sp" android:textStyle="bold"/>
+                        <TextView
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Sistem keamanan SmartWater Chick aktif"
+                            android:textColor="#5B8DB8" android:textSize="12sp"
+                            android:layout_marginTop="2dp"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Autentikasi -->
+            <TextView
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="AUTENTIKASI"
+                android:textSize="12sp" android:textStyle="bold"
+                android:textColor="@color/text_secondary"
+                android:layout_marginStart="8dp" android:layout_marginBottom="8dp"
+                android:letterSpacing="0.1"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp" app:cardElevation="0dp"
+                android:layout_marginBottom="20dp">
+                <LinearLayout
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:background="@color/bg_card">
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <LinearLayout
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            android:background="#E8F4FD" android:gravity="center"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_lock" android:tint="@color/blue_header"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Login dengan Firebase Auth"
+                                android:textColor="@color/text_primary"
+                                android:textSize="14sp" android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Email &amp; password diverifikasi oleh Google Firebase"
+                                android:textColor="@color/text_secondary" android:textSize="12sp"
+                                android:layout_marginTop="2dp"/>
+                        </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dp" android:layout_height="16dp"
+                            android:src="@drawable/ic_check_circle" android:tint="#27AE60"/>
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <LinearLayout
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            android:background="#FEF5E7" android:gravity="center"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_notification" android:tint="#E67E22"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Sesi Login Persisten"
+                                android:textColor="@color/text_primary"
+                                android:textSize="14sp" android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Tetap login hingga keluar secara manual"
+                                android:textColor="@color/text_secondary" android:textSize="12sp"
+                                android:layout_marginTop="2dp"/>
+                        </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dp" android:layout_height="16dp"
+                            android:src="@drawable/ic_check_circle" android:tint="#27AE60"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Enkripsi -->
+            <TextView
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="ENKRIPSI &amp; PERLINDUNGAN DATA"
+                android:textSize="12sp" android:textStyle="bold"
+                android:textColor="@color/text_secondary"
+                android:layout_marginStart="8dp" android:layout_marginBottom="8dp"
+                android:letterSpacing="0.1"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp" app:cardElevation="0dp"
+                android:layout_marginBottom="20dp">
+                <LinearLayout
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:background="@color/bg_card">
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <LinearLayout
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            android:background="#E8F8F5" android:gravity="center"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_signal" android:tint="#27AE60"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Komunikasi Terenkripsi (HTTPS/TLS)"
+                                android:textColor="@color/text_primary"
+                                android:textSize="14sp" android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Semua data dikirim melalui koneksi aman"
+                                android:textColor="@color/text_secondary" android:textSize="12sp"
+                                android:layout_marginTop="2dp"/>
+                        </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dp" android:layout_height="16dp"
+                            android:src="@drawable/ic_check_circle" android:tint="#27AE60"/>
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <LinearLayout
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            android:background="#EAF2FF" android:gravity="center"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_lock" android:tint="#2980B9"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Firebase Security Rules"
+                                android:textColor="@color/text_primary"
+                                android:textSize="14sp" android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Akses database hanya untuk pengguna terautentikasi"
+                                android:textColor="@color/text_secondary" android:textSize="12sp"
+                                android:layout_marginTop="2dp"/>
+                        </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dp" android:layout_height="16dp"
+                            android:src="@drawable/ic_check_circle" android:tint="#27AE60"/>
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <LinearLayout
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            android:background="#F5EEF8" android:gravity="center"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_backup" android:tint="#8E44AD"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Penyimpanan Lokal Aman"
+                                android:textColor="@color/text_primary"
+                                android:textSize="14sp" android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Data profil disimpan di internal storage terisolasi"
+                                android:textColor="@color/text_secondary" android:textSize="12sp"
+                                android:layout_marginTop="2dp"/>
+                        </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dp" android:layout_height="16dp"
+                            android:src="@drawable/ic_check_circle" android:tint="#27AE60"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Izin Aplikasi -->
+            <TextView
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="PRIVASI &amp; IZIN APLIKASI"
+                android:textSize="12sp" android:textStyle="bold"
+                android:textColor="@color/text_secondary"
+                android:layout_marginStart="8dp" android:layout_marginBottom="8dp"
+                android:letterSpacing="0.1"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp" app:cardElevation="0dp"
+                android:layout_marginBottom="20dp">
+                <LinearLayout
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:background="@color/bg_card">
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <LinearLayout
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            android:background="#E8F4FD" android:gravity="center"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_signal" android:tint="@color/blue_header"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Internet"
+                                android:textColor="@color/text_primary"
+                                android:textSize="14sp" android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Sinkronisasi data ke Firebase"
+                                android:textColor="@color/text_secondary" android:textSize="12sp"
+                                android:layout_marginTop="2dp"/>
+                        </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dp" android:layout_height="16dp"
+                            android:src="@drawable/ic_check_circle" android:tint="#27AE60"/>
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <LinearLayout
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            android:background="#F5EEF8" android:gravity="center"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_backup" android:tint="#8E44AD"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Penyimpanan"
+                                android:textColor="@color/text_primary"
+                                android:textSize="14sp" android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Menyimpan foto profil pengguna"
+                                android:textColor="@color/text_secondary" android:textSize="12sp"
+                                android:layout_marginTop="2dp"/>
+                        </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dp" android:layout_height="16dp"
+                            android:src="@drawable/ic_check_circle" android:tint="#27AE60"/>
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <LinearLayout
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            android:background="#E8F8F5" android:gravity="center"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_devices" android:tint="#27AE60"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Bluetooth"
+                                android:textColor="@color/text_primary"
+                                android:textSize="14sp" android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Pengaturan WiFi perangkat ESP32"
+                                android:textColor="@color/text_secondary" android:textSize="12sp"
+                                android:layout_marginTop="2dp"/>
+                        </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dp" android:layout_height="16dp"
+                            android:src="@drawable/ic_check_circle" android:tint="#27AE60"/>
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <LinearLayout
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            android:background="#FEF5E7" android:gravity="center"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_notification" android:tint="#E67E22"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Lokasi"
+                                android:textColor="@color/text_primary"
+                                android:textSize="14sp" android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Diperlukan untuk BLE scan (Android &lt;12)"
+                                android:textColor="@color/text_secondary" android:textSize="12sp"
+                                android:layout_marginTop="2dp"/>
+                        </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dp" android:layout_height="16dp"
+                            android:src="@drawable/ic_check_circle" android:tint="#27AE60"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Tips Keamanan -->
+            <TextView
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="TIPS KEAMANAN"
+                android:textSize="12sp" android:textStyle="bold"
+                android:textColor="@color/text_secondary"
+                android:layout_marginStart="8dp" android:layout_marginBottom="8dp"
+                android:letterSpacing="0.1"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp" app:cardElevation="0dp"
+                android:layout_marginBottom="20dp">
+                <LinearLayout
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:background="@color/bg_card">
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <LinearLayout
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            android:background="#E8F4FD" android:gravity="center"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_lock" android:tint="@color/blue_header"/>
+                        </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:text="Gunakan password yang kuat dan unik"
+                            android:textColor="@color/text_primary" android:textSize="13sp"/>
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <LinearLayout
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            android:background="#FDECEA" android:gravity="center"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_logout" android:tint="#E74C3C"/>
+                        </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:text="Selalu logout saat menggunakan perangkat bersama"
+                            android:textColor="@color/text_primary" android:textSize="13sp"/>
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <LinearLayout
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            android:background="#F5EEF8" android:gravity="center"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_security" android:tint="#8E44AD"/>
+                        </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:text="Jangan bagikan kredensial akun kepada siapapun"
+                            android:textColor="@color/text_primary" android:textSize="13sp"/>
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <LinearLayout
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            android:background="#E8F8F5" android:gravity="center"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_refresh" android:tint="#27AE60"/>
+                        </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:text="Perbarui aplikasi secara rutin untuk patch keamanan"
+                            android:textColor="@color/text_primary" android:textSize="13sp"/>
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <LinearLayout
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            android:background="#FEF5E7" android:gravity="center"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_warning" android:tint="#E67E22"/>
+                        </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:text="Hindari WiFi publik saat memantau perangkat"
+                            android:textColor="@color/text_primary" android:textSize="13sp"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Info Versi -->
+            <TextView
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="INFORMASI KEAMANAN APLIKASI"
+                android:textSize="12sp" android:textStyle="bold"
+                android:textColor="@color/text_secondary"
+                android:layout_marginStart="8dp" android:layout_marginBottom="8dp"
+                android:letterSpacing="0.1"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp" app:cardElevation="0dp"
+                android:layout_marginBottom="8dp">
+                <LinearLayout
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:orientation="vertical" android:background="@color/bg_card">
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <LinearLayout
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            android:background="#EAF2FF" android:gravity="center"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_settings" android:tint="#2980B9"/>
+                        </LinearLayout>
+                        <TextView
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Versi Aplikasi"
+                            android:textColor="@color/text_primary" android:textSize="13sp"/>
+                        <TextView
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="1.0.0"
+                            android:textColor="@color/text_secondary" android:textSize="13sp"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <LinearLayout
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            android:background="#E8F4FD" android:gravity="center"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_lock" android:tint="@color/blue_header"/>
+                        </LinearLayout>
+                        <TextView
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Platform Auth"
+                            android:textColor="@color/text_primary" android:textSize="13sp"/>
+                        <TextView
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Firebase Auth v22"
+                            android:textColor="@color/text_secondary" android:textSize="13sp"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <LinearLayout
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            android:background="#E8F8F5" android:gravity="center"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_shield" android:tint="#27AE60"/>
+                        </LinearLayout>
+                        <TextView
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Status Keamanan"
+                            android:textColor="@color/text_primary" android:textSize="13sp"/>
+                        <TextView
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="✓ Aman"
+                            android:textColor="#27AE60" android:textSize="13sp"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -362,9 +362,12 @@ float readPH() {
     // Konversi ke voltase
     float volt = avgAdc * (3.3f / 4095.0f);
 
-    // Rumus / Formula dari Arduino IDE
-    float calibration_value = 21.34f + 1.5f; // = 22.84
-    float ph = -5.70f * volt + calibration_value;
+    // Menggunakan kalibrasi 2-titik dari config.h
+    // Slope = (pH7 - pH4) / (Volt7 - Volt4)
+    float slope = (7.0f - 4.0f) / (PH7_VOLTAGE - PH4_VOLTAGE);
+    
+    // Rumus linear: pH = Slope * (Volt_ukur - Volt7) + 7.0
+    float ph = slope * (volt - PH7_VOLTAGE) + 7.0f;
 
     // Debug ke Serial Monitor
     Serial.printf("[pH] ADC:%.0f  Volt:%.4fV  pH:%.2f  Connected:%s\n", avgAdc, volt, ph, isPhConnected ? "YES" : "NO");

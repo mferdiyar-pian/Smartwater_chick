@@ -108,7 +108,6 @@ public class AnalisisActivity extends BaseActivity {
         spinnerFilter.setAdapter(new ArrayAdapter<>(this,
             android.R.layout.simple_spinner_dropdown_item, filter));
         spinnerFilter.setSelection(2);
-        listenPhChart(30, "monthly");
 
         String[] barOpts = {"1 Hari", "1 Minggu", "1 Bulan"};
         spinnerFilterBar.setAdapter(new ArrayAdapter<>(this,
@@ -137,6 +136,9 @@ public class AnalisisActivity extends BaseActivity {
             }
             @Override public void onNothingSelected(AdapterView<?> p) {}
         });
+
+        // Sinkronisasi data pH harian dulu, baru tampilkan grafik pH mingguan/bulanan
+        syncPhDailyDataThenListen();
 
         findViewById(R.id.ivBack).setOnClickListener(v -> {
             startActivity(new Intent(this, DashboardActivity.class)
@@ -315,8 +317,13 @@ public class AnalisisActivity extends BaseActivity {
     // =====================================================================
     private void listenPhChart(int limit, String period) {
         if (phListener != null && phQuery != null) phQuery.removeEventListener(phListener);
-        // Selalu ambil 2000 data terakhir untuk di-grouping berdasarkan jam/hari
-        phQuery = dbRef.child("monitoring").limitToLast(2000);
+
+        if ("daily".equals(period)) {
+            phQuery = dbRef.child("monitoring").limitToLast(2000);
+        } else {
+            phQuery = dbRef.child("volume_air").child("daily").limitToLast(30);
+        }
+
         phListener = new ValueEventListener() {
             @Override public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ArrayList<Float> fl = new ArrayList<>();
@@ -376,18 +383,16 @@ public class AnalisisActivity extends BaseActivity {
                     dailyPhData = sl;
 
                 } else if ("weekly".equals(period)) {
-                    // Grouping per hari untuk 7 hari terakhir
-                    java.util.TreeMap<String, List<Float>> dailyMap = new java.util.TreeMap<>();
+                    // Grouping per hari untuk 7 hari terakhir dari volume_air/daily
+                    java.util.TreeMap<String, Float> dailyMap = new java.util.TreeMap<>();
                     for (DataSnapshot ds : snapshot.getChildren()) {
-                        String t = ds.child("tanggal").getValue(String.class);
+                        String t = ds.getKey();
                         Object v = ds.child("ph").getValue();
                         if (t != null && v != null) {
                             float ph = v instanceof Double ? ((Double)v).floatValue()
-                                     : v instanceof Long   ? ((Long)v).floatValue() : 0f;
-                            if (!dailyMap.containsKey(t)) {
-                                dailyMap.put(t, new ArrayList<>());
-                            }
-                            dailyMap.get(t).add(ph);
+                                     : v instanceof Long   ? ((Long)v).floatValue()
+                                     : v instanceof Float  ? (Float)v : 0f;
+                            dailyMap.put(t, ph);
                         }
                     }
 
@@ -395,10 +400,7 @@ public class AnalisisActivity extends BaseActivity {
                     int start = Math.max(0, sortedDates.size() - 7);
                     for (int i = start; i < sortedDates.size(); i++) {
                         String date = sortedDates.get(i);
-                        List<Float> values = dailyMap.get(date);
-                        float sum = 0f;
-                        for (float val : values) sum += val;
-                        float avg = values.isEmpty() ? 0f : sum / values.size();
+                        float avg = dailyMap.get(date);
                         fl.add(avg);
                         sl.add(String.format(java.util.Locale.US, "%.2f", avg));
                         labels.add(shortDate(date));
@@ -406,18 +408,16 @@ public class AnalisisActivity extends BaseActivity {
                     weeklyPhData = sl;
 
                 } else { // monthly
-                    // Grouping per hari untuk 30 hari terakhir
-                    java.util.TreeMap<String, List<Float>> dailyMap = new java.util.TreeMap<>();
+                    // Grouping per hari untuk 30 hari terakhir dari volume_air/daily
+                    java.util.TreeMap<String, Float> dailyMap = new java.util.TreeMap<>();
                     for (DataSnapshot ds : snapshot.getChildren()) {
-                        String t = ds.child("tanggal").getValue(String.class);
+                        String t = ds.getKey();
                         Object v = ds.child("ph").getValue();
                         if (t != null && v != null) {
                             float ph = v instanceof Double ? ((Double)v).floatValue()
-                                     : v instanceof Long   ? ((Long)v).floatValue() : 0f;
-                            if (!dailyMap.containsKey(t)) {
-                                dailyMap.put(t, new ArrayList<>());
-                            }
-                            dailyMap.get(t).add(ph);
+                                     : v instanceof Long   ? ((Long)v).floatValue()
+                                     : v instanceof Float  ? (Float)v : 0f;
+                            dailyMap.put(t, ph);
                         }
                     }
 
@@ -425,10 +425,7 @@ public class AnalisisActivity extends BaseActivity {
                     int start = Math.max(0, sortedDates.size() - 30);
                     for (int i = start; i < sortedDates.size(); i++) {
                         String date = sortedDates.get(i);
-                        List<Float> values = dailyMap.get(date);
-                        float sum = 0f;
-                        for (float val : values) sum += val;
-                        float avg = values.isEmpty() ? 0f : sum / values.size();
+                        float avg = dailyMap.get(date);
                         fl.add(avg);
                         sl.add(String.format(java.util.Locale.US, "%.2f", avg));
                         labels.add(shortDate(date));
@@ -713,6 +710,48 @@ public class AnalisisActivity extends BaseActivity {
         } else {
             tvInfoKosong.setVisibility(View.VISIBLE);
         }
+    }
+
+    /**
+     * Sinkronisasi rata-rata pH harian dari /monitoring ke /volume_air/daily/{tanggal}/ph
+     * kemudian setelah selesai, mulai listen grafik pH dengan periode default (monthly).
+     */
+    private void syncPhDailyDataThenListen() {
+        dbRef.child("monitoring").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    java.util.TreeMap<String, java.util.List<Float>> dailyPhMap = new java.util.TreeMap<>();
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        String t = ds.child("tanggal").getValue(String.class);
+                        Object v = ds.child("ph").getValue();
+                        if (t != null && v != null) {
+                            float ph = v instanceof Double ? ((Double) v).floatValue()
+                                     : v instanceof Long   ? ((Long) v).floatValue()
+                                     : v instanceof Float  ? (Float) v : 0f;
+                            if (!dailyPhMap.containsKey(t)) {
+                                dailyPhMap.put(t, new ArrayList<>());
+                            }
+                            dailyPhMap.get(t).add(ph);
+                        }
+                    }
+                    for (String t : dailyPhMap.keySet()) {
+                        java.util.List<Float> list = dailyPhMap.get(t);
+                        float sum = 0f;
+                        for (float val : list) sum += val;
+                        float avg = list.isEmpty() ? 0f : sum / list.size();
+                        dbRef.child("volume_air").child("daily").child(t).child("ph").setValue(avg);
+                    }
+                }
+                // Setelah sync selesai (atau jika tidak ada data monitoring), mulai dengarkan grafik pH
+                listenPhChart(30, "monthly");
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Tetap tampilkan grafik meski sync gagal
+                listenPhChart(30, "monthly");
+            }
+        });
     }
 
     @Override

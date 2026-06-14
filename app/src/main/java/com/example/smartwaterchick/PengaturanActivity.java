@@ -177,41 +177,21 @@ public class PengaturanActivity extends BaseActivity {
             Toast.makeText(this, "Manajemen Perangkat dinonaktifkan karena perangkat Anda tidak memerlukan koneksi Bluetooth.", Toast.LENGTH_LONG).show();
         });
 
-        findViewById(R.id.menuKeamanan).setOnClickListener(v ->
-                Toast.makeText(this, "Keamanan", Toast.LENGTH_SHORT).show());
-
-        // ── MENU UMUM ──
-        findViewById(R.id.menuBackup).setOnClickListener(v ->
-                Toast.makeText(this, "Backup Data...", Toast.LENGTH_SHORT).show());
-
-        findViewById(R.id.menuHapusDatabase).setOnClickListener(v -> {
-            new AlertDialog.Builder(this)
-                    .setTitle("Hapus Database Monitoring")
-                    .setMessage("Apakah Anda yakin ingin menghapus seluruh data riwayat monitoring secara permanen dari Firebase?")
-                    .setIcon(R.drawable.ic_warning)
-                    .setPositiveButton("Hapus", (dialog, which) -> {
-                        Toast.makeText(this, "Menghapus database...", Toast.LENGTH_SHORT).show();
-                        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
-                        dbRef.child("monitoring").removeValue().addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                dbRef.child("volume_air").removeValue().addOnCompleteListener(task2 -> {
-                                    if (task2.isSuccessful()) {
-                                        Toast.makeText(PengaturanActivity.this, "Database monitoring berhasil dihapus secara permanen!", Toast.LENGTH_LONG).show();
-                                    } else {
-                                        Toast.makeText(PengaturanActivity.this, "Gagal menghapus volume air: " + task2.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            } else {
-                                Toast.makeText(PengaturanActivity.this, "Gagal menghapus data monitoring: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    })
-                    .setNegativeButton("Batal", null)
-                    .show();
+        findViewById(R.id.menuKeamanan).setOnClickListener(v -> {
+            startActivity(new Intent(this, KeamananActivity.class));
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         });
 
-        findViewById(R.id.menuBantuan).setOnClickListener(v ->
-                Toast.makeText(this, "Pusat Bantuan", Toast.LENGTH_SHORT).show());
+        // ── MENU UMUM ──
+        findViewById(R.id.menuManajemenData).setOnClickListener(v -> {
+            startActivity(new Intent(this, ManajemenDataActivity.class));
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        });
+
+        findViewById(R.id.menuBantuan).setOnClickListener(v -> {
+            startActivity(new Intent(this, PusatBantuanActivity.class));
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        });
 
         // ── KELUAR SESI ──
         findViewById(R.id.btnKeluarSesi).setOnClickListener(v ->

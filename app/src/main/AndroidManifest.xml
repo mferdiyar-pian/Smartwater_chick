@@ -71,6 +71,18 @@
         <activity
             android:name=".PengaturanNotifikasiActivity"
             android:exported="false" />
+        <!-- Halaman Keamanan -->
+        <activity
+            android:name=".KeamananActivity"
+            android:exported="false" />
+        <!-- Halaman Pusat Bantuan -->
+        <activity
+            android:name=".PusatBantuanActivity"
+            android:exported="false" />
+        <!-- Halaman Manajemen Data -->
+        <activity
+            android:name=".ManajemenDataActivity"
+            android:exported="false" />
         <!-- Halaman BLE WiFi Setup -->
         <activity
             android:name=".BleWifiSetupActivity"

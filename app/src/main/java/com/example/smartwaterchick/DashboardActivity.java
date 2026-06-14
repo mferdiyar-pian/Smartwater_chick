@@ -131,6 +131,9 @@ public class DashboardActivity extends BaseActivity {
             return false;
         });
 
+        // ─── Auto-delete check ───
+        ManajemenDataActivity.performAutoDeleteIfEnabled(this, dbRef);
+
         // ─── Mulai listener Firebase real-time ───
         startPhListener();
         startWaterListener();
