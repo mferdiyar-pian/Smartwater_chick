@@ -70,7 +70,7 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- 1. Login -->
+            <!-- 1. Memulai Aplikasi -->
             <TextView
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:text="1. MEMULAI APLIKASI"
@@ -84,20 +84,26 @@
                 android:layout_marginBottom="20dp">
                 <LinearLayout
                     android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:orientation="vertical" android:background="@color/bg_card"
-                    android:padding="16dp">
+                    android:orientation="vertical" android:background="@color/bg_card">
+
                     <LinearLayout
                         android:layout_width="match_parent" android:layout_height="wrap_content"
-                        android:orientation="horizontal" android:layout_marginBottom="12dp">
-                        <TextView
-                            android:layout_width="28dp" android:layout_height="28dp"
-                            android:text="1" android:textColor="#FFFFFF"
-                            android:textSize="13sp" android:textStyle="bold"
-                            android:gravity="center" android:background="@color/blue_header"
-                            android:layout_marginEnd="12dp"/>
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            app:cardCornerRadius="8dp" app:cardElevation="0dp"
+                            app:cardBackgroundColor="#E8F4FD"
+                            android:layout_marginEnd="14dp">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="1" android:textColor="@color/blue_header"
+                                android:textSize="14sp" android:textStyle="bold"
+                                android:layout_gravity="center"/>
+                        </androidx.cardview.widget.CardView>
                         <LinearLayout
-                            android:layout_width="match_parent" android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
                             <TextView
                                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                                 android:text="Buka Aplikasi &amp; Login"
@@ -107,23 +113,31 @@
                                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                                 android:text="Masukkan email dan password akun yang telah terdaftar, lalu tekan tombol Masuk."
                                 android:textColor="@color/text_secondary" android:textSize="12sp"
-                                android:layout_marginTop="3dp" android:lineSpacingExtra="2dp"/>
+                                android:layout_marginTop="2dp" android:lineSpacingExtra="2dp"/>
                         </LinearLayout>
                     </LinearLayout>
+
                     <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#F0F2F8" android:layout_marginBottom="12dp"/>
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
                     <LinearLayout
                         android:layout_width="match_parent" android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="28dp" android:layout_height="28dp"
-                            android:text="2" android:textColor="#FFFFFF"
-                            android:textSize="13sp" android:textStyle="bold"
-                            android:gravity="center" android:background="@color/blue_header"
-                            android:layout_marginEnd="12dp"/>
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            app:cardCornerRadius="8dp" app:cardElevation="0dp"
+                            app:cardBackgroundColor="#E8F4FD"
+                            android:layout_marginEnd="14dp">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="2" android:textColor="@color/blue_header"
+                                android:textSize="14sp" android:textStyle="bold"
+                                android:layout_gravity="center"/>
+                        </androidx.cardview.widget.CardView>
                         <LinearLayout
-                            android:layout_width="match_parent" android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
                             <TextView
                                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                                 android:text="Tampilan Dashboard"
@@ -133,9 +147,10 @@
                                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                                 android:text="Setelah login, Anda langsung masuk ke Beranda yang menampilkan status real-time sensor dan pompa."
                                 android:textColor="@color/text_secondary" android:textSize="12sp"
-                                android:layout_marginTop="3dp" android:lineSpacingExtra="2dp"/>
+                                android:layout_marginTop="2dp" android:lineSpacingExtra="2dp"/>
                         </LinearLayout>
                     </LinearLayout>
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -153,42 +168,104 @@
                 android:layout_marginBottom="20dp">
                 <LinearLayout
                     android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:orientation="vertical" android:background="@color/bg_card"
-                    android:padding="16dp">
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="📊  Volume Air Tangki"
-                        android:textColor="@color/text_primary" android:textSize="14sp"
-                        android:textStyle="bold" android:layout_marginBottom="4dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Menampilkan kapasitas dan persentase air saat ini. Warna indikator: Hijau (aman), Kuning (perhatian), Merah (kritis)."
-                        android:textColor="@color/text_secondary" android:textSize="12sp"
-                        android:lineSpacingExtra="2dp" android:layout_marginBottom="14dp"/>
+                    android:orientation="vertical" android:background="@color/bg_card">
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            app:cardCornerRadius="8dp" app:cardElevation="0dp"
+                            app:cardBackgroundColor="#E8F4FD"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_water_capacity" android:tint="@color/blue_header"
+                                android:layout_gravity="center"/>
+                        </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Volume Air Tangki"
+                                android:textColor="@color/text_primary" android:textSize="14sp"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Menampilkan kapasitas dan persentase air saat ini. Warna indikator: Hijau (aman), Kuning (perhatian), Merah (kritis)."
+                                android:textColor="@color/text_secondary" android:textSize="12sp"
+                                android:layout_marginTop="2dp" android:lineSpacingExtra="2dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
                     <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#F0F2F8" android:layout_marginBottom="14dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="🌡️  Suhu &amp; pH Air"
-                        android:textColor="@color/text_primary" android:textSize="14sp"
-                        android:textStyle="bold" android:layout_marginBottom="4dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Data suhu dan pH diperbarui otomatis setiap beberapa detik langsung dari sensor ESP32 via Firebase."
-                        android:textColor="@color/text_secondary" android:textSize="12sp"
-                        android:lineSpacingExtra="2dp" android:layout_marginBottom="14dp"/>
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            app:cardCornerRadius="8dp" app:cardElevation="0dp"
+                            app:cardBackgroundColor="#E8F8F5"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_thermometer" android:tint="#27AE60"
+                                android:layout_gravity="center"/>
+                        </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Suhu &amp; pH Air"
+                                android:textColor="@color/text_primary" android:textSize="14sp"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Data suhu dan pH diperbarui otomatis setiap beberapa detik langsung dari sensor ESP32 via Firebase."
+                                android:textColor="@color/text_secondary" android:textSize="12sp"
+                                android:layout_marginTop="2dp" android:lineSpacingExtra="2dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
                     <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#F0F2F8" android:layout_marginBottom="14dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="⚡  Status Pompa"
-                        android:textColor="@color/text_primary" android:textSize="14sp"
-                        android:textStyle="bold" android:layout_marginBottom="4dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Kartu pompa menampilkan status ON/OFF real-time. Pompa berjalan otomatis sesuai jadwal atau dikontrol manual."
-                        android:textColor="@color/text_secondary" android:textSize="12sp"
-                        android:lineSpacingExtra="2dp"/>
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            app:cardCornerRadius="8dp" app:cardElevation="0dp"
+                            app:cardBackgroundColor="#FEF5E7"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_swirl" android:tint="#E67E22"
+                                android:layout_gravity="center"/>
+                        </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Status Pompa"
+                                android:textColor="@color/text_primary" android:textSize="14sp"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Kartu pompa menampilkan status ON/OFF real-time. Pompa berjalan otomatis sesuai jadwal atau dikontrol manual."
+                                android:textColor="@color/text_secondary" android:textSize="12sp"
+                                android:layout_marginTop="2dp" android:lineSpacingExtra="2dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -206,42 +283,104 @@
                 android:layout_marginBottom="20dp">
                 <LinearLayout
                     android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:orientation="vertical" android:background="@color/bg_card"
-                    android:padding="16dp">
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="💧  Kontrol Pompa Manual"
-                        android:textColor="@color/text_primary" android:textSize="14sp"
-                        android:textStyle="bold" android:layout_marginBottom="4dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Tekan tombol ON/OFF untuk mengaktifkan atau mematikan pompa secara langsung. Perintah dikirim ke ESP32 via Firebase."
-                        android:textColor="@color/text_secondary" android:textSize="12sp"
-                        android:lineSpacingExtra="2dp" android:layout_marginBottom="14dp"/>
+                    android:orientation="vertical" android:background="@color/bg_card">
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            app:cardCornerRadius="8dp" app:cardElevation="0dp"
+                            app:cardBackgroundColor="#EAF2FF"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_water_drop" android:tint="#2980B9"
+                                android:layout_gravity="center"/>
+                        </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Kontrol Pompa Manual"
+                                android:textColor="@color/text_primary" android:textSize="14sp"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Tekan tombol ON/OFF untuk mengaktifkan atau mematikan pompa secara langsung. Perintah dikirim ke ESP32 via Firebase."
+                                android:textColor="@color/text_secondary" android:textSize="12sp"
+                                android:layout_marginTop="2dp" android:lineSpacingExtra="2dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
                     <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#F0F2F8" android:layout_marginBottom="14dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="⏰  Jadwal Otomatis"
-                        android:textColor="@color/text_primary" android:textSize="14sp"
-                        android:textStyle="bold" android:layout_marginBottom="4dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Tekan tombol (+) untuk menambah jadwal. Atur waktu mulai dan durasi. Pompa akan menyala otomatis sesuai jadwal yang dibuat."
-                        android:textColor="@color/text_secondary" android:textSize="12sp"
-                        android:lineSpacingExtra="2dp" android:layout_marginBottom="14dp"/>
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            app:cardCornerRadius="8dp" app:cardElevation="0dp"
+                            app:cardBackgroundColor="#F9EBEA"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_notification" android:tint="#C0392B"
+                                android:layout_gravity="center"/>
+                        </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Jadwal Otomatis"
+                                android:textColor="@color/text_primary" android:textSize="14sp"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Tekan tombol (+) untuk menambah jadwal. Atur waktu mulai dan durasi. Pompa akan menyala otomatis sesuai jadwal yang dibuat."
+                                android:textColor="@color/text_secondary" android:textSize="12sp"
+                                android:layout_marginTop="2dp" android:lineSpacingExtra="2dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
                     <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#F0F2F8" android:layout_marginBottom="14dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="🪣  Level Tangki"
-                        android:textColor="@color/text_primary" android:textSize="14sp"
-                        android:textStyle="bold" android:layout_marginBottom="4dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Animasi tangki menunjukkan persentase air secara visual dan real-time."
-                        android:textColor="@color/text_secondary" android:textSize="12sp"
-                        android:lineSpacingExtra="2dp"/>
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            app:cardCornerRadius="8dp" app:cardElevation="0dp"
+                            app:cardBackgroundColor="#F5EEF8"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_tank" android:tint="#8E44AD"
+                                android:layout_gravity="center"/>
+                        </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Level Tangki"
+                                android:textColor="@color/text_primary" android:textSize="14sp"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Animasi tangki menunjukkan persentase air secara visual dan real-time."
+                                android:textColor="@color/text_secondary" android:textSize="12sp"
+                                android:layout_marginTop="2dp" android:lineSpacingExtra="2dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -259,30 +398,71 @@
                 android:layout_marginBottom="20dp">
                 <LinearLayout
                     android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:orientation="vertical" android:background="@color/bg_card"
-                    android:padding="16dp">
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="📈  Grafik Data"
-                        android:textColor="@color/text_primary" android:textSize="14sp"
-                        android:textStyle="bold" android:layout_marginBottom="4dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Grafik menampilkan tren volume air, suhu, dan pH. Geser tab Harian / Mingguan / Bulanan untuk berpindah periode."
-                        android:textColor="@color/text_secondary" android:textSize="12sp"
-                        android:lineSpacingExtra="2dp" android:layout_marginBottom="14dp"/>
+                    android:orientation="vertical" android:background="@color/bg_card">
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            app:cardCornerRadius="8dp" app:cardElevation="0dp"
+                            app:cardBackgroundColor="#EBF5FB"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_analytics" android:tint="#3498DB"
+                                android:layout_gravity="center"/>
+                        </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Grafik Data"
+                                android:textColor="@color/text_primary" android:textSize="14sp"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Grafik menampilkan tren volume air, suhu, dan pH. Geser tab Harian / Mingguan / Bulanan untuk berpindah periode."
+                                android:textColor="@color/text_secondary" android:textSize="12sp"
+                                android:layout_marginTop="2dp" android:lineSpacingExtra="2dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
                     <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#F0F2F8" android:layout_marginBottom="14dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="📥  Ekspor Laporan Excel"
-                        android:textColor="@color/text_primary" android:textSize="14sp"
-                        android:textStyle="bold" android:layout_marginBottom="4dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Tekan 'Laporan Lengkap' untuk mengunduh data dalam format .xls. File tersimpan otomatis di folder Downloads."
-                        android:textColor="@color/text_secondary" android:textSize="12sp"
-                        android:lineSpacingExtra="2dp"/>
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            app:cardCornerRadius="8dp" app:cardElevation="0dp"
+                            app:cardBackgroundColor="#E8F8F5"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_backup" android:tint="#2ECC71"
+                                android:layout_gravity="center"/>
+                        </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Ekspor Laporan Excel"
+                                android:textColor="@color/text_primary" android:textSize="14sp"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Tekan 'Laporan Lengkap' untuk mengunduh data dalam format .xls. File tersimpan otomatis di folder Downloads."
+                                android:textColor="@color/text_secondary" android:textSize="12sp"
+                                android:layout_marginTop="2dp" android:lineSpacingExtra="2dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -300,30 +480,71 @@
                 android:layout_marginBottom="20dp">
                 <LinearLayout
                     android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:orientation="vertical" android:background="@color/bg_card"
-                    android:padding="16dp">
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="📡  Status Koneksi ESP32"
-                        android:textColor="@color/text_primary" android:textSize="14sp"
-                        android:textStyle="bold" android:layout_marginBottom="4dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Menampilkan status koneksi perangkat ESP32. Ikon hijau = aktif dan terhubung. Ikon merah = offline."
-                        android:textColor="@color/text_secondary" android:textSize="12sp"
-                        android:lineSpacingExtra="2dp" android:layout_marginBottom="14dp"/>
+                    android:orientation="vertical" android:background="@color/bg_card">
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            app:cardCornerRadius="8dp" app:cardElevation="0dp"
+                            app:cardBackgroundColor="#EAF2F8"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_sensor_broadcast" android:tint="#2471A3"
+                                android:layout_gravity="center"/>
+                        </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Status Koneksi ESP32"
+                                android:textColor="@color/text_primary" android:textSize="14sp"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Menampilkan status koneksi perangkat ESP32. Ikon hijau = aktif dan terhubung. Ikon merah = offline."
+                                android:textColor="@color/text_secondary" android:textSize="12sp"
+                                android:layout_marginTop="2dp" android:lineSpacingExtra="2dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
                     <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#F0F2F8" android:layout_marginBottom="14dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="🔧  Informasi Sensor"
-                        android:textColor="@color/text_primary" android:textSize="14sp"
-                        android:textStyle="bold" android:layout_marginBottom="4dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Detail pembacaan sensor Ultrasonik, Suhu DS18B20, dan pH ditampilkan beserta waktu pembaruan terakhir."
-                        android:textColor="@color/text_secondary" android:textSize="12sp"
-                        android:lineSpacingExtra="2dp"/>
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            app:cardCornerRadius="8dp" app:cardElevation="0dp"
+                            app:cardBackgroundColor="#E5E7E9"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_settings" android:tint="#5D6D7E"
+                                android:layout_gravity="center"/>
+                        </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Informasi Sensor"
+                                android:textColor="@color/text_primary" android:textSize="14sp"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Detail pembacaan sensor Ultrasonik, Suhu DS18B20, dan pH ditampilkan beserta waktu pembaruan terakhir."
+                                android:textColor="@color/text_secondary" android:textSize="12sp"
+                                android:layout_marginTop="2dp" android:lineSpacingExtra="2dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -341,42 +562,104 @@
                 android:layout_marginBottom="20dp">
                 <LinearLayout
                     android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:orientation="vertical" android:background="@color/bg_card"
-                    android:padding="16dp">
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="👤  Edit Profil"
-                        android:textColor="@color/text_primary" android:textSize="14sp"
-                        android:textStyle="bold" android:layout_marginBottom="4dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Ketuk ikon pensil untuk mengubah nama dan jabatan. Ketuk foto untuk mengganti dari galeri."
-                        android:textColor="@color/text_secondary" android:textSize="12sp"
-                        android:lineSpacingExtra="2dp" android:layout_marginBottom="14dp"/>
+                    android:orientation="vertical" android:background="@color/bg_card">
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            app:cardCornerRadius="8dp" app:cardElevation="0dp"
+                            app:cardBackgroundColor="#FDEDEC"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_face" android:tint="#CB4335"
+                                android:layout_gravity="center"/>
+                        </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Edit Profil"
+                                android:textColor="@color/text_primary" android:textSize="14sp"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Ketuk ikon pensil untuk mengubah nama dan jabatan. Ketuk foto untuk mengganti dari galeri."
+                                android:textColor="@color/text_secondary" android:textSize="12sp"
+                                android:layout_marginTop="2dp" android:lineSpacingExtra="2dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
                     <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#F0F2F8" android:layout_marginBottom="14dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="🌙  Mode Gelap"
-                        android:textColor="@color/text_primary" android:textSize="14sp"
-                        android:textStyle="bold" android:layout_marginBottom="4dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Aktifkan toggle Mode Gelap untuk beralih ke tema gelap yang nyaman di malam hari."
-                        android:textColor="@color/text_secondary" android:textSize="12sp"
-                        android:lineSpacingExtra="2dp" android:layout_marginBottom="14dp"/>
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            app:cardCornerRadius="8dp" app:cardElevation="0dp"
+                            app:cardBackgroundColor="#FBEEE6"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_dark_mode" android:tint="#D35400"
+                                android:layout_gravity="center"/>
+                        </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Mode Gelap"
+                                android:textColor="@color/text_primary" android:textSize="14sp"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Aktifkan toggle Mode Gelap untuk beralih ke tema gelap yang nyaman di malam hari."
+                                android:textColor="@color/text_secondary" android:textSize="12sp"
+                                android:layout_marginTop="2dp" android:lineSpacingExtra="2dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
                     <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#F0F2F8" android:layout_marginBottom="14dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="🗑️  Hapus Database"
-                        android:textColor="@color/text_primary" android:textSize="14sp"
-                        android:textStyle="bold" android:layout_marginBottom="4dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Menghapus seluruh riwayat monitoring dari Firebase secara permanen. Tindakan ini tidak dapat dibatalkan."
-                        android:textColor="#E74C3C" android:textSize="12sp"
-                        android:lineSpacingExtra="2dp"/>
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            app:cardCornerRadius="8dp" app:cardElevation="0dp"
+                            app:cardBackgroundColor="#FADBD8"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_delete" android:tint="#E74C3C"
+                                android:layout_gravity="center"/>
+                        </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Manajemen Data"
+                                android:textColor="@color/text_primary" android:textSize="14sp"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Cadangkan data harian sensor dan atur penghapusan otomatis log usang."
+                                android:textColor="@color/text_secondary" android:textSize="12sp"
+                                android:layout_marginTop="2dp" android:lineSpacingExtra="2dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -394,42 +677,104 @@
                 android:layout_marginBottom="8dp">
                 <LinearLayout
                     android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:orientation="vertical" android:background="@color/bg_card"
-                    android:padding="16dp">
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="❓  Data tidak muncul di dashboard?"
-                        android:textColor="@color/text_primary" android:textSize="14sp"
-                        android:textStyle="bold" android:layout_marginBottom="4dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Pastikan ESP32 menyala dan terhubung ke WiFi. Periksa koneksi internet ponsel Anda."
-                        android:textColor="@color/text_secondary" android:textSize="12sp"
-                        android:lineSpacingExtra="2dp" android:layout_marginBottom="16dp"/>
+                    android:orientation="vertical" android:background="@color/bg_card">
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            app:cardCornerRadius="8dp" app:cardElevation="0dp"
+                            app:cardBackgroundColor="#FCF3CF"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_help" android:tint="#F39C12"
+                                android:layout_gravity="center"/>
+                        </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Data tidak muncul di dashboard?"
+                                android:textColor="@color/text_primary" android:textSize="14sp"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Pastikan ESP32 menyala dan terhubung ke WiFi. Periksa koneksi internet ponsel Anda."
+                                android:textColor="@color/text_secondary" android:textSize="12sp"
+                                android:layout_marginTop="2dp" android:lineSpacingExtra="2dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
                     <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#F0F2F8" android:layout_marginBottom="16dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="❓  Pompa tidak merespon perintah?"
-                        android:textColor="@color/text_primary" android:textSize="14sp"
-                        android:textStyle="bold" android:layout_marginBottom="4dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Cek status perangkat di halaman Perangkat. Jika offline, restart ESP32 dan tunggu 30 detik."
-                        android:textColor="@color/text_secondary" android:textSize="12sp"
-                        android:lineSpacingExtra="2dp" android:layout_marginBottom="16dp"/>
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            app:cardCornerRadius="8dp" app:cardElevation="0dp"
+                            app:cardBackgroundColor="#FCF3CF"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_help" android:tint="#F39C12"
+                                android:layout_gravity="center"/>
+                        </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Pompa tidak merespon perintah?"
+                                android:textColor="@color/text_primary" android:textSize="14sp"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Cek status perangkat di halaman Perangkat. Jika offline, restart ESP32 dan tunggu 30 detik."
+                                android:textColor="@color/text_secondary" android:textSize="12sp"
+                                android:layout_marginTop="2dp" android:lineSpacingExtra="2dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
                     <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#F0F2F8" android:layout_marginBottom="16dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="❓  Lupa password akun?"
-                        android:textColor="@color/text_primary" android:textSize="14sp"
-                        android:textStyle="bold" android:layout_marginBottom="4dp"/>
-                    <TextView
-                        android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Hubungi administrator untuk reset password melalui Firebase Authentication console."
-                        android:textColor="@color/text_secondary" android:textSize="12sp"
-                        android:lineSpacingExtra="2dp"/>
+                        android:background="#F0F2F8" android:layout_marginStart="16dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:orientation="horizontal" android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="36dp" android:layout_height="36dp"
+                            app:cardCornerRadius="8dp" app:cardElevation="0dp"
+                            app:cardBackgroundColor="#FCF3CF"
+                            android:layout_marginEnd="14dp">
+                            <ImageView
+                                android:layout_width="20dp" android:layout_height="20dp"
+                                android:src="@drawable/ic_help" android:tint="#F39C12"
+                                android:layout_gravity="center"/>
+                        </androidx.cardview.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Lupa password akun?"
+                                android:textColor="@color/text_primary" android:textSize="14sp"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Hubungi administrator untuk reset password melalui Firebase Authentication console."
+                                android:textColor="@color/text_secondary" android:textSize="12sp"
+                                android:layout_marginTop="2dp" android:lineSpacingExtra="2dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

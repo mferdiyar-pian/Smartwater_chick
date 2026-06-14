@@ -177,8 +177,9 @@ public class ManajemenDataActivity extends BaseActivity {
                 ArrayList<String> keysToDelete = new ArrayList<>();
                 for (DataSnapshot ds : snapshot.getChildren()) {
                     String t = ds.child("tanggal").getValue(String.class);
-                    if (t != null && t.compareTo(thresholdDate) < 0) {
-                        if (ds.getKey() != null) keysToDelete.add(ds.getKey());
+                    // Jika tanggal null (data rusak) atau lebih kecil/sama dengan thresholdDate (sudah lewat batas hari)
+                    if (ds.getKey() != null && (t == null || t.compareTo(thresholdDate) <= 0)) {
+                        keysToDelete.add(ds.getKey());
                     }
                 }
                 // Hapus satu per satu via referensi langsung
@@ -266,7 +267,7 @@ public class ManajemenDataActivity extends BaseActivity {
                     ArrayList<String> keysToDelete = new ArrayList<>();
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         String t = ds.child("tanggal").getValue(String.class);
-                        if (t != null && t.compareTo(thresholdDate) < 0 && ds.getKey() != null) {
+                        if (ds.getKey() != null && (t == null || t.compareTo(thresholdDate) <= 0)) {
                             keysToDelete.add(ds.getKey());
                         }
                     }
