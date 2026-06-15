@@ -32,7 +32,6 @@
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 FirebaseData fbdo;
-FirebaseData fbdoCommand;
 FirebaseAuth firebaseAuth;
 FirebaseConfig firebaseConfig;
 
@@ -47,23 +46,31 @@ bool schedule07 = false, schedule15 = false, schedule22 = false;
 bool isPhConnected = false;
 bool isUltrasonicConnected = false;
 
+// Global sensor values (diupdate setiap 2 detik secara lokal)
+float latestPh     = 7.0f;
+float latestLiter  = 0.0f;
+float latestPersen = 0.0f;
+
 unsigned long lastSendTime        = 0;
 unsigned long lastWifiRetryTime   = 0;
 unsigned long lastEpochSync       = 0;
 unsigned long millisAtLastSync    = 0;
 unsigned long lastPollTime        = 0;
 unsigned long lastHeartbeatTime   = 0;   // Timer heartbeat WiFi status
+unsigned long lastSensorReadTime  = 0;   // Timer pembacaan sensor lokal
 
-const unsigned long POLL_INTERVAL_MS      = 2000;
-const unsigned long HEARTBEAT_INTERVAL_MS = 5000;  // Kirim wifi_online setiap 5 detik
+const unsigned long POLL_INTERVAL_MS      = 2000;  // Pembacaan sensor + polling Firebase
+const unsigned long HEARTBEAT_INTERVAL_MS = 5000;  // Kirim status WiFi ke Firebase setiap 5 detik
 
 // ──────────────────────────────────────────
 // DEKLARASI FUNGSI
 // ──────────────────────────────────────────
 bool  connectToWifi(String ssid, String pass, bool silent = false);
 void  connectFirebase();
-void  readAndSendSensorData();
-void  runOfflineTasks();
+void  readSensors();
+void  updateLCD(float ph, float liter, float persen);
+void  sendSensorData(float ph, float liter, float persen);
+void  logOfflineData(float ph, float liter, float persen);
 void  sendHeartbeat(bool wifiOk);  // Kirim status WiFi ke Firebase (cepat)
 float readPH();
 float readWaterLevel();
@@ -126,45 +133,42 @@ void setup() {
 
         connectFirebase();
         isOnline = true;
-
-        // Ganti tampilan LCD setelah Firebase siap
-        if (firebaseReady) {
-            lcd.clear();
-            lcd.setCursor(0, 0); lcd.print("Kontrol Siap!   ");
-            lcd.setCursor(0, 1); lcd.print("Poll tiap 2 det ");
-        }
     } else {
         Serial.println("═══════════════════════════════════════");
         Serial.println("  ⚠️  MODE OFFLINE AKTIF");
         Serial.println("  Sensor tetap berjalan.");
         Serial.println("  Retry WiFi tiap 30 detik...");
         Serial.println("═══════════════════════════════════════");
-        lcd.clear();
-        lcd.setCursor(0, 0); lcd.print("[OFFLINE] MODE  ");
-        lcd.setCursor(0, 1); lcd.print("Retry WiFi 30s  ");
-        delay(1500);
         isOnline = false;
     }
+
+    // Pembacaan awal
+    readSensors();
+    updateLCD(latestPh, latestLiter, latestPersen);
 }
 
 // ──────────────────────────────────────────
 // LOOP UTAMA
 // ──────────────────────────────────────────
 void loop() {
+    unsigned long now = millis();
 
-    // ─── Mode Offline — Coba reconnect WiFi ───
+    // ─── 1. Pembacaan Sensor & Update LCD (Real-Time setiap 2 detik) ───
+    if (now - lastSensorReadTime >= POLL_INTERVAL_MS || lastSensorReadTime == 0) {
+        lastSensorReadTime = now;
+        readSensors();
+        updateLCD(latestPh, latestLiter, latestPersen);
+    }
+
+    // ─── 2. Mode Offline — Coba reconnect WiFi di background ───
     if (!isOnline) {
-        unsigned long now = millis();
         if (now - lastWifiRetryTime >= WIFI_RETRY_INTERVAL_MS || lastWifiRetryTime == 0) {
             lastWifiRetryTime = now;
-            bool ok = connectToWifi(WIFI_SSID, WIFI_PASSWORD, true);
+            Serial.println("[WiFi] Mencoba menghubungkan kembali...");
+            bool ok = connectToWifi(WIFI_SSID, WIFI_PASSWORD, true); // silent = true agar tidak mengganggu LCD
             if (ok) {
                 Serial.println("[WiFi] ✅ Kembali online!");
                 isOnline = true;
-                lcd.clear();
-                lcd.setCursor(0, 0); lcd.print("Kembali Online! ");
-                lcd.setCursor(0, 1); lcd.print(WiFi.localIP().toString());
-                delay(1000);
 
                 timeClient.begin();
                 timeClient.update();
@@ -172,46 +176,35 @@ void loop() {
                 millisAtLastSync = millis();
 
                 if (!firebaseReady) connectFirebase();
-            } else {
-                lcd.clear();
-                lcd.setCursor(0, 0); lcd.print("[OFFLINE] MODE  ");
-                lcd.setCursor(0, 1); lcd.print("Retry WiFi 30s  ");
             }
         }
     }
 
-    // ─── Mode Normal (Online) ───
+    // ─── 3. Mode Online & Firebase Ready ───
     if (isOnline && firebaseReady) {
         if (Firebase.isTokenExpired()) Firebase.refreshToken(&firebaseConfig);
 
-        unsigned long now = millis();
+        // Polling kontrol relay setiap 2 detik
         if (now - lastPollTime >= POLL_INTERVAL_MS || lastPollTime == 0) {
             lastPollTime = now;
             pollFirebase();
         }
 
+        // Cek status koneksi WiFi
         if (WiFi.status() != WL_CONNECTED) {
             Serial.println("[WiFi] Koneksi terputus. Masuk mode offline...");
-            // ── Kirim wifi_online=false sebelum benar-benar offline ──────────
-            // Firebase masih bisa sempat terkirim karena koneksi baru saja putus
-            FirebaseData fbdoHB;
-            fbdoHB.setBSSLBufferSize(512, 512);
-            Firebase.RTDB.setBool(&fbdoHB, "/kontrol_status/wifi_online", false);
-            Firebase.RTDB.setInt(&fbdoHB, "/kontrol_status/rssi", -100);
             isOnline      = false;
             firebaseReady = false;
         }
 
-        // ── Heartbeat: kirim status WiFi setiap 5 detik ─────────────────────
-        unsigned long hbNow = millis();
-        if (hbNow - lastHeartbeatTime >= HEARTBEAT_INTERVAL_MS || lastHeartbeatTime == 0) {
-            lastHeartbeatTime = hbNow;
+        // Heartbeat WiFi status setiap 5 detik
+        if (now - lastHeartbeatTime >= HEARTBEAT_INTERVAL_MS || lastHeartbeatTime == 0) {
+            lastHeartbeatTime = now;
             sendHeartbeat(true);
         }
     }
 
-    // ─── Kirim data sensor (Online & Offline) ───
-    unsigned long now = millis();
+    // ─── 4. Kirim Data Sensor (Setiap 30 detik) ───
     if (now - lastSendTime >= SEND_INTERVAL_MS || lastSendTime == 0) {
         lastSendTime = now;
 
@@ -222,92 +215,134 @@ void loop() {
         }
 
         if (isOnline && firebaseReady) {
-            readAndSendSensorData();
+            sendSensorData(latestPh, latestLiter, latestPersen);
         } else {
-            runOfflineTasks();
+            logOfflineData(latestPh, latestLiter, latestPersen);
         }
 
         checkSchedule();
     }
 
-    delay(100);
+    delay(50);
 }
 
 // ──────────────────────────────────────────
-// FUNGSI: Baca & kirim data sensor ke Firebase
+// FUNGSI: Baca Sensor
 // ──────────────────────────────────────────
-void readAndSendSensorData() {
-    float ph       = readPH();
+void readSensors() {
+    latestPh       = readPH();
     float levelCm  = readWaterLevel();
-    float liter    = levelToLiter(levelCm);
-    float persen   = constrain((liter / TANK_VOLUME_LITER) * 100.0f, 0, 100);
-    float ml       = liter * 1000.0f;
+    latestLiter    = levelToLiter(levelCm);
+    latestPersen   = constrain((latestLiter / TANK_VOLUME_LITER) * 100.0f, 0, 100);
+}
 
-    // ── Update LCD ──
-    lcd.clear();
-    lcd.setCursor(0, 0); lcd.printf("pH:%.2f         ", ph);
-    lcd.setCursor(0, 1); lcd.printf("Air:%.2fL %d%%   ", liter, (int)persen);
+// ──────────────────────────────────────────
+// FUNGSI: Perbarui LCD (Flicker-Free, Fixed Width 16 Chars)
+// ──────────────────────────────────────────
+void updateLCD(float ph, float liter, float persen) {
+    char statusChar = ' ';
+    if (!isOnline) {
+        statusChar = 'O'; // Offline
+    } else if (isAutoMode) {
+        statusChar = 'A'; // Auto
+    } else {
+        statusChar = 'M'; // Manual
+    }
+
+    char isiChar = (digitalRead(RELAY_ISI_PIN) == LOW) ? 'I' : ' ';
+    char buangChar = (digitalRead(RELAY_BUANG_PIN) == LOW) ? 'B' : ' ';
+    char minumChar = (digitalRead(RELAY_MINUM_PIN) == LOW) ? 'M' : ' ';
+
+    char line1[17];
+    char line2[17];
+    snprintf(line1, sizeof(line1), "pH:%-4.2f %c [%c%c%c] ", ph, statusChar, isiChar, buangChar, minumChar);
+    snprintf(line2, sizeof(line2), "Air:%-4.2fL %3d%%  ", liter, (int)persen);
+
+    lcd.setCursor(0, 0);
+    lcd.print(line1);
+    lcd.setCursor(0, 1);
+    lcd.print(line2);
+}
+
+// ──────────────────────────────────────────
+// FUNGSI: Kirim data sensor ke Firebase (Dioptimalkan jadi 3 updateNode)
+// ──────────────────────────────────────────
+void sendSensorData(float ph, float liter, float persen) {
+    if (!Firebase.ready()) return;
 
     String tanggal = epochToDate(timeClient.getEpochTime());
     String waktu   = epochToTime(timeClient.getEpochTime());
     String key     = tanggal + "_" + waktu;
     key.replace(":", "-");
 
+    float ml = liter * 1000.0f;
     Serial.printf("\n[ONLINE] %s %s | pH:%.2f | Air:%.0fml / %.3fL (%.1f%%)\n",
                   tanggal.c_str(), waktu.c_str(), ph, ml, liter, persen);
 
-    // ── Kirim ke Firebase ──
-    String base = "/monitoring/" + key;
-    Firebase.RTDB.setFloat(&fbdo,  base + "/ph",      ph);
-    Firebase.RTDB.setString(&fbdo, base + "/tanggal", tanggal);
-    Firebase.RTDB.setString(&fbdo, base + "/waktu",   waktu);
+    // ── 1. Update node /monitoring/key ──
+    FirebaseJson jsonMonitoring;
+    jsonMonitoring.set("ph", ph);
+    jsonMonitoring.set("tanggal", tanggal);
+    jsonMonitoring.set("waktu", waktu);
+    
+    if (Firebase.RTDB.updateNode(&fbdo, "/monitoring/" + key, &jsonMonitoring)) {
+        Serial.println("  ✅ Data monitoring terkirim.");
+    } else {
+        Serial.printf("  ❌ Gagal kirim monitoring: %s\n", fbdo.errorReason().c_str());
+    }
 
-    Firebase.RTDB.setFloat(&fbdo, "/kontrol_status/kapasitas_liter",  liter);
-    Firebase.RTDB.setFloat(&fbdo, "/kontrol_status/kapasitas_persen", persen);
-    Firebase.RTDB.setFloat(&fbdo, "/kontrol_status/ph_terkini",       ph);
+    // ── 2. Update node /kontrol_status ──
+    FirebaseJson jsonStatus;
+    jsonStatus.set("kapasitas_liter", liter);
+    jsonStatus.set("kapasitas_persen", persen);
+    jsonStatus.set("ph_terkini", ph);
+    jsonStatus.set("last_seen/.sv", "timestamp");
+    jsonStatus.set("rssi", WiFi.status() == WL_CONNECTED ? (int)WiFi.RSSI() : -100);
+    jsonStatus.set("sensor_ph_connected", isPhConnected);
+    jsonStatus.set("sensor_ultrasonic_connected", isUltrasonicConnected);
 
-    // Kirim status hardware tambahan
-    Firebase.RTDB.setTimestamp(&fbdo, "/kontrol_status/last_seen");
-    Firebase.RTDB.setInt(&fbdo, "/kontrol_status/rssi", WiFi.status() == WL_CONNECTED ? (int)WiFi.RSSI() : -100);
-    Firebase.RTDB.setBool(&fbdo, "/kontrol_status/sensor_ph_connected", isPhConnected);
-    Firebase.RTDB.setBool(&fbdo, "/kontrol_status/sensor_ultrasonic_connected", isUltrasonicConnected);
+    if (Firebase.RTDB.updateNode(&fbdo, "/kontrol_status", &jsonStatus)) {
+        Serial.println("  ✅ Data status terkirim.");
+    } else {
+        Serial.printf("  ❌ Gagal kirim status: %s\n", fbdo.errorReason().c_str());
+    }
 
-    Firebase.RTDB.setFloat(&fbdo,  "/volume_air/daily/" + tanggal + "/liter", liter);
-    Firebase.RTDB.setString(&fbdo, "/volume_air/daily/" + tanggal + "/label", "Hari Ini");
+    // ── 3. Update node /volume_air/daily/tanggal ──
+    FirebaseJson jsonVolume;
+    jsonVolume.set("liter", liter);
+    jsonVolume.set("label", "Hari Ini");
 
-    Serial.println("  ✅ Data dikirim ke Firebase.");
+    if (Firebase.RTDB.updateNode(&fbdo, "/volume_air/daily/" + tanggal, &jsonVolume)) {
+        Serial.println("  ✅ Data volume harian terkirim.");
+    } else {
+        Serial.printf("  ❌ Gagal kirim volume harian: %s\n", fbdo.errorReason().c_str());
+    }
 }
 
 // ──────────────────────────────────────────
-// FUNGSI: Kirim heartbeat status WiFi ke Firebase (ringan, cepat)
-// Hanya tulis wifi_online + rssi — tidak ada data sensor
+// FUNGSI: Kirim heartbeat status WiFi (Dioptimalkan jadi 1 updateNode)
 // ──────────────────────────────────────────
 void sendHeartbeat(bool wifiOk) {
     if (!Firebase.ready()) return;
-    FirebaseData fbdoHB;
-    fbdoHB.setBSSLBufferSize(512, 512);
+
+    FirebaseJson jsonHB;
     int rssiVal = (wifiOk && WiFi.status() == WL_CONNECTED) ? (int)WiFi.RSSI() : -100;
-    Firebase.RTDB.setBool(&fbdoHB, "/kontrol_status/wifi_online", wifiOk);
-    Firebase.RTDB.setInt(&fbdoHB,  "/kontrol_status/rssi", rssiVal);
-    Firebase.RTDB.setTimestamp(&fbdoHB, "/kontrol_status/last_seen");
-    Serial.printf("[HB] wifi_online=%s rssi=%d\n", wifiOk ? "true" : "false", rssiVal);
+    jsonHB.set("wifi_online", wifiOk);
+    jsonHB.set("rssi", rssiVal);
+    jsonHB.set("last_seen/.sv", "timestamp");
+
+    if (Firebase.RTDB.updateNode(&fbdo, "/kontrol_status", &jsonHB)) {
+        Serial.printf("[HB] wifi_online=%s rssi=%d\n", wifiOk ? "true" : "false", rssiVal);
+    } else {
+        Serial.printf("[HB ERR] Gagal kirim heartbeat: %s\n", fbdo.errorReason().c_str());
+    }
 }
 
 // ──────────────────────────────────────────
-// FUNGSI: Jalankan tugas sensor saat OFFLINE
+// FUNGSI: Logging data sensor saat OFFLINE
 // ──────────────────────────────────────────
-void runOfflineTasks() {
-    float ph      = readPH();
-    float levelCm = readWaterLevel();
-    float liter   = levelToLiter(levelCm);
-    float persen  = constrain((liter / TANK_VOLUME_LITER) * 100.0f, 0, 100);
-    float ml      = liter * 1000.0f;
-
-    // ── Update LCD ──
-    lcd.clear();
-    lcd.setCursor(0, 0); lcd.printf("pH:%.2f [OFL]   ", ph);
-    lcd.setCursor(0, 1); lcd.printf("Air:%.2fL %d%%   ", liter, (int)persen);
-
+void logOfflineData(float ph, float liter, float persen) {
+    float ml = liter * 1000.0f;
     unsigned long estEpoch = getEstimatedEpoch();
     Serial.println("\n[OFFLINE] ── Data Sensor ──────────────────");
     if (estEpoch > 0) {
@@ -376,12 +411,9 @@ float readPH() {
 }
 
 // ──────────────────────────────────────────
-// FUNGSI: Baca level air (HC-SR04) — Multi-sample + Median Filter
-// Sensor dipasang DI ATAS toples menghadap ke bawah.
-// Return : tinggi air dari dasar toples (cm), 0.0 s/d TANK_HEIGHT_CM
+// FUNGSI: Baca level air (HC-SR04)
 // ──────────────────────────────────────────
 float readWaterLevel() {
-    // Ambil 5 sampel jarak untuk median filter
     const int SAMPLES = 5;
     float readings[SAMPLES];
     int validCount = 0;
@@ -391,15 +423,13 @@ float readWaterLevel() {
         digitalWrite(TRIG_PIN, HIGH); delayMicroseconds(10);
         digitalWrite(TRIG_PIN, LOW);
 
-        // Timeout 30ms ≈ maks 5 meter, cukup untuk toples 18 cm
         long dur = pulseIn(ECHO_PIN, HIGH, 30000);
         if (dur > 0) {
             readings[validCount++] = (dur * 0.034f) / 2.0f;  // cm
         }
-        delay(20);  // Jeda antar-ping agar echo tidak bertabrakan
+        delay(20);
     }
 
-    // Jika semua sampel gagal (tidak ada echo) → anggap kosong
     if (validCount == 0) {
         Serial.println("[ULTRASONIC] ⚠️ Tidak ada echo! Cek kabel/sensor.");
         isUltrasonicConnected = false;
@@ -408,7 +438,6 @@ float readWaterLevel() {
 
     isUltrasonicConnected = true;
 
-    // Urutkan (bubble sort sederhana) lalu ambil nilai TENGAH (median)
     for (int i = 0; i < validCount - 1; i++) {
         for (int j = i + 1; j < validCount; j++) {
             if (readings[i] > readings[j]) {
@@ -416,14 +445,10 @@ float readWaterLevel() {
             }
         }
     }
-    float distCm = readings[validCount / 2];  // nilai median
+    float distCm = readings[validCount / 2];
 
-    // Hitung tinggi air berdasarkan kalibrasi dua titik:
-    //   distCm == SENSOR_DIST_EMPTY_CM  → air = 0 cm   (toples kosong)
-    //   distCm == SENSOR_DIST_FULL_CM   → air = 18 cm  (toples penuh)
-    // Rumus: tinggiAir = (distCm_kosong - distCm_baca) / (distCm_kosong - distCm_penuh) * tinggi_total
-    float distRange  = SENSOR_DIST_EMPTY_CM - SENSOR_DIST_FULL_CM;  // cm rentang jarak
-    float waterRatio = (SENSOR_DIST_EMPTY_CM - distCm) / distRange;  // 0.0 – 1.0
+    float distRange  = SENSOR_DIST_EMPTY_CM - SENSOR_DIST_FULL_CM;
+    float waterRatio = (SENSOR_DIST_EMPTY_CM - distCm) / distRange;
     float waterCm    = waterRatio * TANK_HEIGHT_CM;
     float waterCm_c  = constrain(waterCm, 0.0f, TANK_HEIGHT_CM);
 
@@ -434,15 +459,12 @@ float readWaterLevel() {
 }
 
 // ──────────────────────────────────────────
-// FUNGSI: Konversi tinggi air (cm) → Volume (liter) — Rumus Silinder Akurat
-// V = π × r² × h  (cm³ = mL) → bagi 1000 = liter
+// FUNGSI: Konversi tinggi air (cm) → Volume (liter)
 // ──────────────────────────────────────────
 float levelToLiter(float h) {
-    // V (cm³) = π × r² × h
-    // Dengan r = TANK_RADIUS_CM = 5 cm, maka πr² = 78.5398 cm²
     const float PI_R2 = 3.14159265f * TANK_RADIUS_CM * TANK_RADIUS_CM;
-    float volumeCm3   = PI_R2 * h;          // cm³ = mL
-    float volumeLiter = volumeCm3 / 1000.0f; // konversi ke liter
+    float volumeCm3   = PI_R2 * h;
+    float volumeLiter = volumeCm3 / 1000.0f;
     return constrain(volumeLiter, 0.0f, TANK_VOLUME_LITER);
 }
 
@@ -455,92 +477,74 @@ void controlPump(bool fillOn, bool drainOn) {
 }
 
 // ──────────────────────────────────────────
-// FUNGSI: Polling Firebase (perintah relay & mode otomatis)
-// FUNGSI: Polling Firebase (perintah relay & mode otomatis)
+// FUNGSI: Polling Firebase (Dioptimalkan jadi 1 request JSON)
 // ──────────────────────────────────────────
 void pollFirebase() {
-    // Catatan: tidak pakai Firebase.ready() agar relay tetap bisa dibaca
-    // meski koneksi sesekali tidak "ready" secara internal
-    if (!Firebase.ready()) {
-        Serial.println("[POLL] Firebase belum siap, mencoba tetap baca...");
-    }
+    if (!Firebase.ready()) return;
 
-    // Relay Isi Air
-    {
-        static bool lastRelayIsi = false;
-        bool state = false;
-        if (Firebase.RTDB.getBool(&fbdoCommand, "/kontrol/relay_isi")) {
-            state = fbdoCommand.boolData();
-        } else {
-            Serial.printf("[POLL ERR] relay_isi: %s\n", fbdoCommand.errorReason().c_str());
-            state = lastRelayIsi;  // pertahankan state terakhir jika gagal baca
-        }
-        digitalWrite(RELAY_ISI_PIN, state ? LOW : HIGH);
-        if (state != lastRelayIsi) {
-            lastRelayIsi = state;
-            Serial.printf("[FIREBASE] relay_isi: %s\n", state ? "ON" : "OFF");
-            lcd.clear();
-            lcd.setCursor(0, 0); lcd.print("Pompa Isi Air:  ");
-            lcd.setCursor(0, 1); lcd.print(state ? ">>> ON <<<      " : ">>> OFF <<<     ");
-        }
-    }
+    if (Firebase.RTDB.getJSON(&fbdo, "/kontrol")) {
+        if (fbdo.dataType() == "json") {
+            FirebaseJson &json = fbdo.jsonObject();
+            FirebaseJsonData result;
 
-    // Relay Buang Air
-    {
-        static bool lastRelayBuang = false;
-        bool state = false;
-        if (Firebase.RTDB.getBool(&fbdoCommand, "/kontrol/relay_buang")) {
-            state = fbdoCommand.boolData();
-        } else {
-            Serial.printf("[POLL ERR] relay_buang: %s\n", fbdoCommand.errorReason().c_str());
-            state = lastRelayBuang;
-        }
-        digitalWrite(RELAY_BUANG_PIN, state ? LOW : HIGH);
-        if (state != lastRelayBuang) {
-            lastRelayBuang = state;
-            Serial.printf("[FIREBASE] relay_buang: %s\n", state ? "ON" : "OFF");
-            lcd.clear();
-            lcd.setCursor(0, 0); lcd.print("Pompa Buang Air:");
-            lcd.setCursor(0, 1); lcd.print(state ? ">>> ON <<<      " : ">>> OFF <<<     ");
-        }
-    }
+            // 1. Relay Isi
+            if (json.get(result, "relay_isi") && result.success) {
+                bool state = result.boolValue;
+                digitalWrite(RELAY_ISI_PIN, state ? LOW : HIGH);
+                static bool lastRelayIsi = false;
+                if (state != lastRelayIsi) {
+                    lastRelayIsi = state;
+                    Serial.printf("[FIREBASE] relay_isi: %s\n", state ? "ON" : "OFF");
+                }
+            }
 
-    // Relay Kran Minum Ayam
-    {
-        static bool lastRelayMinum = false;
-        bool state = false;
-        if (Firebase.RTDB.getBool(&fbdoCommand, "/kontrol/relay_minum")) {
-            state = fbdoCommand.boolData();
-        } else {
-            Serial.printf("[POLL ERR] relay_minum: %s\n", fbdoCommand.errorReason().c_str());
-            state = lastRelayMinum;
-        }
-        digitalWrite(RELAY_MINUM_PIN, state ? LOW : HIGH);
-        if (state != lastRelayMinum) {
-            lastRelayMinum = state;
-            Serial.printf("[FIREBASE] relay_minum: %s\n", state ? "ON" : "OFF");
-            lcd.clear();
-            lcd.setCursor(0, 0); lcd.print("Kran Air Minum: ");
-            lcd.setCursor(0, 1); lcd.print(state ? ">>> ON <<<      " : ">>> OFF <<<     ");
-        }
-    }
+            // 2. Relay Buang
+            if (json.get(result, "relay_buang") && result.success) {
+                bool state = result.boolValue;
+                digitalWrite(RELAY_BUANG_PIN, state ? LOW : HIGH);
+                static bool lastRelayBuang = false;
+                if (state != lastRelayBuang) {
+                    lastRelayBuang = state;
+                    Serial.printf("[FIREBASE] relay_buang: %s\n", state ? "ON" : "OFF");
+                }
+            }
 
-    // Mode Otomatis
-    if (Firebase.RTDB.getBool(&fbdoCommand, "/kontrol/otomatis")) {
-        isAutoMode = fbdoCommand.boolData();
-    }
+            // 3. Relay Minum
+            if (json.get(result, "relay_minum") && result.success) {
+                bool state = result.boolValue;
+                digitalWrite(RELAY_MINUM_PIN, state ? LOW : HIGH);
+                static bool lastRelayMinum = false;
+                if (state != lastRelayMinum) {
+                    lastRelayMinum = state;
+                    Serial.printf("[FIREBASE] relay_minum: %s\n", state ? "ON" : "OFF");
+                }
+            }
 
-    // Perintah Cek Manual (Cek pH)
-    if (Firebase.RTDB.getBool(&fbdoCommand, "/kontrol/cek_sekarang")) {
-        bool cekSekarang = fbdoCommand.boolData();
-        if (cekSekarang) {
-            Serial.println("[FIREBASE] Perintah Cek Manual diterima!");
-            lcd.clear();
-            lcd.setCursor(0, 0); lcd.print("Membaca Sensor..");
-            lcd.setCursor(0, 1); lcd.print("pH + Air Level  ");
-            readAndSendSensorData();
-            Firebase.RTDB.setBool(&fbdoCommand, "/kontrol/cek_sekarang", false);
+            // 4. Mode Otomatis
+            if (json.get(result, "otomatis") && result.success) {
+                isAutoMode = result.boolValue;
+            }
+
+            // 5. Cek Sekarang (Manual Trigger)
+            if (json.get(result, "cek_sekarang") && result.success) {
+                bool cekSekarang = result.boolValue;
+                if (cekSekarang) {
+                    Serial.println("[FIREBASE] Perintah Cek Manual diterima!");
+                    
+                    // Baca ulang sensor secara langsung & update tampilan
+                    readSensors();
+                    updateLCD(latestPh, latestLiter, latestPersen);
+                    
+                    // Kirim data langsung ke Firebase
+                    sendSensorData(latestPh, latestLiter, latestPersen);
+                    
+                    // Reset flag cek_sekarang di Firebase
+                    Firebase.RTDB.setBool(&fbdo, "/kontrol/cek_sekarang", false);
+                }
+            }
         }
+    } else {
+        Serial.printf("[POLL ERR] Gagal membaca /kontrol: %s\n", fbdo.errorReason().c_str());
     }
 }
 
@@ -590,20 +594,17 @@ bool connectToWifi(String ssid, String pass, bool silent) {
 
 // ──────────────────────────────────────────
 // FUNGSI: Koneksi Firebase
+// ──────────────────────────────────────────
 void connectFirebase() {
     firebaseConfig.api_key      = FIREBASE_API_KEY;
     firebaseConfig.database_url = FIREBASE_DATABASE_URL;
 
-    // Autentikasi akun perangkat (device login)
     firebaseAuth.user.email    = FIREBASE_USER_EMAIL;
     firebaseAuth.user.password = FIREBASE_USER_PASSWORD;
 
-    // ── Buffer SSL lebih besar → handshake lebih cepat ──────────────────────
-    // Firebase ESP Client merekomendasikan 4096/1024 untuk koneksi stabil
+    // Buffer SSL dioptimalkan untuk hemat memori & stabil
     fbdo.setBSSLBufferSize(4096, 1024);
-    fbdoCommand.setBSSLBufferSize(4096, 1024);
 
-    // Nonaktifkan reconnect otomatis yang bisa memperlambat inisialisasi awal
     Firebase.reconnectWiFi(true);
 
     lcd.clear();
@@ -613,7 +614,6 @@ void connectFirebase() {
 
     Firebase.begin(&firebaseConfig, &firebaseAuth);
 
-    // ── Tunggu Firebase ready (maks 10 detik, update LCD tiap 300ms) ────────
     Serial.print("Menghubungkan ke Firebase");
     unsigned long waitStart = millis();
     int dotCount = 0;
@@ -621,7 +621,6 @@ void connectFirebase() {
         delay(300);
         Serial.print(".");
 
-        // Tampilkan animasi titik pada baris ke-2 LCD agar tidak terlihat hang
         String dots = "";
         for (int i = 0; i < (dotCount % 4); i++) dots += ".";
         lcd.setCursor(0, 1);
@@ -664,15 +663,19 @@ int getMinuteFromEpoch(unsigned long epoch) {
 }
 
 String epochToDate(unsigned long epoch) {
-    struct tm* t = gmtime((time_t*)&epoch);
-    char buf[11];
+    time_t rawtime = (time_t)epoch;
+    struct tm* t = gmtime(&rawtime);
+    if (t == NULL) return "1970-01-01";
+    char buf[12];
     sprintf(buf, "%04d-%02d-%02d", t->tm_year + 1900, t->tm_mon + 1, t->tm_mday);
     return String(buf);
 }
 
 String epochToTime(unsigned long epoch) {
-    struct tm* t = gmtime((time_t*)&epoch);
-    char buf[9];
+    time_t rawtime = (time_t)epoch;
+    struct tm* t = gmtime(&rawtime);
+    if (t == NULL) return "00:00:00";
+    char buf[10];
     sprintf(buf, "%02d:%02d:%02d", t->tm_hour, t->tm_min, t->tm_sec);
     return String(buf);
 }
