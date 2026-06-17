@@ -31,7 +31,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -72,6 +76,16 @@ public class KontrolActivity extends BaseActivity {
     private RecyclerView   rvJadwal;
     private JadwalAdapter  jadwalAdapter;
     private final List<JadwalItem> jadwalList = new ArrayList<>();
+
+    // ─── Otomatis Minum ───
+    private final Handler  scheduleHandler  = new Handler(Looper.getMainLooper());
+    private Runnable scheduleChecker;   // loop pengecekan tiap 10 detik
+    private Runnable autoOffRunnable;   // matikan relay setelah 60 detik
+    /** true = relay_minum sedang menyala karena jadwal otomatis */
+    private boolean  isMinumAutoOn      = false;
+    /** Jam+menit jadwal yang terakhir kali dipicu (cegah double-trigger) */
+    private int      lastTriggeredJam   = -1;
+    private int      lastTriggeredMenit = -1;
 
     // ─── Konstanta pH air ayam ───
     private static final float PH_SAFE_MIN = 6.5f;
@@ -181,6 +195,11 @@ public class KontrolActivity extends BaseActivity {
         switchKranMinum = findViewById(R.id.switchKranMinum);
         switchKranMinum.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (!isUpdatingFromFirebase) {
+                if (!isChecked && isMinumAutoOn) {
+                    // User mematikan manual saat sedang otomatis → batalkan auto-off
+                    cancelAutoOff();
+                    isMinumAutoOn = false;
+                }
                 dbKontrol.child("relay_minum").setValue(isChecked).addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
                         Toast.makeText(KontrolActivity.this, "Gagal kirim: " +
@@ -306,6 +325,9 @@ public class KontrolActivity extends BaseActivity {
         // ─── Mulai listener sensor real-time ───
         startPhListener();
         startWaterListener();
+
+        // ─── Mulai pengecekan jadwal otomatis ───
+        startScheduleChecker();
     }
 
     // =========================================================
@@ -533,6 +555,87 @@ public class KontrolActivity extends BaseActivity {
     }
 
     // =========================================================
+    // OTOMATIS PENGISIAN AIR MINUM
+    // =========================================================
+
+    /** Mulai loop pengecekan jadwal tiap 10 detik */
+    private void startScheduleChecker() {
+        scheduleChecker = new Runnable() {
+            @Override public void run() {
+                checkAndTriggerJadwal();
+                scheduleHandler.postDelayed(this, 10_000); // cek setiap 10 detik
+            }
+        };
+        scheduleHandler.post(scheduleChecker);
+    }
+
+    /** Hentikan loop pengecekan (dipanggil di onDestroy) */
+    private void stopScheduleChecker() {
+        if (scheduleChecker != null) scheduleHandler.removeCallbacks(scheduleChecker);
+        cancelAutoOff();
+    }
+
+    /**
+     * Cek apakah ada jadwal aktif yang jam & menitnya cocok dengan waktu HP sekarang.
+     * Jika iya dan mode otomatis aktif, nyalakan relay kran minum selama 60 detik.
+     */
+    private void checkAndTriggerJadwal() {
+        if (!isOtomatisAktif) return;
+        if (isMinumAutoOn)    return; // sedang menyala, jangan trigger lagi
+
+        Calendar now = Calendar.getInstance(); // waktu lokal HP
+        int nowJam   = now.get(Calendar.HOUR_OF_DAY);
+        int nowMenit = now.get(Calendar.MINUTE);
+
+        for (JadwalItem j : jadwalList) {
+            if (!j.aktif) continue;
+            if (j.jam == nowJam && j.menit == nowMenit) {
+                // Pastikan jadwal ini belum dipicu di menit yang sama
+                if (lastTriggeredJam == nowJam && lastTriggeredMenit == nowMenit) continue;
+
+                lastTriggeredJam   = nowJam;
+                lastTriggeredMenit = nowMenit;
+                nyalakanMinumOtomatis();
+                return; // satu jadwal satu trigger per menit
+            }
+        }
+
+        // Reset pencatat triggered jika menit sudah berganti
+        if (lastTriggeredJam == nowJam && lastTriggeredMenit != nowMenit) {
+            lastTriggeredJam   = -1;
+            lastTriggeredMenit = -1;
+        }
+    }
+
+    /** Nyalakan relay kran minum dan jadwalkan auto-off setelah 60 detik */
+    private void nyalakanMinumOtomatis() {
+        isMinumAutoOn = true;
+        dbKontrol.child("relay_minum").setValue(true);
+        Toast.makeText(this, "⏱ Jadwal: Kran minum menyala 60 detik", Toast.LENGTH_LONG).show();
+
+        autoOffRunnable = () -> {
+            matikanMinum();
+            Toast.makeText(this, "✅ Kran minum otomatis dimatikan", Toast.LENGTH_SHORT).show();
+        };
+        scheduleHandler.postDelayed(autoOffRunnable, 60_000); // 60 detik
+    }
+
+    /** Matikan relay kran minum dan batalkan pending auto-off */
+    private void matikanMinum() {
+        isMinumAutoOn = false;
+        cancelAutoOff();
+        dbKontrol.child("relay_minum").setValue(false);
+    }
+
+    /** Batalkan runnable auto-off jika masih pending */
+    private void cancelAutoOff() {
+        if (autoOffRunnable != null) {
+            scheduleHandler.removeCallbacks(autoOffRunnable);
+            autoOffRunnable = null;
+        }
+    }
+
+    // =========================================================
     // LIFECYCLE
     // =========================================================
     @Override
@@ -541,5 +644,6 @@ public class KontrolActivity extends BaseActivity {
         NotificationSystem.getInstance().unregisterNotificationIcon(findViewById(R.id.ivNotification));
         if (phListener    != null) dbStatus.child("ph_terkini").removeEventListener(phListener);
         if (waterListener != null) dbStatus.removeEventListener(waterListener);
+        stopScheduleChecker(); // hentikan loop jadwal & batalkan auto-off
     }
 }
