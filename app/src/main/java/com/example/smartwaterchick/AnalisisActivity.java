@@ -1,5 +1,6 @@
 package com.example.smartwaterchick;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -56,6 +57,8 @@ public class AnalisisActivity extends BaseActivity {
 
     // Dideklarasikan sebagai field, diinisialisasi di onCreate()
     private ActivityResultLauncher<Intent> saveLauncher;
+    // Periode yang sedang menunggu untuk di-export
+    private XlsxWriter.Period pendingPeriod = XlsxWriter.Period.DAILY;
 
     private List<String> dailyVolData   = new ArrayList<>();
     private List<String> weeklyVolData  = new ArrayList<>();
@@ -77,7 +80,7 @@ public class AnalisisActivity extends BaseActivity {
                 if (result.getResultCode() == RESULT_OK
                         && result.getData() != null
                         && result.getData().getData() != null) {
-                    writeExcelToUri(result.getData().getData());
+                    writeExcelToUri(result.getData().getData(), pendingPeriod);
                 }
             }
         );
@@ -159,14 +162,20 @@ public class AnalisisActivity extends BaseActivity {
         });
 
         findViewById(R.id.btnLaporanLengkap).setOnClickListener(v -> {
-            Toast.makeText(this, "Menyiapkan laporan...", Toast.LENGTH_SHORT).show();
-            // Jika real-time listener sudah mengisi data, langsung export.
-            // Jika belum (misalnya koneksi lambat), fetch dulu dari Firebase.
-            if (hasAnyData()) {
-                openSaveDialog();
-            } else {
-                fetchAllDataThenExport();
-            }
+            // Tampilkan dialog pilihan periode laporan
+            String[] pilihan = {"Harian", "Mingguan", "Bulanan"};
+            new AlertDialog.Builder(this)
+                .setTitle("Pilih Periode Laporan")
+                .setItems(pilihan, (dialog, which) -> {
+                    switch (which) {
+                        case 0: pendingPeriod = XlsxWriter.Period.DAILY;   break;
+                        case 1: pendingPeriod = XlsxWriter.Period.WEEKLY;  break;
+                        default: pendingPeriod = XlsxWriter.Period.MONTHLY; break;
+                    }
+                    Toast.makeText(this, "Menyiapkan laporan...", Toast.LENGTH_SHORT).show();
+                    fetchDataForPeriod(pendingPeriod);
+                })
+                .show();
         });
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
@@ -198,66 +207,134 @@ public class AnalisisActivity extends BaseActivity {
             || !dailyVolData.isEmpty()   || !dailyPhData.isEmpty();
     }
 
-    // ── Fetch dari Firebase (fallback jika listener belum mengisi data) ────
-    private void fetchAllDataThenExport() {
-        dbRef.child("volume_air").child("daily").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override public void onDataChange(@NonNull DataSnapshot snap) {
-                // Ambil dan urutkan semua entry harian dari Firebase
-                java.util.TreeMap<String, String> sorted = new java.util.TreeMap<>();
-                for (DataSnapshot ds : snap.getChildren()) {
-                    Object liter = ds.child("liter").getValue();
-                    if (ds.getKey() != null && liter != null) {
-                        sorted.put(ds.getKey(), liter.toString());
-                    }
-                }
-                java.util.List<String> keys = new ArrayList<>(sorted.keySet());
-
-                // Slice untuk masing-masing periode
-                if (dailyVolData.isEmpty()) {
-                    dailyVolData = new ArrayList<>();
-                    if (!keys.isEmpty()) dailyVolData.add(sorted.get(keys.get(keys.size() - 1)));
-                }
-                if (weeklyVolData.isEmpty()) {
-                    int s = Math.max(0, keys.size() - 7);
-                    weeklyVolData = new ArrayList<>();
-                    for (int i = s; i < keys.size(); i++) weeklyVolData.add(sorted.get(keys.get(i)));
-                }
-                if (monthlyVolData.isEmpty()) {
-                    int s = Math.max(0, keys.size() - 30);
-                    monthlyVolData = new ArrayList<>();
-                    for (int i = s; i < keys.size(); i++) monthlyVolData.add(sorted.get(keys.get(i)));
-                }
-
-                dbRef.child("monitoring").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override public void onDataChange(@NonNull DataSnapshot phSnap) {
-                        if (monthlyPhData.isEmpty()) {
-                            List<String> all = new ArrayList<>();
-                            for (DataSnapshot ds : phSnap.getChildren()) {
-                                Object ph = ds.child("ph").getValue();
-                                if (ph != null) all.add(ph.toString());
-                            }
-                            monthlyPhData = new ArrayList<>(all);
-                            int sz = all.size();
-                            weeklyPhData = sz >= 7
-                                ? new ArrayList<>(all.subList(sz - 7, sz))
-                                : new ArrayList<>(all);
-                            dailyPhData = sz >= 1
-                                ? new ArrayList<>(all.subList(sz - 1, sz))
-                                : new ArrayList<>(all);
+    // ── Fetch data dari Firebase sesuai periode yang dipilih ────────────────
+    private void fetchDataForPeriod(XlsxWriter.Period period) {
+        // Selalu fetch fresh dari Firebase agar data lengkap dengan label tanggal/jam
+        dbRef.child("volume_air").child("daily").limitToLast(30)
+            .addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override public void onDataChange(@NonNull DataSnapshot volSnap) {
+                    // Kumpulkan semua entry volume, diurutkan
+                    java.util.TreeMap<String, Float> allVol = new java.util.TreeMap<>();
+                    for (DataSnapshot ds : volSnap.getChildren()) {
+                        String key = ds.getKey();
+                        Object liter = ds.child("liter").getValue();
+                        if (key != null && liter != null) {
+                            float val = liter instanceof Double ? ((Double)liter).floatValue()
+                                      : liter instanceof Long   ? ((Long)liter).floatValue()
+                                      : liter instanceof Float  ? (Float)liter : 0f;
+                            allVol.put(key, val);
                         }
-                        openSaveDialog();
                     }
-                    @Override public void onCancelled(@NonNull DatabaseError e) {
-                        Toast.makeText(AnalisisActivity.this,
-                            "Gagal ambil pH: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    // Bangun volRows: pasangan [label, nilai]
+                    // Label = "Tgl X" untuk semua periode (karena data di volume_air/daily sudah harian)
+                    List<String> volRows = new ArrayList<>();
+                    java.util.List<String> sortedKeys = new ArrayList<>(allVol.keySet());
+                    int start;
+                    switch (period) {
+                        case DAILY:   start = Math.max(0, sortedKeys.size() - 1);  break;
+                        case WEEKLY:  start = Math.max(0, sortedKeys.size() - 7);  break;
+                        default:      start = Math.max(0, sortedKeys.size() - 30); break;
                     }
-                });
-            }
-            @Override public void onCancelled(@NonNull DatabaseError e) {
-                Toast.makeText(AnalisisActivity.this,
-                    "Gagal ambil volume: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+                    for (int i = start; i < sortedKeys.size(); i++) {
+                        String key = sortedKeys.get(i);
+                        float val  = allVol.get(key);
+                        String[] parts = key.split("-");
+                        String tgl = (parts.length == 3) ? parts[2] : key; // ambil DD saja
+                        volRows.add("Tgl " + tgl);
+                        volRows.add(String.format(java.util.Locale.US, "%.3f liter", val));
+                    }
+
+                    // Fetch pH sesuai periode
+                    if (period == XlsxWriter.Period.DAILY) {
+                        // Harian → baca dari /monitoring (per jam, hari ini)
+                        dbRef.child("monitoring").limitToLast(2000)
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override public void onDataChange(@NonNull DataSnapshot phSnap) {
+                                    String today = getTodayWitaStr();
+                                    // Cari targetDate (hari ini atau tanggal terakhir ada data)
+                                    String targetDate = today;
+                                    boolean hasTodayData = false;
+                                    for (DataSnapshot ds : phSnap.getChildren()) {
+                                        String t = ds.child("tanggal").getValue(String.class);
+                                        if (today.equals(t)) { hasTodayData = true; break; }
+                                    }
+                                    if (!hasTodayData) {
+                                        for (DataSnapshot ds : phSnap.getChildren()) {
+                                            String t = ds.child("tanggal").getValue(String.class);
+                                            if (t != null) targetDate = t;
+                                        }
+                                    }
+                                    final String td = targetDate;
+
+                                    // Kumpulkan per jam, rata-ratakan
+                                    java.util.TreeMap<Integer, List<Float>> hourMap = new java.util.TreeMap<>();
+                                    for (DataSnapshot ds : phSnap.getChildren()) {
+                                        String t = ds.child("tanggal").getValue(String.class);
+                                        if (!td.equals(t)) continue;
+                                        Object v = ds.child("ph").getValue();
+                                        String w = ds.child("waktu").getValue(String.class);
+                                        if (v != null && w != null) {
+                                            float ph = v instanceof Double ? ((Double)v).floatValue()
+                                                     : v instanceof Long   ? ((Long)v).floatValue() : 0f;
+                                            int hour = parseHour(w);
+                                            if (hour >= 0 && hour <= 23) {
+                                                if (!hourMap.containsKey(hour)) hourMap.put(hour, new ArrayList<>());
+                                                hourMap.get(hour).add(ph);
+                                            }
+                                        }
+                                    }
+
+                                    List<String> phRows = new ArrayList<>();
+                                    for (int hour : hourMap.keySet()) {
+                                        List<Float> vals = hourMap.get(hour);
+                                        float sum = 0; for (float f : vals) sum += f;
+                                        float avg = vals.isEmpty() ? 0 : sum / vals.size();
+                                        // Format: "pukul HH.00" | "pH X,XX"
+                                        String phStr = String.format(java.util.Locale.US, "%.2f", avg)
+                                                              .replace('.', ',');
+                                        phRows.add(String.format(java.util.Locale.US, "pukul %02d.00", hour));
+                                        phRows.add("pH " + phStr);
+                                    }
+
+                                    openSaveDialog(period, volRows, phRows);
+                                }
+                                @Override public void onCancelled(@NonNull DatabaseError e) {
+                                    Toast.makeText(AnalisisActivity.this,
+                                        "Gagal ambil pH: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                    } else {
+                        // Mingguan / Bulanan → baca pH dari /volume_air/daily (sudah ada field ph rata-rata harian)
+                        int phStart;
+                        switch (period) {
+                            case WEEKLY: phStart = Math.max(0, sortedKeys.size() - 7);  break;
+                            default:     phStart = Math.max(0, sortedKeys.size() - 30); break;
+                        }
+                        List<String> phRows = new ArrayList<>();
+                        // Fetch ph dari volSnap yang sudah ada (field "ph" per tanggal)
+                        for (int i = phStart; i < sortedKeys.size(); i++) {
+                            String key = sortedKeys.get(i);
+                            DataSnapshot ds = volSnap.child(key);
+                            Object phObj = ds.child("ph").getValue();
+                            String[] parts = key.split("-");
+                            String tgl = (parts.length == 3) ? parts[2] : key;
+                            float ph = phObj instanceof Double ? ((Double)phObj).floatValue()
+                                     : phObj instanceof Long   ? ((Long)phObj).floatValue()
+                                     : phObj instanceof Float  ? (Float)phObj : 0f;
+                            String phStr = String.format(java.util.Locale.US, "%.2f", ph)
+                                                  .replace('.', ',');
+                            phRows.add("Tgl " + tgl);
+                            phRows.add("pH " + phStr);
+                        }
+                        openSaveDialog(period, volRows, phRows);
+                    }
+                }
+                @Override public void onCancelled(@NonNull DatabaseError e) {
+                    Toast.makeText(AnalisisActivity.this,
+                        "Gagal ambil volume: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
     }
 
     private List<String> extractLiters(DataSnapshot snap) {
@@ -272,13 +349,25 @@ public class AnalisisActivity extends BaseActivity {
     }
 
     // ── Buka dialog simpan file ────────────────────────────────────────────
-    private void openSaveDialog() {
+    // volRows & phRows disimpan sementara agar bisa dipakai setelah saveLauncher callback
+    private List<String> pendingVolRows = new ArrayList<>();
+    private List<String> pendingPhRows  = new ArrayList<>();
+
+    private void openSaveDialog(XlsxWriter.Period period, List<String> volRows, List<String> phRows) {
+        pendingPeriod  = period;
+        pendingVolRows = volRows;
+        pendingPhRows  = phRows;
+        String periodName;
+        switch (period) {
+            case DAILY:   periodName = "Harian";   break;
+            case WEEKLY:  periodName = "Mingguan"; break;
+            default:      periodName = "Bulanan";  break;
+        }
         try {
             Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
-            // XLSX — lebih kompatibel, tidak memerlukan library tambahan
             intent.setType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-            intent.putExtra(Intent.EXTRA_TITLE, "Laporan_SmartWaterChick.xlsx");
+            intent.putExtra(Intent.EXTRA_TITLE, "Laporan_" + periodName + "_SmartWaterChick.xlsx");
             saveLauncher.launch(intent);
         } catch (Exception e) {
             Toast.makeText(this, "Gagal buka dialog: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -286,19 +375,15 @@ public class AnalisisActivity extends BaseActivity {
     }
 
     // ── Tulis XLSX ke URI yang dipilih user (background thread) ───────────
-    private void writeExcelToUri(Uri uri) {
-        // Snapshot data agar thread-safe
-        final List<String> dv = new ArrayList<>(dailyVolData);
-        final List<String> wv = new ArrayList<>(weeklyVolData);
-        final List<String> mv = new ArrayList<>(monthlyVolData);
-        final List<String> dp = new ArrayList<>(dailyPhData);
-        final List<String> wp = new ArrayList<>(weeklyPhData);
-        final List<String> mp = new ArrayList<>(monthlyPhData);
+    private void writeExcelToUri(Uri uri, XlsxWriter.Period period) {
+        final List<String> vr = new ArrayList<>(pendingVolRows);
+        final List<String> pr = new ArrayList<>(pendingPhRows);
+        final XlsxWriter.Period p = period;
 
         new Thread(() -> {
             try (OutputStream out = getContentResolver().openOutputStream(uri)) {
                 if (out == null) throw new Exception("Tidak bisa membuka file output");
-                new XlsxWriter(dv, wv, mv, dp, wp, mp).write(out);
+                new XlsxWriter(p, vr, pr).write(out);
                 out.flush();
                 runOnUiThread(() ->
                     Toast.makeText(AnalisisActivity.this,

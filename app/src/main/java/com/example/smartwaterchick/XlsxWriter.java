@@ -8,30 +8,46 @@ import java.util.zip.ZipOutputStream;
 /**
  * Menulis file .xlsx secara manual menggunakan ZipOutputStream bawaan Java.
  * Tidak memerlukan library Apache POI — lebih stabil di Android.
+ *
+ * Format data sesuai periode:
+ *  - Harian  Vol : "Tgl 1"   | "0.153 liter"
+ *  - Harian  pH  : "pukul 12.00" | "pH 10,12"
+ *  - Mingguan/Bulanan Vol : "Tgl 2"   | "0.153 liter"
+ *  - Mingguan/Bulanan pH  : "Tgl 2"   | "pH 6,23"
+ *
+ * Setiap List berisi pasangan [label, nilai] yang sudah siap tampil.
+ * Jadi ukuran list harus genap: index 0=label, 1=nilai, 2=label, 3=nilai, ...
  */
 public class XlsxWriter {
 
-    private final List<String> dailyVol, weeklyVol, monthlyVol;
-    private final List<String> dailyPh,  weeklyPh,  monthlyPh;
+    /** Jenis periode laporan */
+    public enum Period { DAILY, WEEKLY, MONTHLY }
 
-    public XlsxWriter(List<String> dailyVol,  List<String> weeklyVol,  List<String> monthlyVol,
-                      List<String> dailyPh,   List<String> weeklyPh,   List<String> monthlyPh) {
-        this.dailyVol   = dailyVol;
-        this.weeklyVol  = weeklyVol;
-        this.monthlyVol = monthlyVol;
-        this.dailyPh    = dailyPh;
-        this.weeklyPh   = weeklyPh;
-        this.monthlyPh  = monthlyPh;
+    private final Period period;
+    /** volRows: pasangan (label, nilai) untuk kolom Volume Air */
+    private final List<String> volRows;
+    /** phRows: pasangan (label, nilai) untuk kolom pH */
+    private final List<String> phRows;
+
+    /**
+     * @param period  periode laporan (DAILY / WEEKLY / MONTHLY)
+     * @param volRows list pasangan label+nilai volume — ukuran harus genap
+     * @param phRows  list pasangan label+nilai pH    — ukuran harus genap
+     */
+    public XlsxWriter(Period period, List<String> volRows, List<String> phRows) {
+        this.period  = period;
+        this.volRows = volRows;
+        this.phRows  = phRows;
     }
 
     public void write(OutputStream out) throws Exception {
         ZipOutputStream zip = new ZipOutputStream(out);
-        putEntry(zip, "[Content_Types].xml",       contentTypes());
-        putEntry(zip, "_rels/.rels",               rootRels());
-        putEntry(zip, "xl/workbook.xml",           workbook());
-        putEntry(zip, "xl/_rels/workbook.xml.rels",workbookRels());
-        putEntry(zip, "xl/styles.xml",             styles());
-        putEntry(zip, "xl/worksheets/sheet1.xml",  sheet());
+        putEntry(zip, "[Content_Types].xml",        contentTypes());
+        putEntry(zip, "_rels/.rels",                rootRels());
+        putEntry(zip, "xl/workbook.xml",            workbook());
+        putEntry(zip, "xl/_rels/workbook.xml.rels", workbookRels());
+        putEntry(zip, "xl/styles.xml",              styles());
+        putEntry(zip, "xl/worksheets/sheet1.xml",   sheet());
         zip.finish();
     }
 
@@ -68,10 +84,16 @@ public class XlsxWriter {
     }
 
     private String workbook() {
+        String periodName;
+        switch (period) {
+            case DAILY:   periodName = "Harian";   break;
+            case WEEKLY:  periodName = "Mingguan"; break;
+            default:      periodName = "Bulanan";  break;
+        }
         return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
             + "<workbook xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\""
             +   " xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\">"
-            + "<sheets><sheet name=\"Laporan\" sheetId=\"1\" r:id=\"rId1\"/></sheets>"
+            + "<sheets><sheet name=\"Laporan " + periodName + "\" sheetId=\"1\" r:id=\"rId1\"/></sheets>"
             + "</workbook>";
     }
 
@@ -159,60 +181,68 @@ public class XlsxWriter {
 
     // ── Worksheet ──────────────────────────────────────────────────────────
     private String sheet() {
-        int maxRows = Math.max(
-            Math.max(dailyVol.size(), Math.max(weeklyVol.size(), monthlyVol.size())),
-            Math.max(dailyPh.size(),  Math.max(weeklyPh.size(),  monthlyPh.size()))
-        );
+        // Hitung jumlah baris data (tiap entry = 1 baris, karena label & nilai di kolom berbeda)
+        int volCount = volRows.size() / 2;  // tiap entry = 2 elemen (label, nilai)
+        int phCount  = phRows.size()  / 2;
+        int maxRows  = Math.max(volCount, phCount);
         if (maxRows == 0) maxRows = 1;
+
+        String periodName;
+        switch (period) {
+            case DAILY:   periodName = "Harian";   break;
+            case WEEKLY:  periodName = "Mingguan"; break;
+            default:      periodName = "Bulanan";  break;
+        }
 
         StringBuilder sb = new StringBuilder();
         sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
         sb.append("<worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">");
 
-        // Lebar kolom
+        // Lebar kolom: A=label vol, B=nilai vol, C=spacer, D=label pH, E=nilai pH
         sb.append("<cols>");
-        sb.append("<col min=\"1\" max=\"3\" width=\"18\" customWidth=\"1\"/>");
-        sb.append("<col min=\"4\" max=\"4\" width=\"3\"  customWidth=\"1\"/>");
-        sb.append("<col min=\"5\" max=\"7\" width=\"18\" customWidth=\"1\"/>");
+        sb.append("<col min=\"1\" max=\"2\" width=\"20\" customWidth=\"1\"/>");
+        sb.append("<col min=\"3\" max=\"3\" width=\"4\"  customWidth=\"1\"/>");
+        sb.append("<col min=\"4\" max=\"5\" width=\"20\" customWidth=\"1\"/>");
         sb.append("</cols>");
 
-        // Data
         sb.append("<sheetData>");
 
         // Baris 1 — judul
         sb.append("<row r=\"1\" ht=\"25\" customHeight=\"1\">");
-        sb.append(cell("A1", "Laporan Penggunaan Air", 1));
+        sb.append(cell("A1", "Laporan Penggunaan Air (" + periodName + ")", 1));
         sb.append(cell("B1", "", 1));
-        sb.append(cell("C1", "", 1));
-        sb.append(cell("D1", "", 0));
-        sb.append(cell("E1", "Riwayat Kondisi pH", 2));
-        sb.append(cell("F1", "", 2));
-        sb.append(cell("G1", "", 2));
+        sb.append(cell("C1", "", 0));
+        sb.append(cell("D1", "Riwayat Kondisi pH (" + periodName + ")", 2));
+        sb.append(cell("E1", "", 2));
         sb.append("</row>");
 
         // Baris 2 — sub-header
+        String volSubLabel = (period == Period.DAILY) ? "Waktu" : "Tanggal";
+        String phSubLabel  = (period == Period.DAILY) ? "Jam"   : "Tanggal";
         sb.append("<row r=\"2\" ht=\"20\" customHeight=\"1\">");
-        sb.append(cell("A2", "Harian",   3));
-        sb.append(cell("B2", "Mingguan", 3));
-        sb.append(cell("C2", "Bulanan",  3));
-        sb.append(cell("D2", "", 0));
-        sb.append(cell("E2", "Harian",   4));
-        sb.append(cell("F2", "Mingguan", 4));
-        sb.append(cell("G2", "Bulanan",  4));
+        sb.append(cell("A2", volSubLabel,    3));
+        sb.append(cell("B2", "Volume Air",  3));
+        sb.append(cell("C2", "", 0));
+        sb.append(cell("D2", phSubLabel,     4));
+        sb.append(cell("E2", "Nilai pH",    4));
         sb.append("</row>");
 
         // Baris data mulai dari baris 3
-        String[] cols = {"A","B","C","D","E","F","G"};
         for (int i = 0; i < maxRows; i++) {
             int r = i + 3;
+            // label & nilai volume
+            String volLabel = getPair(volRows, i, 0);
+            String volVal   = getPair(volRows, i, 1);
+            // label & nilai pH
+            String phLabel  = getPair(phRows,  i, 0);
+            String phVal    = getPair(phRows,  i, 1);
+
             sb.append("<row r=\"").append(r).append("\" ht=\"18\" customHeight=\"1\">");
-            sb.append(cell(cols[0]+r, get(dailyVol,   i), 5));
-            sb.append(cell(cols[1]+r, get(weeklyVol,  i), 5));
-            sb.append(cell(cols[2]+r, get(monthlyVol, i), 5));
-            sb.append(cell(cols[3]+r, "",               0));
-            sb.append(cell(cols[4]+r, get(dailyPh,    i), 5));
-            sb.append(cell(cols[5]+r, get(weeklyPh,   i), 5));
-            sb.append(cell(cols[6]+r, get(monthlyPh,  i), 5));
+            sb.append(cell("A" + r, volLabel, 5));
+            sb.append(cell("B" + r, volVal,   5));
+            sb.append(cell("C" + r, "",        0));
+            sb.append(cell("D" + r, phLabel,  5));
+            sb.append(cell("E" + r, phVal,    5));
             sb.append("</row>");
         }
 
@@ -220,8 +250,8 @@ public class XlsxWriter {
 
         // mergeCells HARUS setelah sheetData (per OOXML spec)
         sb.append("<mergeCells count=\"2\">");
-        sb.append("<mergeCell ref=\"A1:C1\"/>");
-        sb.append("<mergeCell ref=\"E1:G1\"/>");
+        sb.append("<mergeCell ref=\"A1:B1\"/>");
+        sb.append("<mergeCell ref=\"D1:E1\"/>");
         sb.append("</mergeCells>");
 
         sb.append("</worksheet>");
@@ -229,8 +259,17 @@ public class XlsxWriter {
     }
 
     // ── Helpers ────────────────────────────────────────────────────────────
-    private String get(List<String> list, int i) {
-        return (i < list.size() && list.get(i) != null) ? list.get(i) : "-";
+
+    /**
+     * Ambil elemen ke-i dari list pasangan.
+     * @param list  list berisi [label0, val0, label1, val1, ...]
+     * @param entry indeks entry (0-based)
+     * @param col   0=label, 1=nilai
+     */
+    private String getPair(List<String> list, int entry, int col) {
+        int idx = entry * 2 + col;
+        if (idx < list.size() && list.get(idx) != null) return list.get(idx);
+        return "-";
     }
 
     /** Inline string cell dengan style index */
