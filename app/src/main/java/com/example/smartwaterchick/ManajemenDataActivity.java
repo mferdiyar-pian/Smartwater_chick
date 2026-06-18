@@ -44,7 +44,7 @@ public class ManajemenDataActivity extends BaseActivity {
         if (getSupportActionBar() != null) getSupportActionBar().hide();
 
         dbRef = FirebaseDatabase.getInstance().getReference();
-        sharedPrefs = getSharedPreferences("DataManagementPrefs", Context.MODE_PRIVATE);
+        sharedPrefs = SecurePrefsHelper.getPrefs(this, "DataManagementPrefs");
 
         // Bind Back Button
         findViewById(R.id.btnBack).setOnClickListener(v -> {
@@ -215,7 +215,7 @@ public class ManajemenDataActivity extends BaseActivity {
     }
 
     public static void performAutoDeleteIfEnabled(Context context, DatabaseReference dbRef) {
-        SharedPreferences prefs = context.getSharedPreferences("DataManagementPrefs", Context.MODE_PRIVATE);
+        SharedPreferences prefs = SecurePrefsHelper.getPrefs(context, "DataManagementPrefs");
         boolean enabled = prefs.getBoolean("auto_delete_enabled", false);
         if (!enabled) return;
 

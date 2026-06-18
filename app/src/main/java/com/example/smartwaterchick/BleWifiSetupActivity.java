@@ -28,6 +28,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -70,6 +72,16 @@ public class BleWifiSetupActivity extends BaseActivity {
     private boolean isPasswordVisible = false;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
+
+    // Launcher untuk request aktifkan Bluetooth (menggantikan startActivity implicit)
+    private final ActivityResultLauncher<Intent> enableBtLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    startScan();
+                } else {
+                    Toast.makeText(this, "Bluetooth harus diaktifkan untuk fitur ini", Toast.LENGTH_SHORT).show();
+                }
+            });
 
     // ──────────────────────────────────────────
     // SCAN CALLBACK — dipanggil setiap ada device BLE ditemukan
@@ -269,7 +281,9 @@ public class BleWifiSetupActivity extends BaseActivity {
     private void startScan() {
         if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
             Toast.makeText(this, "Aktifkan Bluetooth terlebih dahulu", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
+            // Explicit intent untuk request enable Bluetooth
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            enableBtLauncher.launch(enableBtIntent);
             return;
         }
 

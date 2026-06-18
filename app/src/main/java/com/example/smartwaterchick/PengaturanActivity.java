@@ -55,23 +55,10 @@ public class PengaturanActivity extends BaseActivity {
     private TextView tvStatusSistem;
 
     // Launcher untuk membuka galeri
-    private final ActivityResultLauncher<Intent> pickImageLauncher =
-            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                    Uri selectedUri = result.getData().getData();
-                    if (selectedUri != null) {
-                        savePhotoToInternal(selectedUri);
-                    }
-                }
-            });
-
-    // Launcher untuk minta izin akses galeri
-    private final ActivityResultLauncher<String> requestPermissionLauncher =
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-                if (isGranted) {
-                    bukaGaleri();
-                } else {
-                    Toast.makeText(this, "Izin akses galeri diperlukan", Toast.LENGTH_SHORT).show();
+    private final ActivityResultLauncher<String> pickImageLauncher =
+            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+                if (uri != null) {
+                    savePhotoToInternal(uri);
                 }
             });
 
@@ -82,7 +69,7 @@ public class PengaturanActivity extends BaseActivity {
 
         if (getSupportActionBar() != null) getSupportActionBar().hide();
 
-        prefs = getSharedPreferences("SmartWaterProfile", Context.MODE_PRIVATE);
+        prefs = SecurePrefsHelper.getPrefs(this, "SmartWaterProfile");
 
         // Load nama & email login
         TextView tvNama = findViewById(R.id.tvNama);
@@ -248,7 +235,7 @@ public class PengaturanActivity extends BaseActivity {
                 .setTitle("Foto Profil")
                 .setItems(opsi, (dialog, which) -> {
                     if (which == 0) {
-                        mintaIzinGaleri();
+                        bukaGaleri();
                     } else {
                         hapusFotoProfil();
                     }
@@ -257,24 +244,9 @@ public class PengaturanActivity extends BaseActivity {
                 .show();
     }
 
-    /** Minta izin galeri sesuai versi Android */
-    private void mintaIzinGaleri() {
-        String permission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-                ? Manifest.permission.READ_MEDIA_IMAGES
-                : Manifest.permission.READ_EXTERNAL_STORAGE;
-
-        if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
-            bukaGaleri();
-        } else {
-            requestPermissionLauncher.launch(permission);
-        }
-    }
-
     /** Buka Intent picker galeri */
     private void bukaGaleri() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        pickImageLauncher.launch(intent);
+        pickImageLauncher.launch("image/*");
     }
 
     /** Simpan foto dari URI ke penyimpanan internal aplikasi */

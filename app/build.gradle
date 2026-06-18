@@ -21,10 +21,25 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release {
+            storeFile file("../smartwaterchick")
+            storePassword "smartwater123"
+            keyAlias "smartwaterchick"
+            keyPassword "smartwater123"
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            minifyEnabled false
+            debuggable true
         }
     }
     compileOptions {
@@ -48,6 +63,9 @@ dependencies {
     implementation libs.play.services.auth
 
     // XLSX digenerate manual dengan ZipOutputStream — tidak perlu library eksternal
+
+    // Keamanan - EncryptedSharedPreferences
+    implementation libs.security.crypto
 
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit

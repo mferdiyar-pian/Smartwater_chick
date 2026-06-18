@@ -10,6 +10,7 @@ constraintlayout = "2.2.1"
 googleServices = "4.4.2"
 firebaseBom = "33.5.1"
 playServicesAuth = "21.2.0"
+securityCrypto = "1.1.0-alpha06"
 
 
 [libraries]
@@ -24,6 +25,7 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-database = { group = "com.google.firebase", name = "firebase-database" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
 play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
+security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "securityCrypto" }
 
 
 [plugins]

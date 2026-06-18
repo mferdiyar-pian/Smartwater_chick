@@ -20,7 +20,7 @@ public class PengaturanNotifikasiActivity extends BaseActivity {
         FrameLayout btnBack = findViewById(R.id.btnBack);
         btnBack.setOnClickListener(v -> finish());
 
-        SharedPreferences prefs = getSharedPreferences("SmartWaterNotifPrefs", Context.MODE_PRIVATE);
+        SharedPreferences prefs = SecurePrefsHelper.getPrefs(this, "SmartWaterNotifPrefs");
         
         SwitchCompat switchPush = findViewById(R.id.switchPush);
         SwitchCompat switchCritical = findViewById(R.id.switchCritical);

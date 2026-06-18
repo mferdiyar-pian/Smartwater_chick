@@ -126,7 +126,7 @@ public class NotificationSystem {
     public synchronized List<NotifItem> getFilteredAlerts(Context context) {
         List<NotifItem> list = new ArrayList<>();
         SharedPreferences prefs =
-                context.getSharedPreferences("SmartWaterNotifPrefs", Context.MODE_PRIVATE);
+                SecurePrefsHelper.getPrefs(context, "SmartWaterNotifPrefs");
         if (!prefs.getBoolean("notif_push", true)) return list;
 
         if (prefs.getBoolean("notif_wifi", true) && !isOnline)

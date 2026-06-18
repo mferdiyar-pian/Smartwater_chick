@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Hanya izinkan HTTPS, tidak ada HTTP plaintext -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <!-- Percaya hanya CA resmi (bukan user-installed certificate) -->
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+
+    <!-- Firebase & Google API sudah HTTPS, tidak perlu exception -->
+</network-security-config>
