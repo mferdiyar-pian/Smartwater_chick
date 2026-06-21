@@ -183,7 +183,9 @@ public class AnalisisActivity extends BaseActivity {
         bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.nav_beranda) {
-                startActivity(new Intent(this, DashboardActivity.class));
+                Intent i = new Intent(this, DashboardActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(i);
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out); finish(); return true;
             } else if (id == R.id.nav_analytics) { return true;
             } else if (id == R.id.nav_controls) {

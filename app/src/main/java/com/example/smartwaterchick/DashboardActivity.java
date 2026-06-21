@@ -63,8 +63,7 @@ public class DashboardActivity extends BaseActivity {
         tvIrrigationStatus = findViewById(R.id.tvIrrigationStatus);
         ivIrrigationIcon   = findViewById(R.id.ivIrrigationIcon);
 
-        // ─── Firebase (persistence dimatikan — data real-time, tidak perlu SQLite cache) ───
-        FirebaseDatabase.getInstance().setPersistenceEnabled(false);
+        // ─── Firebase ───
         dbRef = FirebaseDatabase.getInstance().getReference();
 
         // ─── Setup Toolbar ───
