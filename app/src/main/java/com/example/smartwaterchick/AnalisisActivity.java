@@ -364,9 +364,10 @@ public class AnalisisActivity extends BaseActivity {
             default:      periodName = "Bulanan";  break;
         }
         try {
+            // Set MIME type lebih awal agar intent lebih eksplisit
             Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.putExtra(Intent.EXTRA_TITLE, "Laporan_" + periodName + "_SmartWaterChick.xlsx");
             saveLauncher.launch(intent);
         } catch (Exception e) {

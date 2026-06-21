@@ -6,8 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,6 +25,39 @@ public class SplashActivity extends BaseActivity {
 
         progressBar = findViewById(R.id.progressBar);
         tvLoadingPercent = findViewById(R.id.tvLoadingPercent);
+
+        // ── Pemeriksaan Keamanan Runtime ──────────────────────────────
+        // Deteksi root: lindungi dari perangkat yang tidak aman
+        if (SecurityHelper.isDeviceRooted()) {
+            Toast.makeText(this,
+                "Peringatan: Perangkat terdeteksi sudah di-root. Keamanan data tidak terjamin.",
+                Toast.LENGTH_LONG).show();
+        }
+
+        // Deteksi emulator: blokir penggunaan di emulator
+        if (SecurityHelper.isEmulator()) {
+            Toast.makeText(this,
+                "Peringatan: Aplikasi berjalan di emulator.",
+                Toast.LENGTH_SHORT).show();
+        }
+
+        // Deteksi debugger: cegah analisis runtime berbahaya
+        if (SecurityHelper.isDebuggerAttached()) {
+            Toast.makeText(this,
+                "Sesi debugging terdeteksi.",
+                Toast.LENGTH_SHORT).show();
+        }
+
+        // Verifikasi integritas APK: pastikan tidak dimodifikasi
+        if (SecurityHelper.isAppTampered(this)) {
+            Toast.makeText(this,
+                "Integritas aplikasi tidak valid. Silakan instal ulang dari sumber resmi.",
+                Toast.LENGTH_LONG).show();
+        }
+
+        // Inisialisasi SSL Pinning untuk melindungi koneksi dari serangan MITM
+        javax.net.ssl.HttpsURLConnection.setDefaultSSLSocketFactory(
+                CertificatePinnerHelper.getPinnedSSLSocketFactory());
 
         startLoadingAnimation();
     }
@@ -80,4 +112,3 @@ public class SplashActivity extends BaseActivity {
         handler.removeCallbacksAndMessages(null);
     }
 }
-

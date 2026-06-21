@@ -18,6 +18,15 @@
     public <methods>;
 }
 
+# Keep SecurityHelper - berisi security checks penting (root/emulator/tamper detection)
+-keep class com.example.smartwaterchick.SecurityHelper { *; }
+
+# Keep IntentValidator - berisi validasi intent extras
+-keep class com.example.smartwaterchick.IntentValidator { *; }
+
+# Keep CertificatePinnerHelper - SSL pinning untuk keamanan koneksi
+-keep class com.example.smartwaterchick.CertificatePinnerHelper { *; }
+
 # Keep enum methods
 -keepclassmembers enum * {
     public static **[] values();

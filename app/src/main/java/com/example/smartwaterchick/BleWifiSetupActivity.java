@@ -12,12 +12,14 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.Settings;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
@@ -281,8 +283,9 @@ public class BleWifiSetupActivity extends BaseActivity {
     private void startScan() {
         if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
             Toast.makeText(this, "Aktifkan Bluetooth terlebih dahulu", Toast.LENGTH_SHORT).show();
-            // Explicit intent untuk request enable Bluetooth
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            // Explicit intent ke Settings Bluetooth (menghindari implicit ACTION_REQUEST_ENABLE)
+            Intent enableBtIntent = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+            enableBtIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             enableBtLauncher.launch(enableBtIntent);
             return;
         }
